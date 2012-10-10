@@ -1,6 +1,11 @@
 DemoApp::Application.routes.draw do
   
-  root :to => "admin/dashboard#index"
+  get "welcome/index"
+  get "welcome/details"
+
+  root :to => 'welcome#index'
+  match "/landing", :to => "welcome#index"
+  match "/details", :to => "welcome#details"
   
   devise_for :users
 
