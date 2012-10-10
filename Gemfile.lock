@@ -149,6 +149,7 @@ PLATFORMS
 DEPENDENCIES
   activeadmin
   coffee-rails (~> 3.2.1)
+  devise
   jquery-rails
   json
   pg (= 0.12.2)

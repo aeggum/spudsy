@@ -26,6 +26,7 @@ end
 
 gem 'jquery-rails'
 gem 'activeadmin'
+gem 'devise'
 
 group :production do
   gem 'pg', '0.12.2'
