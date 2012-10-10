@@ -23,7 +23,7 @@ test:
   password: spudsy
 
 production:
-  adapter: sqlite3
-  database: db/production.sqlite3
+  adapter: postgresql
+  database: production_spudsy
   pool: 5
   timeout: 5000
