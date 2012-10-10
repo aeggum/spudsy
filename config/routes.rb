@@ -1,5 +1,9 @@
 DemoApp::Application.routes.draw do
   
+  ActiveAdmin.routes(self)
+
+  devise_for :users
+
   get "welcome/index"
   get "welcome/details"
 
@@ -7,11 +11,7 @@ DemoApp::Application.routes.draw do
   match "/landing", :to => "welcome#index"
   match "/details", :to => "welcome#details"
   
-  devise_for :users
-
-  ActiveAdmin.routes(self)
-
-  devise_for :admin_users, ActiveAdmin::Devise.config
+  
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

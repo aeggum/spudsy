@@ -5,7 +5,7 @@ ActiveAdmin.setup do |config|
   # Set the title that is displayed on the main layout
   # for each of the active admin pages.
   #
-  config.site_title = "Demo App"
+  config.site_title = "Spudsy"
 
   # Set the link url for the title. For example, to take
   # users to your main site. Defaults to no link.
@@ -78,7 +78,8 @@ ActiveAdmin.setup do |config|
   # will call the method to return the path.
   #
   # Default:
-  config.logout_link_path = :destroy_admin_user_session_path
+  config.logout_link_method = :delete
+  config.logout_link_path = :destroy_user_session_path
 
   # This setting changes the http method used when rendering the
   # link. For example :get, :delete, :put, etc..
@@ -140,7 +141,11 @@ ActiveAdmin.setup do |config|
   #
   # To load a javascript file:
   #   config.register_javascript 'my_javascript.js'
-
+  module ActiveAdmin
+    class BaseController
+      with_role :administrator
+    end
+  end
 
   # == CSV options
   #
