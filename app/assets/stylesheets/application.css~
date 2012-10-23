@@ -69,13 +69,12 @@ hr {
  	position: fixed; 
 	left: 20px; 
 	top: 65px;
-	width: 134px;
-	height: 220px;
+	width: 144px;
+	height: 500px;
 	border: 1px solid #EEE;
 	border-bottom-left-radius: 10px;
 	border-top-left-radius: 10px;
 	background-color: white !important;
-	padding-left: 10px;
 }
 
 /* Giant Goldfish color palette */

@@ -1,5 +1,5 @@
 <div class="fixed_left_nav">
-	<h2>TV</h1>
+	<input type="checkbox" id="tv_select"><label for"tv_select">TV</label>
 	<h2>Netflix</h1>
 	<h2>Hulu</h1>
 	<h2>Redbox</h1>
