@@ -10,6 +10,7 @@
   <%= stylesheet_link_tag    "application", :media => "all" %>
   <%= stylesheet_link_tag    "960", :media => "all" %>
   <%= javascript_include_tag "application" %>
+  <%= javascript_include_tag "jquery.sticky" %>
   <%= csrf_meta_tags %>
 </head>
 <body>

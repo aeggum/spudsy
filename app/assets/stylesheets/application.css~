@@ -21,6 +21,10 @@
 	src: url('../fonts/Franchise-Bold-hinted.ttf');
 }
 
+html {
+       overflow-y: scroll;
+}
+
 body {
 	background-image: url('../textures/dust_@2X.png') !important;
 	padding-top: 0 !important;
@@ -30,6 +34,7 @@ body {
 h1 {
 	font-weight: normal !important;
 	font-style: normal !important;
+	margin: 15px 0 20px !important;
 }
 
 h2 {
@@ -39,7 +44,13 @@ h2 {
 }
 
 hr {
+	margin-top: 25px !important;	
 	margin-bottom: 0px !important;
+}
+
+label {
+	display: inline !important;
+	vertical-align: middle;
 }
 
 .content {
@@ -69,12 +80,19 @@ hr {
  	position: fixed; 
 	left: 20px; 
 	top: 65px;
-	width: 144px;
-	height: 500px;
+	width: 134px;
+	height: 220px;
 	border: 1px solid #EEE;
 	border-bottom-left-radius: 10px;
 	border-top-left-radius: 10px;
 	background-color: white !important;
+	padding-left: 10px;
+}
+
+.poster {
+	-moz-box-shadow: 1px 1px 1px #CCC;
+	-webkit-box-shadow: 1px 1px 1px #CCC;
+	box-shadow: 1px 1px 1px #CCC;
 }
 
 /* Giant Goldfish color palette */
