@@ -22,7 +22,7 @@ var Welcome = function() {
 
 			$(".poster").hover(function(){
 				if ($(this).data("bouncing") == false || $(this).data("bouncing") == undefined){
-				    $(this).effect("bounce", { distance: 5, times: 1 });
+				    $(this).effect("bounce", { distance: 5, times: 1 }, 500);
 				    $(this).data("bouncing", true);
 				}
 			},function () {

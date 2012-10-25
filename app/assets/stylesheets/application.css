@@ -53,6 +53,10 @@ label {
 	vertical-align: middle;
 }
 
+#genre_select_chzn {
+	margin-top: 25px;
+}
+
 .content {
 	background-color: white;
 	border: 1px solid #EEE;
@@ -81,7 +85,7 @@ label {
 	left: 20px; 
 	top: 65px;
 	width: 134px;
-	height: 220px;
+	height: 415px;
 	border: 1px solid #EEE;
 	border-bottom-left-radius: 10px;
 	border-top-left-radius: 10px;

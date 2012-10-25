@@ -1,5 +1,39 @@
 <div class="fixed_left_nav">
-	<h2>What's on...</h2>	
+	<h2>Watch...</h2>	
+	<input id="movie" type="checkbox" value="movie" />	
+	<label for="movie">Movie</label>
+	<br />
+	<input id="tv_show" type="checkbox" value="tv_show" />	
+	<label for="tv_show">TV Show</label>
+
+	<select data-placeholder="Genre" class="chzn-select" multiple style="width:125px;" >
+		<option value=""></option>
+		<option value="Action">Action</option>
+		<option value="Adventure">Adventure</option>
+		<option value="Animation">Animation</option>
+		<option value="Comedy">Comedy</option>
+		<option value="Crime">Crime</option>
+		<option value="Disaster">Disaster</option>
+		<option value="Documentary">Documentary</option>
+		<option value="Drama">Drama</option>
+		<option value="Eastern">Eastern</option>
+		<option value="Fantasy">Fantasy</option>
+		<option value="History">History</option>
+		<option value="Holiday">Holiday</option>
+		<option value="Horror">Horror</option>
+		<option value="Music">Music</option>
+		<option value="Musical">Musical</option>
+		<option value="Mystery">Mystery</option>
+		<option value="Road Movie">Road Movie</option>
+		<option value="Science Fiction">Science Fiction</option>
+		<option value="Short">Short</option>
+		<option value="Sport">Sport</option>
+		<option value="Suspense">Suspense</option>
+		<option value="Thriller">Thriller</option>
+		<option value="Western">Western</option>
+	</select>
+	
+	<h2>on...</h2>	
 	<input id="hulu" type="checkbox" value="hulu" />	
 	<label for="hulu">Hulu+</label>
 	<br />
@@ -18,24 +52,25 @@
 		<h1 class="giant_goldfish">Your picks</h1>
 	</div>
 </div>
-<div class="container_12">
-	<div class="grid_2">
-		<img src="http://cf2.imgobject.com/t/p/w185/icL23Y3CUyNM3bxaTm999OB3HcI.jpg" style="width:140px;height:200px;" class="poster" />
+
+<div class="container_12" id="poster_slider">
+	<div class="grid_2 poster">
+		<img src="http://cf2.imgobject.com/t/p/w185/icL23Y3CUyNM3bxaTm999OB3HcI.jpg" style="width:140px;height:200px;" />
 	</div>
-	<div class="grid_2">
-		<img src="http://cf2.imgobject.com/t/p/w185/ywzjM7rGZUPJTj5oiyeM1jqTq01.jpg" style="width:140px;height:200px;" class="poster" />
+	<div class="grid_2 poster">
+		<img src="http://cf2.imgobject.com/t/p/w185/ywzjM7rGZUPJTj5oiyeM1jqTq01.jpg" style="width:140px;height:200px;" />
 	</div>
-	<div class="grid_2">
-		<img src="http://cf2.imgobject.com/t/p/w185/lbEqxVbzg936a392Z837HTUGvWc.jpg" style="width:140px;height:200px;" class="poster" />
+	<div class="grid_2 poster">
+		<img src="http://cf2.imgobject.com/t/p/w185/lbEqxVbzg936a392Z837HTUGvWc.jpg" style="width:140px;height:200px;" />
 	</div>
-	<div class="grid_2">
-		<img src="http://cf2.imgobject.com/t/p/w185/tBXdHVUQozj229NqnM9CoExXvw1.jpg" style="width:140px;height:200px;" class="poster" />
+	<div class="grid_2 poster">
+		<img src="http://cf2.imgobject.com/t/p/w185/tBXdHVUQozj229NqnM9CoExXvw1.jpg" style="width:140px;height:200px;" />
 	</div>
-	<div class="grid_2">
-		<img src="http://cf2.imgobject.com/t/p/w185/fjHFhv2RG2rz81NWSKUL6UTew7o.jpg" style="width:140px;height:200px;" class="poster" />
+	<div class="grid_2 poster">
+		<img src="http://cf2.imgobject.com/t/p/w185/fjHFhv2RG2rz81NWSKUL6UTew7o.jpg" style="width:140px;height:200px;" />
 	</div>
-	<div class="grid_2">
-		<img src="http://cf2.imgobject.com/t/p/w185/8o7xRloe8eAdlA6pwkeCVFt0UX4.jpg" style="width:140px;height:200px;" class="poster" />
+	<div class="grid_2 poster">
+		<img src="http://cf2.imgobject.com/t/p/w185/8o7xRloe8eAdlA6pwkeCVFt0UX4.jpg" style="width:140px;height:200px;" />
 	</div>
 </div>
 
