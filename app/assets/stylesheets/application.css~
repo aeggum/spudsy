@@ -41,6 +41,7 @@ h2 {
 	font-weight: normal !important;
 	font-style: normal !important;
 	font-size: 25px !important;
+	line-height: 30px !important;
 }
 
 hr {
@@ -53,8 +54,29 @@ label {
 	vertical-align: middle;
 }
 
-#genre_select {
-	margin-top: 20px;
+#genre_select_chzn {
+	margin-top: 25px;
+}
+
+.rank {
+	position: absolute; 
+	top: -5px; 
+	left: -15px;
+}
+
+.rating {
+	position: absolute; 
+	top: 150px; 
+	left: 100px;
+}
+
+.rank span, .rating span {
+	color: white; 
+	font: bold 24px/45px LeagueGothic !important;; 
+	letter-spacing: -1px;  
+	background: rgb(0, 0, 0); /* fallback color */
+	background: rgba(0, 0, 0, 0.7);
+	padding: 10px; 
 }
 
 .content {
@@ -97,6 +119,8 @@ label {
 	-moz-box-shadow: 5px 5px 5px #CCC;
 	-webkit-box-shadow: 5px 5px 5px #CCC;
 	box-shadow: 5px 5px 5px #CCC;
+	position: relative; 
+   	width: 100%; /* for IE 6 */
 }
 
 /* Giant Goldfish color palette */

@@ -1,12 +1,12 @@
 <div class="fixed_left_nav">
-	<h2>Watch...</h2>	
+	<h2>Watch a</h2>	
 	<input id="movie" type="checkbox" value="movie" />	
 	<label for="movie">Movie</label>
 	<br />
 	<input id="tv_show" type="checkbox" value="tv_show" />	
 	<label for="tv_show">TV Show</label>
 
-	<select data-placeholder="Genre" class="chzn-select" multiple style="width:125px;" >
+	<select data-placeholder="Genre" class="chzn-select" id="genre_select" multiple style="width:125px;" >
 		<option value=""></option>
 		<option value="Action">Action</option>
 		<option value="Adventure">Adventure</option>
@@ -33,7 +33,7 @@
 		<option value="Western">Western</option>
 	</select>
 	
-	<h2>on...</h2>	
+	<h2>on</h2>	
 	<input id="hulu" type="checkbox" value="hulu" />	
 	<label for="hulu">Hulu+</label>
 	<br />
@@ -56,21 +56,33 @@
 <div class="container_12" id="poster_slider">
 	<div class="grid_2 poster">
 		<img src="http://cf2.imgobject.com/t/p/w185/icL23Y3CUyNM3bxaTm999OB3HcI.jpg" style="width:140px;height:200px;" />
+		<h3 class="rank"><span>#1</span></h3>
+		<h3 class="rating"><span>96%</span></h3>
 	</div>
 	<div class="grid_2 poster">
 		<img src="http://cf2.imgobject.com/t/p/w185/ywzjM7rGZUPJTj5oiyeM1jqTq01.jpg" style="width:140px;height:200px;" />
+		<h3 class="rank"><span>#2</span></h3>
+		<h3 class="rating"><span>92%</span></h3>
 	</div>
 	<div class="grid_2 poster">
 		<img src="http://cf2.imgobject.com/t/p/w185/lbEqxVbzg936a392Z837HTUGvWc.jpg" style="width:140px;height:200px;" />
+		<h3 class="rank"><span>#3</span></h3>
+		<h3 class="rating"><span>88%</span></h3>
 	</div>
 	<div class="grid_2 poster">
 		<img src="http://cf2.imgobject.com/t/p/w185/tBXdHVUQozj229NqnM9CoExXvw1.jpg" style="width:140px;height:200px;" />
+		<h3 class="rank"><span>#4</span></h3>
+		<h3 class="rating"><span>81%</span></h3>
 	</div>
 	<div class="grid_2 poster">
 		<img src="http://cf2.imgobject.com/t/p/w185/fjHFhv2RG2rz81NWSKUL6UTew7o.jpg" style="width:140px;height:200px;" />
+		<h3 class="rank"><span>#5</span></h3>
+		<h3 class="rating"><span>79%</span></h3>
 	</div>
 	<div class="grid_2 poster">
 		<img src="http://cf2.imgobject.com/t/p/w185/8o7xRloe8eAdlA6pwkeCVFt0UX4.jpg" style="width:140px;height:200px;" />
+		<h3 class="rank"><span>#1</span></h3>
+		<h3 class="rating"><span>75%</span></h3>
 	</div>
 </div>
 
