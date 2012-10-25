@@ -1,0 +1,22 @@
+# Place all the behaviors and hooks related to the matching controller here.
+# All this logic will automatically be available in application.js.
+# You can use CoffeeScript in this file: http://jashkenas.github.com/coffee-script/
+
+var Welcome = function() {
+	/**
+	*	Private Methods (separated just by closing brace)
+	*/
+
+	return {
+		/**
+		*	Public Methods (separated by commas)
+		*/
+		documentReady: function() {
+			$('#tv').prop('checked', true);
+		}
+	};
+}();
+
+$(document).ready(function() {
+	Welcome.documentReady();
+});

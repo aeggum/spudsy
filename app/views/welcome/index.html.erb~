@@ -1,8 +1,16 @@
 <div class="fixed_left_nav">
-	<input type="checkbox" id="tv_select"><label for"tv_select">TV</label>
-	<h2>Netflix</h1>
-	<h2>Hulu</h1>
-	<h2>Redbox</h1>
+	<h2>What's on...</h2>	
+	<input id="hulu" type="checkbox" value="hulu" />	
+	<label for="hulu">Hulu+</label>
+	<br />
+	<input id="netflix" type="checkbox" value="netflix" />	
+	<label for="netflix">Netflix</label>
+	<br />
+	<input id="redbox" type="checkbox" value="redbox" />	
+	<label for="redbox">Redbox</label>
+	<br />
+	<input id="tv" type="checkbox" value="tv" />	
+	<label for="tv">TV</label>
 </div>
 
 <div class="container_12">
@@ -12,36 +20,37 @@
 </div>
 <div class="container_12">
 	<div class="grid_2">
-		<img src="http://placekitten.com/140/200" />
+		<img src="http://cf2.imgobject.com/t/p/w185/icL23Y3CUyNM3bxaTm999OB3HcI.jpg" style="width:140px;height:200px;" class="poster" />
 	</div>
 	<div class="grid_2">
-		<img src="http://placekitten.com/140/200" />
+		<img src="http://cf2.imgobject.com/t/p/w185/ywzjM7rGZUPJTj5oiyeM1jqTq01.jpg" style="width:140px;height:200px;" class="poster" />
 	</div>
 	<div class="grid_2">
-		<img src="http://placekitten.com/140/200" />
+		<img src="http://cf2.imgobject.com/t/p/w185/lbEqxVbzg936a392Z837HTUGvWc.jpg" style="width:140px;height:200px;" class="poster" />
 	</div>
 	<div class="grid_2">
-		<img src="http://placekitten.com/140/200" />
+		<img src="http://cf2.imgobject.com/t/p/w185/tBXdHVUQozj229NqnM9CoExXvw1.jpg" style="width:140px;height:200px;" class="poster" />
 	</div>
 	<div class="grid_2">
-		<img src="http://placekitten.com/140/200" />
+		<img src="http://cf2.imgobject.com/t/p/w185/fjHFhv2RG2rz81NWSKUL6UTew7o.jpg" style="width:140px;height:200px;" class="poster" />
 	</div>
 	<div class="grid_2">
-		<img src="http://placekitten.com/140/200" />
+		<img src="http://cf2.imgobject.com/t/p/w185/8o7xRloe8eAdlA6pwkeCVFt0UX4.jpg" style="width:140px;height:200px;" class="poster" />
 	</div>
 </div>
 
-<div class="container_12">
-	<hr />
-</div>
-
-<div class="container_12">
-	<div class="grid_12">	
-		<h1 class="giant_goldfish">TV</h1>
+<div id="tv_section">
+	<div class="container_12">
+		<hr />
 	</div>
-</div>
-<div class="container_12">
-	<div class="grid_12">
-		<iframe src="http://www.titantv.com/#ctl00_Main_TVL_ctl00_Grid" style="width: 100%; height: 800px"></iframe>
+	<div class="container_12">
+		<div class="grid_12">	
+			<h1 class="giant_goldfish">TV</h1>
+		</div>
+	</div>
+	<div class="container_12">
+		<div class="grid_12">
+			<iframe src="http://www.titantv.com/#ctl00_Main_TVL_ctl00_Grid" style="width: 100%; height: 800px"></iframe>
+		</div>
 	</div>
 </div>
