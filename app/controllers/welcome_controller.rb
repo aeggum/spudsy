@@ -3,12 +3,15 @@ class WelcomeController < ApplicationController
   Rotten.api_key = 'pykjuv5y44fywgpu2m7rt4dk'
   
   def index
-    # I think this can essentially be the landing page
-    # APIS::RottenTomatoes.full_movie_info(770672122) 
-    # APIS::RottenTomatoes.movie_reviews(770672122, 20, 1, 'us')
-    # APIS::RottenTomatoes.top_rentals(5, 'us');
+   
+    # Doing some testing with the RT API wrapper
+    argo = Rotten::Movie.find_first "Argo"
+    @argo_score = argo.ratings['critics_score']
     
-    puts Rotten::Movie.upcoming
+    perks = Rotten::Movie.find_first "Perks of being a wallflower"
+    @perks_score = perks.ratings['critics_score']
+    @perks_poster = perks.posters['detailed']
+    
   end
   
   def details

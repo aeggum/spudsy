@@ -57,12 +57,12 @@
 	<div class="grid_2 poster">
 		<img src="http://cf2.imgobject.com/t/p/w185/icL23Y3CUyNM3bxaTm999OB3HcI.jpg" style="width:140px;height:200px;" />
 		<h3 class="rank"><span>#1</span></h3>
-		<h3 class="rating"><span>96%</span></h3>
+		<h3 class="rating"><span><%= @argo_score %>%</span></h3>
 	</div>
 	<div class="grid_2 poster">
-		<img src="http://cf2.imgobject.com/t/p/w185/ywzjM7rGZUPJTj5oiyeM1jqTq01.jpg" style="width:140px;height:200px;" />
+		<%= image_tag("#{@perks_poster}", :size => "140x200") %>
 		<h3 class="rank"><span>#2</span></h3>
-		<h3 class="rating"><span>92%</span></h3>
+		<h3 class="rating"><span><%= @perks_score %>%</span></h3>
 	</div>
 	<div class="grid_2 poster">
 		<img src="http://cf2.imgobject.com/t/p/w185/lbEqxVbzg936a392Z837HTUGvWc.jpg" style="width:140px;height:200px;" />
