@@ -1,11 +1,8 @@
-module RottenTomatoes
+module APIS
   require 'rubygems'
   require 'httparty'
   
-  # dir = File.expand_path(File.join(File.dirname(__FILE__), '..', 'lib'))
-  # require File.join(dir, 'httparty')
-  # require 'pp'
-  class Rotten
+  class RottenTomatoes
     include HTTParty
     base_uri 'http://api.rottentomatoes.com/'
     default_params :apiKey => 'pykjuv5y44fywgpu2m7rt4dk'
