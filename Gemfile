@@ -3,14 +3,11 @@ source 'http://rubygems.org'
 gem 'rails', '3.2.8'
 gem 'rb-readline'
 gem 'activerecord-postgresql-adapter'
-gem 'rubygems-bundler'
+# gem 'rubygems-bundler'
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 
-#group :development do
-  # gem 'sqlite3'
 gem 'pg', '0.12.2'
-#end
 
 gem 'json'
 
@@ -22,12 +19,12 @@ group :assets do
 
   # See https://github.com/sstephenson/execjs#readme for more supported runtimes
   # gem 'therubyracer', :platforms => :ruby
-
+  gem 'twitter-bootstrap-rails'
   gem 'uglifier', '>= 1.0.3'
   
 end
 
-gem 'twitter-bootstrap-rails'
+
 gem 'jquery-rails'
 gem 'activeadmin'
 gem 'devise'
