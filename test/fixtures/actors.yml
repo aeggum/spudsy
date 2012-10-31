@@ -2,6 +2,10 @@
 
 one:
   name: MyString
+  media_id: 1
+  media_type: MyString
 
 two:
   name: MyString
+  media_id: 1
+  media_type: MyString

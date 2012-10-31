@@ -4,10 +4,8 @@ one:
   name: MyString
   rating: 1.5
   description: MyText
-  release_date: 2012-10-31
 
 two:
   name: MyString
   rating: 1.5
   description: MyText
-  release_date: 2012-10-31

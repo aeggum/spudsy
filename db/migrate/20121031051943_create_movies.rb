@@ -5,10 +5,8 @@ class CreateMovies < ActiveRecord::Migration
       t.float :rating
       t.text :description
       t.date :release_date
-      t.references :actor
 
       t.timestamps
     end
-    add_index :movies, :actor_id
   end
 end

@@ -11,6 +11,9 @@ DemoApp::Application.routes.draw do
   match "/landing", :to => "welcome#index"
   match "/details", :to => "welcome#details"
   
+  #map.resources :movies, :has_many => :actors
+  #map.resources :tv_shows, :has_many => :actors
+  
   
 
   # The priority is based upon order of creation:
