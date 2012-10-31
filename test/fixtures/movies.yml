@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  name: MyString
+  rating: 1.5
+  description: MyText
+  release_date: 2012-10-30
+  actor: 
+
+two:
+  name: MyString
+  rating: 1.5
+  description: MyText
+  release_date: 2012-10-30
+  actor: 
