@@ -1,6 +1,31 @@
 module Tmdb
   class TmdbMovie
   
+    def self.top_rated() 
+      options = {
+        :expand_results => true,
+        :language => Tmdb.default_language
+      }
+      
+      results = []
+      results << Tmdb.api_call2("movie/top_rated", {}, options[:language])
+      options[:expand_results] = false
+      puts "results! : #{results}"
+      
+      results.flatten!(1)
+      results.uniq!
+      results.delete_if &:nil?
+      
+      unless(options[:limit].nil?)
+        raise ArgumentError, ":limit must be an integer greater than 0" unless(options[:limit].is_a?(Fixnum) && options[:limit] > 0)
+        results = results.slice(0, options[:limit])
+      end
+      
+      results.map!{|m| TmdbMovie.new(m, options[:expand_results], options[:language])}
+      return results
+    end
+    
+    
     def self.find(options)
       options = {
         :expand_results => true,
