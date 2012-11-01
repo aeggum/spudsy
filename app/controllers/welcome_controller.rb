@@ -1,10 +1,10 @@
 require "rotten"
-require "ruby-tmdb"
+require "tmdb"
 
 class WelcomeController < ApplicationController
   Rotten.api_key = 'pykjuv5y44fywgpu2m7rt4dk'
-  Tmdb.api_key = "8da8a86a8b272a70d20c08a35b576d50"
-  Tmdb.default_language = "en"
+  Tmdb::Tmdb.api_key = "8da8a86a8b272a70d20c08a35b576d50"
+  Tmdb::Tmdb.default_language = "en"
   
   def index 
    
@@ -16,8 +16,14 @@ class WelcomeController < ApplicationController
     @perks_score = perks.ratings['critics_score']
     @perks_poster = perks.posters['detailed']
     
-    @movie = TmdbMovie.find :title => "Argo", :limit => 1
+    @movie = Tmdb::TmdbMovie.find :title => "Argo", :limit => 1
     puts @movie.id
+    puts @movie # tons of information
+    
+    
+    # This is an example of how to add one Movie to the database.  Need to do this for thousands.. and not in an action
+    movie = Movie.new(:name => @movie.name, :description => @movie.overview, :release_date => @movie.released, :rating => Rotten::Movie.find_first(@movie.name).ratings['critics_score'])
+    #movie.save!
     
   end
   

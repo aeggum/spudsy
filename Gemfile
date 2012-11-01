@@ -23,7 +23,8 @@ gem 'jquery-rails'
 gem 'activeadmin'
 gem 'devise'
 gem 'rest-client'
-gem 'ruby-tmdb'
+gem 'addressable'
+# gem 'ruby-tmdb'
 # gem 'httparty'
 
 # To use ActiveModel has_secure_password
