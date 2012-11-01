@@ -11,3 +11,4 @@ else
   puts "Unable to open file!"
 end
 
+movieArray.push( :name => "foo", :rating => 100.0 )
