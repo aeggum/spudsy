@@ -24,10 +24,16 @@ var Welcome = function() {
 				if ($(this).data("bouncing") == false || $(this).data("bouncing") == undefined){
 				    $(this).effect("bounce", { distance: 5, times: 1 }, 500);
 				    $(this).data("bouncing", true);
+				    cursor: pointer;
+				    cursor: hand;
 				}
 			},function () {
 			   	$(this).data("bouncing", false);
 			});
+			
+			$(".poster").click(function() {
+				expandPhoto();
+			})
 
 			$(".chzn-select").chosen(); 
 			$(".chzn-select-deselect").chosen({allow_single_deselect:true});
@@ -38,3 +44,16 @@ var Welcome = function() {
 $(document).ready(function() {
 	Welcome.documentReady();
 });
+
+
+function expandPhoto() {
+
+   var overlay = document.createElement("div");
+   overlay.setAttribute("id","overlay");
+   overlay.setAttribute("class", "overlay");
+   document.body.appendChild(overlay);
+}
+
+function restore() {
+   document.body.removeChild(document.getElementById("overlay"));
+}
