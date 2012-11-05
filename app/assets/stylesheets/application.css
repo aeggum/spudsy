@@ -143,6 +143,8 @@ img.rt_img {
 	-webkit-box-shadow: 5px 5px 5px #CCC;
 	box-shadow: 5px 5px 5px #CCC;
 	position: relative; 
+	cursor:pointer;
+	cursor:hand;
    	width: 100%; /* for IE 6 */
 }
 

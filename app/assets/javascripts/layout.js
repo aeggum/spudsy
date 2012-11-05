@@ -34,8 +34,15 @@ var Welcome = function() {
 				$(this).colorbox({
 			    	width:"50%",
 			   		height:"50%",
-			   		opacity: 1.0,
-			   		html: "<h1> FUCK </h1>"
+			   		inline: true,
+			   		href: "#popup",
+			   		onLoad:function() { 
+						document.documentElement.style.overflow = "hidden";
+			   		},
+			   		onClosed:function() {
+						document.documentElement.style.overflow = "auto";
+			   		}
+			   		
 			  })
 			})
 
