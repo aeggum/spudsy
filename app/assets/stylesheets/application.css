@@ -32,11 +32,6 @@ body {
 	font-family: 'News Cycle' !important;
 }
 
-.container {
-	width: 960px;
-	max-width: 72.1%;
-}
-
 h1 {
 	font-weight: normal !important;
 	font-style: normal !important;
@@ -62,6 +57,11 @@ label {
 
 #genre_select_chzn {
 	margin-top: 25px;
+}
+
+.container {
+	width: 960px !important;
+	max-width: 100%;
 }
 
 .grey_shade {
@@ -127,10 +127,10 @@ img.rt_img {
 
 .fixed_left_nav {
  	position: fixed; 
-	left: 20px; 
+	margin-left: -156px; 
 	top: 65px;
 	width: 134px;
-	height: 415px;
+	height: 320px;
 	border: 1px solid #EEE;
 	border-bottom-left-radius: 10px;
 	border-top-left-radius: 10px;
