@@ -61,10 +61,17 @@ label {
 
 .grey_shade {
 	color: white; 
-	font: normal 24px/45px LeagueGothic !important;
+	font: 200 24px/45px LeagueGothic !important;
 	letter-spacing: -1px;  
 	background: rgb(0, 0, 0); /* fallback color */
 	background: rgba(0, 0, 0, 0.7);
+}
+
+.content_type {
+	position: absolute;
+	top: -18px;
+	left: 20px;
+	padding: 5px 10px;
 }
 
 .rank {

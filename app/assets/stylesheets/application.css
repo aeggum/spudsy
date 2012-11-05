@@ -61,8 +61,7 @@ label {
 
 .grey_shade {
 	color: white; 
-	font: normal 24px/45px LeagueGothic !important;
-	letter-spacing: -1px;  
+	font: 200 24px/45px LeagueGothic !important;  
 	background: rgb(0, 0, 0); /* fallback color */
 	background: rgba(0, 0, 0, 0.7);
 }
