@@ -24,16 +24,20 @@ var Welcome = function() {
 				if ($(this).data("bouncing") == false || $(this).data("bouncing") == undefined){
 				    $(this).effect("bounce", { distance: 5, times: 1 }, 500);
 				    $(this).data("bouncing", true);
-				    cursor: pointer;
-				    cursor: hand;
 				}
 			},function () {
 			   	$(this).data("bouncing", false);
 			});
-			
-			$(".poster").click(function() {
-				expandPhoto();
+						
+			$(".poster").on('click', function() {
+				$(this).colorbox({
+			    	width:"50%",
+			   		height:"50%",
+			   		opacity: 1.0,
+			   		html: "<h1> FUCK </h1>"
+			  })
 			})
+
 
 			$(".chzn-select").chosen(); 
 			$(".chzn-select-deselect").chosen({allow_single_deselect:true});
