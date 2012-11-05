@@ -10,6 +10,7 @@
  *
  *= require_self
  *= require_tree .
+ *= require bootstrap_and_overrides
  */
 @font-face {
 	font-family: LeagueGothic;
@@ -58,25 +59,43 @@ label {
 	margin-top: 25px;
 }
 
+.grey_shade {
+	color: white; 
+	font: 200 24px/45px LeagueGothic !important;
+	letter-spacing: -1px;  
+	background: rgb(0, 0, 0); /* fallback color */
+	background: rgba(0, 0, 0, 0.7);
+}
+
+.content_type {
+	position: absolute;
+	top: -18px;
+	left: 20px;
+	padding: 5px 10px;
+}
+
 .rank {
 	position: absolute; 
-	top: -5px; 
-	left: -15px;
+	top: -18px; 
+	left: -8px;
+	padding: 5px 10px;
 }
 
 .rating {
 	position: absolute; 
 	top: 150px; 
-	left: 100px;
+	left: 80px;
+	padding: 5px;
 }
 
-.rank span, .rating span {
-	color: white; 
-	font: bold 24px/45px LeagueGothic !important;; 
-	letter-spacing: -1px;  
-	background: rgb(0, 0, 0); /* fallback color */
-	background: rgba(0, 0, 0, 0.7);
-	padding: 10px; 
+.rating span {
+	padding-left: 33px;
+}
+
+img.rt_img {
+	width:30px;
+	position: absolute;
+	top: 12px;
 }
 
 .content {
