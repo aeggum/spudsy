@@ -32,6 +32,11 @@ body {
 	font-family: 'News Cycle' !important;
 }
 
+.container {
+	width: 960px;
+	max-width: 72.1%;
+}
+
 h1 {
 	font-weight: normal !important;
 	font-style: normal !important;
@@ -122,6 +127,16 @@ label {
 	box-shadow: 5px 5px 5px #CCC;
 	position: relative; 
    	width: 100%; /* for IE 6 */
+}
+
+#view_more {
+	float:right;
+	padding: 15px;
+}
+
+#poster_slider_2, #poster_slider_3 {
+	padding-top: 35px;
+	display: none;
 }
 
 /* Giant Goldfish color palette */
