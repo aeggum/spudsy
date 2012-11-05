@@ -11,10 +11,27 @@ class WelcomeController < ApplicationController
     # Doing some testing with the RT API wrapper
     argo = Rotten::Movie.find_first "Argo"
     @argo_score = argo.ratings['critics_score']
+    @argo_poster = argo.posters['detailed']
     
     perks = Rotten::Movie.find_first "Perks of being a wallflower"
     @perks_score = perks.ratings['critics_score']
     @perks_poster = perks.posters['detailed']
+    
+    looper = Rotten::Movie.find_first "Looper"
+    @looper_score = looper.ratings['critics_score']
+    @looper_poster = looper.posters['detailed']
+    
+    psychopaths = Rotten::Movie.find_first "Seven Psychopaths"
+    @psycho_score = psychopaths.ratings['critics_score']
+    @psycho_poster = psychopaths.posters['detailed']
+    
+    dark_rises = Rotten::Movie.find_first "The Dark Knight Rises"
+    @rises_score = dark_rises.ratings['critics_score']
+    @rises_poster = dark_rises.posters['detailed']
+    
+    avatar = Rotten::Movie.find_first "Avatar"
+    @avatar_score = avatar.ratings['critics_score']
+    @avatar_poster = avatar.posters['detailed']
     
     # will print out a giant blob in the console
     @movie = Tmdb::TmdbMovie.find :title => "Argo", :limit => 1
