@@ -52,7 +52,7 @@
 	</div>
 </div>
 
-<div class="container_12" id="poster_slider">
+<div class="container_12" id="poster_slider_1">
 	<div class="grid_2 poster">
 		<img src="http://cf2.imgobject.com/t/p/w185/icL23Y3CUyNM3bxaTm999OB3HcI.jpg" style="width:140px;height:200px;" />
 		<h3 class="rank grey_shade">#1 - HBO 9p</h3>
@@ -70,37 +70,143 @@
 		</div>
 	</div>
 	<div class="grid_2 poster">
-		<img src="http://cf2.imgobject.com/t/p/w185/lbEqxVbzg936a392Z837HTUGvWc.jpg" style="width:140px;height:200px;" />
+		<%= image_tag("#{@looper_poster}", :size => "140x200") %>		
 		<h3 class="rank grey_shade"><span>#3 - Netflix</span></h3>
 		<div class="rating grey_shade">
 			<img class="rt_img" src="../rt_fresh.png" />
-			<span>88%</span>
+			<span><%= @looper_score %>%</span>
 		</div>
 	</div>
 	<div class="grid_2 poster">
-		<img src="http://cf2.imgobject.com/t/p/w185/tBXdHVUQozj229NqnM9CoExXvw1.jpg" style="width:140px;height:200px;" />
+		<%= image_tag("#{@psycho_poster}", :size => "140x200") %>
 		<h3 class="rank grey_shade"><span>#4 - Netflix</span></h3>
 		<div class="rating grey_shade">
 			<img class="rt_img" src="../rt_fresh.png" />
-			<span>81%</span>
+			<span><%= @psycho_score %>%</span>
 		</div>
 	</div>
 	<div class="grid_2 poster">
-		<img src="http://cf2.imgobject.com/t/p/w185/fjHFhv2RG2rz81NWSKUL6UTew7o.jpg" style="width:140px;height:200px;" />
+		<%= image_tag("#{@rises_poster}", :size => "140x200") %>
 		<h3 class="rank grey_shade"><span>#5 - TNT 7:30p</span></h3>
 		<div class="rating grey_shade">
 			<img class="rt_img" src="../rt_fresh.png" />
-			<span>79%</span>
+			<span><%= @rises_score %>%</span>
 		</div>
 	</div>
 	<div class="grid_2 poster">
-		<img src="http://cf2.imgobject.com/t/p/w185/8o7xRloe8eAdlA6pwkeCVFt0UX4.jpg" style="width:140px;height:200px;" />
+		<%= image_tag("#{@avatar_poster}", :size => "140x200") %>
 		<h3 class="rank grey_shade"><span>#6 - Hulu+</span></h3>
 		<div class="rating grey_shade">
 			<img class="rt_img" src="../rt_rotten.png" />
-			<span>75%</span>
+			<span><%= @avatar_score %>%</span>
 		</div>
 	</div>
+</div>
+
+<div class="container_12" id="poster_slider_2">
+	<div class="grid_2 poster">
+		<%= image_tag("#{@dark_knight_poster}", :size => "140x200") %>
+		<h3 class="rank grey_shade"><span>#7</span></h3>
+		<h3 class="rating grey_shade">
+			<img class="rt_img" src="../rt_certified.png" />
+			<span><%= @dark_knight_score %>%</span>
+		</h3>
+	</div>
+	<div class="grid_2 poster">
+		<%= image_tag("#{@cruel_poster}", :size => "140x200") %>
+		<h3 class="rank grey_shade"><span>#8</span></h3>
+		<h3 class="rating grey_shade">
+			<img class="rt_img" src="../rt_rotten.png" />
+			<span><%= @cruel_score %>%</span>
+		</h3>
+	</div>
+	<div class="grid_2 poster">
+		<%= image_tag("#{@avengers_poster}", :size => "140x200") %>
+		<h3 class="rank grey_shade"><span>#9</span></h3>
+		<h3 class="rating grey_shade">
+			<img class="rt_img" src="../rt_fresh.png" />
+			<span><%= @avengers_score %>%</span>
+		</h3>
+	</div>
+	<div class="grid_2 poster">
+		<%= image_tag("#{@cloud_poster}", :size => "140x200") %>
+		<h3 class="rank grey_shade"><span>#10</span></h3>
+		<h3 class="rating grey_shade">
+			<img class="rt_img" src="../rt_rotten.png" />
+			<span><%= @cloud_score %>%</span>
+		</h3>
+	</div>
+	<div class="grid_2 poster">
+		<%= image_tag("#{@potter_poster}", :size => "140x200") %>
+		<h3 class="rank grey_shade"><span>#11</span></h3>
+		<h3 class="rating grey_shade">
+			<img class="rt_img" src="../rt_certified.png" />
+			<span><%= @potter_score %>%</span>
+		</h3>
+	</div>
+	<div class="grid_2 poster">
+		<%= image_tag("#{@iron_poster}", :size => "140x200") %>
+		<h3 class="rank grey_shade"><span>#12</span></h3>
+		<h3 class="rating grey_shade">
+			<img class="rt_img" src="../rt_fresh.png" />
+			<span><%= @iron_score %>%</span>
+		</h3>
+	</div>
+</div>
+
+<div class="container_12" id="poster_slider_3">
+	<div class="grid_2 poster">
+		<%= image_tag("#{@spiderman_poster}", :size => "140x200") %>
+		<h3 class="rank grey_shade"><span>#13</span></h3>
+		<h3 class="rating grey_shade">
+			<img class="rt_img" src="../rt_fresh.png" />
+			<span><%= @spiderman_score %>%</span>
+		</h3>
+	</div>
+	<div class="grid_2 poster">
+		<%= image_tag("#{@titanic_poster}", :size => "140x200") %>
+		<h3 class="rank grey_shade"><span>#14</span></h3>
+		<h3 class="rating grey_shade">
+			<img class="rt_img" src="../rt_fresh.png" />
+			<span><%= @titanic_score %>%</span>
+		</h3>
+	</div>
+	<div class="grid_2 poster">
+		<%= image_tag("#{@texas_poster}", :size => "140x200") %>
+		<h3 class="rank grey_shade"><span>#15</span></h3>
+		<h3 class="rating grey_shade">
+			<img class="rt_img" src="../rt_rotten.png" />
+			<span><%= @texas_score %>%</span>
+		</h3>
+	</div>
+	<div class="grid_2 poster">
+		<%= image_tag("#{@legend_poster}", :size => "140x200") %>
+		<h3 class="rank grey_shade"><span>#16</span></h3>
+		<h3 class="rating grey_shade">
+			<img class="rt_img" src="../rt_fresh.png" />
+			<span><%= @legend_score %>%</span>
+		</h3>
+	</div>
+	<div class="grid_2 poster">
+		<%= image_tag("#{@lotr_poster}", :size => "140x200") %>
+		<h3 class="rank grey_shade"><span>#17</span></h3>
+		<h3 class="rating grey_shade">
+			<img class="rt_img" src="../rt_certified.png" />
+			<span><%= @lotr_score %>%</span>
+		</h3>
+	</div>
+	<div class="grid_2 poster">
+		<%= image_tag("#{@mummy_poster}", :size => "140x200") %>
+		<h3 class="rank grey_shade"><span>#18</span></h3>
+		<h3 class="rating grey_shade">
+			<img class="rt_img" src="../rt_rotten.png" />
+			<span><%= @mummy_score %>%</span>
+		</h3>
+	</div>
+</div>
+
+<div class="container_2" id="view_more">
+	<button>View More</button>
 </div>
 
 <div id="tv_section">

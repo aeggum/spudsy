@@ -2,6 +2,7 @@ var Welcome = function() {
 	/**
 	*	Private Methods (separated just by closing brace)
 	*/
+	var page = 1;
 
 	return {
 		/**
@@ -41,6 +42,14 @@ var Welcome = function() {
 
 			$(".chzn-select").chosen(); 
 			$(".chzn-select-deselect").chosen({allow_single_deselect:true});
+			
+			$("#view_more").on('click', function() {
+				page++;
+				$("#poster_slider_" + page).slideDown(250);
+				if (page >= 3) {
+					$("#view_more").hide();
+				}
+			});
 		}
 	};
 }();
