@@ -209,6 +209,10 @@
 	<button>View More</button>
 </div>
 
+<div id="netflix_section" style="display: none">
+	<%= render :partial => 'netflix', :locals => { :shows => @show_array } %>
+</div>
+
 <div id="tv_section">
 	<div class="container_12">
 		<hr />

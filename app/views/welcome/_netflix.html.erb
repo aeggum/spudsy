@@ -1,0 +1,23 @@
+<div id="netflix_partial">
+	<div class="container_12">
+		<div class="grid_12">	
+			<h1 class="giant_goldfish">Netflix</h1>
+		</div>
+	</div>
+	<% shows.each_with_index do |show, index| %>
+	<% if (index % 6 == 0) %>
+		<div class="container_12">
+	<% end %>
+		<div class="grid_2 poster">
+			<%= image_tag("#{show['poster']}", :size => "140x200") %>
+			<h3 class="tv_rating grey_shade">
+				<span><%= show['rating'] %>/10</span>
+			</h3>
+		</div> 
+	<% if (index % 6 == 5) %>
+		</div>
+	<% end %>
+	
+	<% end %>
+	
+</div>

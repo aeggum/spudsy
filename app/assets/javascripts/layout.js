@@ -20,6 +20,16 @@ var Welcome = function() {
 					$('#tv_section').slideUp('slow');
 				}
 			});
+			
+			$('#netflix').click(function() {
+				if ($(this).is(':checked')) {
+					$("#netflix_section").slideDown('slow');
+					//$("#netflix_section").slideDown('slow');
+				}
+				else {
+					$("#netflix_section").slideUp('slow');
+				}
+			});
 
 			$(".poster").hover(function(){
 				if ($(this).data("bouncing") == false || $(this).data("bouncing") == undefined){

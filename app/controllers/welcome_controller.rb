@@ -91,7 +91,6 @@ class WelcomeController < ApplicationController
     @mummy_poster = mummy.posters['detailed']
     
     @show_array = get_shows
-
     
     
     # will print out a giant blob in the console
@@ -135,7 +134,9 @@ class WelcomeController < ApplicationController
     def get_shows
       tvdb = TvdbParty::Search.new("FACBC9B54A326107")
     
-      tv_show_titles = ['Seinfeld', 'The West Wing', 'Person of Interest', 'The Walking Dead', 'Family Guy', '24', 'Dexter', 'Breaking Bad']
+      tv_show_titles = ['Seinfeld', 'The West Wing', 'Person of Interest', 'The Walking Dead', '24', #'Family Guy', 
+          'Dexter', 'Breaking Bad', 'Planet Earth', 'The Wire', 'Game of Thrones', 'Arrested Development', 'Firefly', 
+          'Lost', 'The Sopranos', 'Sherlock', 'Twin Peaks', 'Batman', 'Oz', 'Downton Abbey', 'Top Gear'] #,'Rome'
       show_array = Array.new
       tv_show_titles.each { |show|
         hash_show = Hash.new
@@ -143,9 +144,11 @@ class WelcomeController < ApplicationController
         tvdb_show = tvdb.get_series_by_id(tvdb.search(show)[0]["seriesid"])
         hash_show['rating'] = tvdb_show.rating
         hash_show['poster'] = tvdb_show.posters('en').first.url
+        puts show
         show_array.push(hash_show)
       }
     
+        
       return show_array
     end
 end

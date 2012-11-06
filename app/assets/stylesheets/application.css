@@ -55,6 +55,10 @@ label {
 	vertical-align: middle;
 }
 
+#netflix_partial .container_12 {
+	padding-top: 30px;	
+}
+
 #genre_select_chzn {
 	margin-top: 25px;
 }
@@ -85,16 +89,20 @@ label {
 	padding: 5px 10px;
 }
 
-.rating {
+.rating, .tv_rating {
 	position: absolute; 
 	top: 150px; 
 	left: 80px;
 	padding: 5px;
 }
 
+.tv_rating {
+	left: 95px;
+}
+
 .rating span {
 	padding-left: 33px;
-}
+} 
 
 img.rt_img {
 	width:30px;
