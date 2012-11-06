@@ -55,7 +55,7 @@
 
 <div class="container_12" id="poster_slider_1">
 	<div class="grid_2 poster">
-		<img src="http://cf2.imgobject.com/t/p/w185/icL23Y3CUyNM3bxaTm999OB3HcI.jpg" style="width:140px;height:200px;" />
+		<%= image_tag("#{@argo_poster}", :size => "140x200") %>
 		<h3 class="rank grey_shade">#1 - HBO 9p</h3>
 		<div class="rating grey_shade">
 			<img class="rt_img" src="../rt_certified.png" />
@@ -79,11 +79,10 @@
 		</div>
 	</div>
 	<div class="grid_2 poster">
-		<%= image_tag("#{@psycho_poster}", :size => "140x200") %>
+		<%= image_tag("#{@show_array[0]['poster']}", :size => "140x200") %>
 		<h3 class="rank grey_shade"><span>#4 - Netflix</span></h3>
-		<div class="rating grey_shade">
-			<img class="rt_img" src="../rt_fresh.png" />
-			<span><%= @psycho_score %>%</span>
+		<div class="tv rating grey_shade">
+			<span><%= @show_array[0]['rating'] %>/10</span>
 		</div>
 	</div>
 	<div class="grid_2 poster">
@@ -95,11 +94,11 @@
 		</div>
 	</div>
 	<div class="grid_2 poster">
-		<%= image_tag("#{@avatar_poster}", :size => "140x200") %>
+		<%= image_tag("#{@show_array[1]['poster']}", :size => "140x200") %>
 		<h3 class="rank grey_shade"><span>#6 - Hulu+</span></h3>
 		<div class="rating grey_shade">
 			<img class="rt_img" src="../rt_rotten.png" />
-			<span><%= @avatar_score %>%</span>
+			<span><%= @show_array[1]['rating'] %>/10</span>
 		</div>
 	</div>
 </div>
@@ -107,23 +106,23 @@
 <div class="container_12" id="poster_slider_2">
 	<div class="grid_2 poster">
 		<%= image_tag("#{@dark_knight_poster}", :size => "140x200") %>
-		<h3 class="rank grey_shade"><span>#7</span></h3>
+		<h3 class="rank grey_shade"><span>#7 - Netflix</span></h3>
 		<h3 class="rating grey_shade">
 			<img class="rt_img" src="../rt_certified.png" />
 			<span><%= @dark_knight_score %>%</span>
 		</h3>
 	</div>
 	<div class="grid_2 poster">
-		<%= image_tag("#{@cruel_poster}", :size => "140x200") %>
-		<h3 class="rank grey_shade"><span>#8</span></h3>
+		<%= image_tag("#{@show_array[2]['poster']}", :size => "140x200") %>
+		<h3 class="rank grey_shade"><span>#8 - CBS 8p</span></h3>
 		<h3 class="rating grey_shade">
 			<img class="rt_img" src="../rt_rotten.png" />
-			<span><%= @cruel_score %>%</span>
+			<span><%= @show_array[2]['rating'] %>/10</span>
 		</h3>
 	</div>
 	<div class="grid_2 poster">
 		<%= image_tag("#{@avengers_poster}", :size => "140x200") %>
-		<h3 class="rank grey_shade"><span>#9</span></h3>
+		<h3 class="rank grey_shade"><span>#9 - HBO 3p</span></h3>
 		<h3 class="rating grey_shade">
 			<img class="rt_img" src="../rt_fresh.png" />
 			<span><%= @avengers_score %>%</span>
@@ -131,23 +130,23 @@
 	</div>
 	<div class="grid_2 poster">
 		<%= image_tag("#{@cloud_poster}", :size => "140x200") %>
-		<h3 class="rank grey_shade"><span>#10</span></h3>
+		<h3 class="rank grey_shade"><span>#10 - Redbox</span></h3>
 		<h3 class="rating grey_shade">
 			<img class="rt_img" src="../rt_rotten.png" />
 			<span><%= @cloud_score %>%</span>
 		</h3>
 	</div>
 	<div class="grid_2 poster">
-		<%= image_tag("#{@potter_poster}", :size => "140x200") %>
-		<h3 class="rank grey_shade"><span>#11</span></h3>
+		<%= image_tag("#{@show_array[3]['poster']}", :size => "140x200") %>
+		<h3 class="rank grey_shade"><span>#11 - AMC 8p</span></h3>
 		<h3 class="rating grey_shade">
 			<img class="rt_img" src="../rt_certified.png" />
-			<span><%= @potter_score %>%</span>
+			<span><%= @show_array[3]['rating'] %>/10</span>
 		</h3>
 	</div>
 	<div class="grid_2 poster">
 		<%= image_tag("#{@iron_poster}", :size => "140x200") %>
-		<h3 class="rank grey_shade"><span>#12</span></h3>
+		<h3 class="rank grey_shade"><span>#12 - Amazon</span></h3>
 		<h3 class="rating grey_shade">
 			<img class="rt_img" src="../rt_fresh.png" />
 			<span><%= @iron_score %>%</span>
@@ -157,16 +156,16 @@
 
 <div class="container_12" id="poster_slider_3">
 	<div class="grid_2 poster">
-		<%= image_tag("#{@spiderman_poster}", :size => "140x200") %>
-		<h3 class="rank grey_shade"><span>#13</span></h3>
+		<%= image_tag("#{@show_array[4]['poster']}", :size => "140x200") %>
+		<h3 class="rank grey_shade"><span>#13 - TBS 7p</span></h3>
 		<h3 class="rating grey_shade">
 			<img class="rt_img" src="../rt_fresh.png" />
-			<span><%= @spiderman_score %>%</span>
+			<span><%= @show_array[4]['rating'] %>/10</span>
 		</h3>
 	</div>
 	<div class="grid_2 poster">
 		<%= image_tag("#{@titanic_poster}", :size => "140x200") %>
-		<h3 class="rank grey_shade"><span>#14</span></h3>
+		<h3 class="rank grey_shade"><span>#14 - ABC 7p</span></h3>
 		<h3 class="rating grey_shade">
 			<img class="rt_img" src="../rt_fresh.png" />
 			<span><%= @titanic_score %>%</span>
@@ -174,7 +173,7 @@
 	</div>
 	<div class="grid_2 poster">
 		<%= image_tag("#{@texas_poster}", :size => "140x200") %>
-		<h3 class="rank grey_shade"><span>#15</span></h3>
+		<h3 class="rank grey_shade"><span>#15 - Netflix </span></h3>
 		<h3 class="rating grey_shade">
 			<img class="rt_img" src="../rt_rotten.png" />
 			<span><%= @texas_score %>%</span>
@@ -182,7 +181,7 @@
 	</div>
 	<div class="grid_2 poster">
 		<%= image_tag("#{@legend_poster}", :size => "140x200") %>
-		<h3 class="rank grey_shade"><span>#16</span></h3>
+		<h3 class="rank grey_shade"><span>#16 - Amazon</span></h3>
 		<h3 class="rating grey_shade">
 			<img class="rt_img" src="../rt_fresh.png" />
 			<span><%= @legend_score %>%</span>
@@ -190,18 +189,18 @@
 	</div>
 	<div class="grid_2 poster">
 		<%= image_tag("#{@lotr_poster}", :size => "140x200") %>
-		<h3 class="rank grey_shade"><span>#17</span></h3>
+		<h3 class="rank grey_shade"><span>#17 - TNT 1pm</span></h3>
 		<h3 class="rating grey_shade">
 			<img class="rt_img" src="../rt_certified.png" />
 			<span><%= @lotr_score %>%</span>
 		</h3>
 	</div>
 	<div class="grid_2 poster">
-		<%= image_tag("#{@mummy_poster}", :size => "140x200") %>
-		<h3 class="rank grey_shade"><span>#18</span></h3>
+		<%= image_tag("#{@show_array[5]['poster']}", :size => "140x200") %>
+		<h3 class="rank grey_shade"><span>#18 - FOX 8p</span></h3>
 		<h3 class="rating grey_shade">
 			<img class="rt_img" src="../rt_rotten.png" />
-			<span><%= @mummy_score %>%</span>
+			<span><%= @show_array[5]['rating'] %>/10</span>
 		</h3>
 	</div>
 </div>
