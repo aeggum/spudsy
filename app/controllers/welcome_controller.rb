@@ -10,87 +10,85 @@ class WelcomeController < ApplicationController
   caches_action :get_shows
   def index 
    
+    @movies = Movie.all
+    @show_array = get_shows 
     # Doing some testing with the RT API wrapper
-    argo = Rotten::Movie.find_first "Argo"
-    @argo_score = argo.ratings['critics_score']
-    @argo_poster = argo.posters['detailed']
+    # argo = Rotten::Movie.find_first "Argo"
+    @argo_score = @movies[0].rating #argo.ratings['critics_score']
+    @argo_poster = @movies[0].poster #argo.posters['detailed']
     
-    perks = Rotten::Movie.find_first "Perks of being a wallflower"
-    @perks_score = perks.ratings['critics_score']
-    @perks_poster = perks.posters['detailed']
+    # perks = Rotten::Movie.find_first "Perks of being a wallflower"
+    @perks_score = @movies[1].rating #perks.ratings['critics_score']
+    @perks_poster = @movies[1].poster #perks.posters['detailed']
     
-    looper = Rotten::Movie.find_first "Looper"
-    @looper_score = looper.ratings['critics_score']
-    @looper_poster = looper.posters['detailed']
+    # looper = Rotten::Movie.find_first "Looper"
+    @looper_score = @movies[2].rating #looper.ratings['critics_score']
+    @looper_poster = @movies[2].poster #looper.posters['detailed']
     
-    psychopaths = Rotten::Movie.find_first "Seven Psychopaths"
-    @psycho_score = psychopaths.ratings['critics_score']
-    @psycho_poster = psychopaths.posters['detailed']
+    # psychopaths = Rotten::Movie.find_first "Seven Psychopaths"
+    @psycho_score = @movies[3].rating #psychopaths.ratings['critics_score']
+    @psycho_poster = @movies[4].poster #psychopaths.posters['detailed']
     
-    dark_rises = Rotten::Movie.find_first "The Dark Knight Rises"
-    @rises_score = dark_rises.ratings['critics_score']
-    @rises_poster = dark_rises.posters['detailed']
+    # dark_rises = Rotten::Movie.find_first "The Dark Knight Rises"
+    @rises_score = @movies[4].rating #dark_rises.ratings['critics_score']
+    @rises_poster = @movies[4].poster #dark_rises.posters['detailed']
     
-    avatar = Rotten::Movie.find_first "Avatar"
-    @avatar_score = avatar.ratings['critics_score']
-    @avatar_poster = avatar.posters['detailed']
+    # avatar = Rotten::Movie.find_first "Avatar"
+    @avatar_score =  @movies[5].rating #avatar.ratings['critics_score']
+    @avatar_poster = @movies[5].poster #avatar.posters['detailed']
     
     
     
     
     # extra movies (hard-coded) (page 2)
-    dark_knight = Rotten::Movie.find_first "The Dark Knight"
-    @dark_knight_score = dark_knight.ratings['critics_score']
-    @dark_knight_poster = dark_knight.posters['detailed']
+    # dark_knight = Rotten::Movie.find_first "The Dark Knight"
+    @dark_knight_score =  @movies[6].rating
+    @dark_knight_poster = @movies[6].poster
     
-    cruel_intentions = Rotten::Movie.find_first "Cruel Intentions"
-    @cruel_score = cruel_intentions.ratings['critics_score']
-    @cruel_poster = cruel_intentions.posters['detailed']
+    # cruel_intentions = Rotten::Movie.find_first "Cruel Intentions"
+    @cruel_score =  @movies[7].rating
+    @cruel_poster = @movies[7].poster
     
-    avengers = Rotten::Movie.find_first "The Avengers"
-    @avengers_score = avengers.ratings['critics_score']
-    @avengers_poster = avengers.posters['detailed']
+    # avengers = Rotten::Movie.find_first "The Avengers"
+    @avengers_score =  @movies[8].rating
+    @avengers_poster = @movies[8].poster
     
-    cloud = Rotten::Movie.find_first "Cloud Atlas"
-    @cloud_score = cloud.ratings['critics_score']
-    @cloud_poster = cloud.posters['detailed']
+    # cloud = Rotten::Movie.find_first "Cloud Atlas"
+    @cloud_score =  @movies[9].rating
+    @cloud_poster = @movies[9].poster
     
-    harry_potter = Rotten::Movie.find_first "Harry Potter"
-    @potter_score = harry_potter.ratings['critics_score']
-    @potter_poster = harry_potter.posters['detailed']
+    # harry_potter = Rotten::Movie.find_first "Harry Potter"
+    @potter_score =  @movies[10].rating
+    @potter_poster = @movies[10].poster
     
-    iron_man = Rotten::Movie.find_first "Iron Man"
-    @iron_score = iron_man.ratings['critics_score']
-    @iron_poster = iron_man.posters['detailed']
+    # iron_man = Rotten::Movie.find_first "Iron Man"
+    @iron_score =  @movies[11].rating
+    @iron_poster = @movies[11].poster
     
     
     
     # page 3 
-    spiderman = Rotten::Movie.find_first "Spiderman"
-    @spiderman_score = spiderman.ratings['critics_score']
-    @spiderman_poster = spiderman.posters['detailed']
+    # spiderman = Rotten::Movie.find_first "Spiderman"
+    @spiderman_score =  @movies[12].rating
+    @spiderman_poster = @movies[12].poster
     
-    titanic = Rotten::Movie.find_first "Titanic"
-    @titanic_score = titanic.ratings['critics_score']
-    @titanic_poster = titanic.posters['detailed']
+    # titanic = Rotten::Movie.find_first "Titanic"
+    @titanic_score =  @movies[13].rating
+    @titanic_poster = @movies[13].poster
     
-    texas = Rotten::Movie.find_first "The Texas Chainsaw Massacre"
-    @texas_score = texas.ratings['critics_score']
-    @texas_poster = texas.posters['detailed']
+    # texas = Rotten::Movie.find_first "The Texas Chainsaw Massacre"
+    @texas_score =  @movies[14].rating
+    @texas_poster = @movies[14].poster
     
-    legend = Rotten::Movie.find_first "I am Legend"
-    @legend_score = legend.ratings['critics_score']
-    @legend_poster = legend.posters['detailed']
+    # legend = Rotten::Movie.find_first "I am Legend"
+    @legend_score =  @movies[15].rating
+    @legend_poster = @movies[15].poster
     
-    lotr = Rotten::Movie.find_first "Lord of the Rings"
-    @lotr_score = lotr.ratings['critics_score']
-    @lotr_poster = lotr.posters['detailed']
+    # lotr = Rotten::Movie.find_first "Lord of the Rings"
+    @lotr_score =  @movies[16].rating
+    @lotr_poster = @movies[16].poster
     
-    mummy = Rotten::Movie.find_first "The Mummy"
-    @mummy_score = mummy.ratings['critics_score']
-    @mummy_poster = mummy.posters['detailed']
     
-    @show_array = get_shows
     
     
     # will print out a giant blob in the console
@@ -132,23 +130,22 @@ class WelcomeController < ApplicationController
   private 
   
     def get_shows
-      tvdb = TvdbParty::Search.new("FACBC9B54A326107")
-    
-      tv_show_titles = ['Seinfeld', 'The West Wing', 'Person of Interest', 'The Walking Dead', '24', #'Family Guy', 
-          'Dexter', 'Breaking Bad', 'Planet Earth', 'The Wire', 'Game of Thrones', 'Arrested Development', 'Firefly', 
-          'Lost', 'The Sopranos', 'Sherlock', 'Twin Peaks', 'Batman', 'Oz', 'Downton Abbey', 'Top Gear'] #,'Rome'
-      show_array = Array.new
-      tv_show_titles.each { |show|
-        hash_show = Hash.new
-        hash_show['title'] = show
-        tvdb_show = tvdb.get_series_by_id(tvdb.search(show)[0]["seriesid"])
-        hash_show['rating'] = tvdb_show.rating
-        hash_show['poster'] = tvdb_show.posters('en').first.url
-        puts show
-        show_array.push(hash_show)
-      }
+      # tvdb = TvdbParty::Search.new("FACBC9B54A326107")
+      # tv_show_titles = ['Seinfeld', 'The West Wing', 'Person of Interest', 'The Walking Dead', '24', #'Family Guy', 
+          # 'Dexter', 'Breaking Bad', 'Planet Earth', 'The Wire', 'Game of Thrones', 'Arrested Development', 'Firefly', 
+          # 'Lost', 'The Sopranos', 'Sherlock', 'Twin Peaks', 'Batman', 'Oz', 'Downton Abbey', 'Top Gear'] #,'Rome'
+      # show_array = Array.new
+      # tv_show_titles.each { |show|
+        # hash_show = Hash.new
+        # hash_show['title'] = show
+        # tvdb_show = tvdb.get_series_by_id(tvdb.search(show)[0]["seriesid"])
+        # hash_show['rating'] = tvdb_show.rating
+        # hash_show['poster'] = tvdb_show.posters('en').first.url
+        # # puts show
+        # show_array.push(hash_show)
+      # }
     
         
-      return show_array
+      return TvShow.all
     end
 end
