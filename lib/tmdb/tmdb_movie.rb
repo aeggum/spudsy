@@ -1,25 +1,33 @@
 module Tmdb
   class TmdbMovie
   
-    def self.top_rated() 
+    def self.top_rated(options) 
       options = {
         :expand_results => true,
         :language => Tmdb.default_language
-      }
+      }.merge(options)
       
       results = []
-      results << Tmdb.api_call2("movie/top_rated", {}, options[:language])
+      results << Tmdb.api_call2("movie/top_rated", {:page => options[:page]}, options[:language])
       options[:expand_results] = false
-      puts "results! : #{results}"
+      # puts "results! : #{results}"
+      
+      # puts results[0]['results']
+     # results[0]['results'].each_key do |key|
+       # puts key
+        # if (key == 'id') do 
+          # puts "FUCK"
+        # end
+     # end
       
       results.flatten!(1)
       results.uniq!
       results.delete_if &:nil?
       
-      unless(options[:limit].nil?)
-        raise ArgumentError, ":limit must be an integer greater than 0" unless(options[:limit].is_a?(Fixnum) && options[:limit] > 0)
-        results = results.slice(0, options[:limit])
-      end
+      # unless(options[:limit].nil?)
+        # raise ArgumentError, ":limit must be an integer greater than 0" unless(options[:limit].is_a?(Fixnum) && options[:limit] > 0)
+        # results = results.slice(0, options[:limit])
+      # end
       
       results.map!{|m| TmdbMovie.new(m, options[:expand_results], options[:language])}
       return results

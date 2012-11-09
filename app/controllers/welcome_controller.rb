@@ -10,7 +10,8 @@ class WelcomeController < ApplicationController
   caches_action :get_shows
   def index 
    
-    @movies = Movie.all
+    @movies = Movie.all(:limit => 25)
+    
     @show_array = get_shows 
     # Doing some testing with the RT API wrapper
     # argo = Rotten::Movie.find_first "Argo"

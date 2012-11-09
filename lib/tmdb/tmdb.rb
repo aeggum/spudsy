@@ -48,7 +48,7 @@ module Tmdb
     raise ArgumentError, "Invalid data." if(data.nil? || (data.class != Hash))
 
     method, action = method.split '/'
-    puts "method: " + method
+    # puts "method: " + method
 
     data = {
       :api_key =>  Tmdb.api_key
@@ -81,8 +81,10 @@ module Tmdb
     url            = [Tmdb.base_api_url, method, data[:id], action].compact.join '/'
     url_with_query = [url, uri.query].compact.join '?'
     url_with_query += '?api_key=' + Tmdb.api_key
+    # puts data[:page]
+    url_with_query += '&page=' + data[:page].to_s
     
-    puts "url_with_query" + url_with_query
+   # puts "url_with_query" + url_with_query
     
     response = Tmdb.get_url(url_with_query)
     if(response.code.to_i != 200)
@@ -103,7 +105,7 @@ module Tmdb
     raise ArgumentError, "Invalid data." if(data.nil? || (data.class != Hash))
 
     method, action = method.split '/'
-    puts "method: " + method
+    # puts "method: " + method
 
     data = {
       :api_key =>  Tmdb.api_key
@@ -151,7 +153,7 @@ module Tmdb
 
   # Get a URL and return a response object, follow upto 'limit' re-directs on the way
   def self.get_url(uri_str, limit = 10)
-    puts 'uri_str: ' + uri_str
+    # puts 'uri_str: ' + uri_str
     return false if limit == 0
     begin 
       response = Net::HTTP.get_response(URI.parse(uri_str))
