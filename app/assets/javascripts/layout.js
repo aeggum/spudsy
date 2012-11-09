@@ -43,17 +43,23 @@ var Welcome = function() {
 			});
 						
 			$(".poster").on('click', function() {
-				$(this).colorbox({
-					
-			    	width:"50%",
-			   		height:"50%",
+				$(this).colorbox({	
+			    	width:"500px",
+			   		height:"600px",
 			   		inline: true,
-			   		href: "#popup",
+			   		href: "#info_overlay",
+			   		speed: 500,
 			   		onLoad:function() { 
 						document.documentElement.style.overflow = "hidden";
 						var id = $(this).attr('data-id');
+						console.log(id)
+						alert(id)
+						
 			   		},
 			   		onClosed:function() {
+			   			$(".overlay_info").css("overflow", "hidden");
+						$(".overlay_info").css("height", "200px");
+						$("#overlay_more_info").show();
 						document.documentElement.style.overflow = "auto";
 			   		}
 			   		
@@ -70,6 +76,12 @@ var Welcome = function() {
 				if (page >= 3) {
 					$("#view_more").hide();
 				}
+			});
+			
+			$("#overlay_more_info").on('click', function() {
+				$(".overlay_info").css("overflow", "auto");
+				$(".overlay_info").css("height", "100%");
+				$("#overlay_more_info").hide();
 			});
 		}
 	};
