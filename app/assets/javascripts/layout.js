@@ -42,10 +42,11 @@ var Welcome = function() {
 						
 			$(".poster").on('click', function() {
 				$(this).colorbox({
-			    	width:"50%",
-			   		height:"50%",
+			    	width: "500px",
+			   		height:"600px",
 			   		inline: true,
-			   		href: "#popup",
+			   		href: "#info_overlay",
+			   		speed: 500,
 			   		onLoad:function() { 
 						document.documentElement.style.overflow = "hidden";
 			   		},

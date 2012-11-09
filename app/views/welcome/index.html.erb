@@ -239,7 +239,21 @@
 </div>
 
 <div id="hidden_div" style="display: none">
-	<div id="popup" >
-		<h1>Fuck That Shit</h1>
+	<div id="info_overlay" >
+		<div class="overlay_container" style="border: 1px solid #000000;
+	overflow: hidden;
+	width: 99%;">
+			<div style= "float:left; width:45%">
+				<%= image_tag("#{@lotr_poster}", :size => "200x300") %>
+			</div>
+			<div style= "float:right; width:45%">
+				<h1>Movie Name</h1> 
+				<h3>MPAA Rating</h3>
+				<h3>Release Date</h3>
+			</div>
+		</div>
+		<div style="width:95%">
+			<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed scelerisque libero mollis massa pretium hendrerit sit amet id dolor. Phasellus dapibus ligula vel ipsum porta sed accumsan lorem molestie. Maecenas nibh ante, euismod lacinia scelerisque a, luctus sit amet ipsum. Pellentesque luctus ligula ac tellus elementum faucibus. Phasellus et nulla enim, in gravida ligula. Integer sed imperdiet erat. Maecenas condimentum mi vitae purus vestibulum in eleifend sem faucibus. Aliquam ullamcorper, ante sit amet tristique tempus, velit magna egestas nisi, eu pellentesque diam eros at lorem. Donec ac lacus non turpis dictum pretium ac ut ante. Aenean quis fringilla eros. Vivamus vitae quam et tellus rutrum pretium ac quis tortor. Sed odio nunc, egestas a vulputate et, aliquet eu mauris. Nunc sapien nisl, elementum at tempor quis, sollicitudin eu diam. Proin aliquam convallis imperdiet. Morbi hendrerit porta erat eget facilisis. Morbi dignissim quam vel nisi dignissim a pretium odio pulvinar.  </p>
+		</div>
 	</div>
 </div>
