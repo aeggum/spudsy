@@ -62,8 +62,14 @@ var Welcome = function() {
 			   		onLoad:function() { 
 						document.documentElement.style.overflow = "hidden";
 						var id = $(this).attr('data-id');
-						//console.log(id)
+						//console.log(id);
 						//alert(id)
+						//$.get('tv_shows/' + id, function(data) {
+							//alert(data);
+							//console.log(data);
+      						// Handle the result
+      						//$('.article-window').html(data);
+    					//});
 						
 			   		},
 			   		onClosed:function() {

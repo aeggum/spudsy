@@ -6,13 +6,14 @@ DemoApp::Application.routes.draw do
 
   get "welcome/index"
   get "welcome/details"
+  get "tv_shows/show"
 
   root :to => 'welcome#index'
   match "/landing", :to => "welcome#index"
   match "/details", :to => "welcome#details"
   
   #map.resources :movies, :has_many => :actors
-  #map.resources :tv_shows, :has_many => :actors
+  resources :tv_shows# , :has_many => :actors
   
   
 
