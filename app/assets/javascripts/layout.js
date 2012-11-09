@@ -51,6 +51,9 @@ var Welcome = function() {
 						document.documentElement.style.overflow = "hidden";
 			   		},
 			   		onClosed:function() {
+			   			$(".overlay_info").css("overflow", "hidden");
+						$(".overlay_info").css("height", "200px");
+						$("#overlay_more_info").show();
 						document.documentElement.style.overflow = "auto";
 			   		}
 			   		
@@ -67,6 +70,12 @@ var Welcome = function() {
 				if (page >= 3) {
 					$("#view_more").hide();
 				}
+			});
+			
+			$("#overlay_more_info").on('click', function() {
+				$(".overlay_info").css("overflow", "auto");
+				$(".overlay_info").css("height", "100%");
+				$("#overlay_more_info").hide();
 			});
 		}
 	};
