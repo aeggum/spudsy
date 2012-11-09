@@ -55,14 +55,52 @@ label {
 	vertical-align: middle;
 }
 
+a {
+	color: #999;
+}
+
+#netflix_partial .container_12 {
+	padding-top: 30px;	
+}
+
 #genre_select_chzn {
 	margin-top: 25px;
 }
 
+/* SEARCH */
+
+#search_box {
+	width: 100%;
+	border: 1px solid #ccc;
+	font-family: 'News Cycle';
+	font-size: 1.5em;
+	height: 45px;
+	padding-top: 0;
+}
+
+#search_container {
+	border-bottom: 1px solid #eee;
+	height: 55px;
+}
+
+#search_form {
+	margin: 0 !important;
+}
+
+#magnify_img {
+	position: absolute;
+	margin-top: 15px;
+	margin-left: -25px;
+}
+
+.container {
+	width: 960px !important;
+	max-width: 100%;
+}
+
 .grey_shade {
 	color: white; 
-	font: 200 24px/45px LeagueGothic !important;
-	letter-spacing: -1px;  
+	font: 200 24px/45px LeagueGothic !important;  
 	background: rgb(0, 0, 0); /* fallback color */
 	background: rgba(0, 0, 0, 0.7);
 }
@@ -81,16 +119,20 @@ label {
 	padding: 5px 10px;
 }
 
-.rating {
+.rating, .tv_rating {
 	position: absolute; 
 	top: 150px; 
 	left: 80px;
 	padding: 5px;
 }
 
+.tv_rating {
+	left: 95px;
+}
+
 .rating span {
 	padding-left: 33px;
-}
+} 
 
 img.rt_img {
 	width:30px;
@@ -123,10 +165,10 @@ img.rt_img {
 
 .fixed_left_nav {
  	position: fixed; 
-	left: 20px; 
-	top: 65px;
+	margin-left: -156px; 
+	top: 105px;
 	width: 134px;
-	height: 415px;
+	height: 320px;
 	border: 1px solid #EEE;
 	border-bottom-left-radius: 10px;
 	border-top-left-radius: 10px;
@@ -139,7 +181,19 @@ img.rt_img {
 	-webkit-box-shadow: 5px 5px 5px #CCC;
 	box-shadow: 5px 5px 5px #CCC;
 	position: relative; 
+	cursor:pointer;
+	cursor:hand;
    	width: 100%; /* for IE 6 */
+}
+
+#view_more {
+	float:right;
+	padding: 15px;
+}
+
+#poster_slider_2, #poster_slider_3 {
+	padding-top: 35px;
+	display: none;
 }
 
 /* Giant Goldfish color palette */
