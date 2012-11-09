@@ -1,10 +1,11 @@
 <div id="netflix_partial">
 	<div class="container_12">
 		<div class="grid_12">	
-			<h1 class="giant_goldfish">Netflix</h1>
+			<h1 class="giant_goldfish"><%= header %></h1>
 		</div>
 	</div>
 	<% shows.each_with_index do |show, index| %>
+	<% if index < 6%>
 	<% if (index % 6 == 0) %>
 		<div class="container_12">
 	<% end %>
@@ -16,6 +17,8 @@
 		</div> 
 	<% if (index % 6 == 5) %>
 		</div>
+	<% end %>
+	
 	<% end %>
 	
 	<% end %>

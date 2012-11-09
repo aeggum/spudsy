@@ -90,7 +90,7 @@
 	<div class="grid_2 poster">
 		<%= image_tag("#{@show_array[0]['photo_url']}", :size => "140x200") %>
 		<h3 class="rank grey_shade"><span>#4 - Netflix</span></h3>
-		<div class="tv rating grey_shade">
+		<div class="tv_rating grey_shade">
 			<span><%= @show_array[0]['rating'] %>/10</span>
 		</div>
 	</div>
@@ -105,8 +105,7 @@
 	<div class="grid_2 poster">
 		<%= image_tag("#{@show_array[1]['photo_url']}", :size => "140x200") %>
 		<h3 class="rank grey_shade"><span>#6 - Hulu+</span></h3>
-		<div class="rating grey_shade">
-			<img class="rt_img" src="../rt_rotten.png" />
+		<div class="tv_rating grey_shade">
 			<span><%= @show_array[1]['rating'] %>/10</span>
 		</div>
 	</div>
@@ -124,8 +123,7 @@
 	<div class="grid_2 poster">
 		<%= image_tag("#{@show_array[2]['photo_url']}", :size => "140x200") %>
 		<h3 class="rank grey_shade"><span>#8 - CBS 8p</span></h3>
-		<h3 class="rating grey_shade">
-			<img class="rt_img" src="../rt_rotten.png" />
+		<h3 class="tv_rating grey_shade">
 			<span><%= @show_array[2]['rating'] %>/10</span>
 		</h3>
 	</div>
@@ -148,8 +146,7 @@
 	<div class="grid_2 poster">
 		<%= image_tag("#{@show_array[3]['photo_url']}", :size => "140x200") %>
 		<h3 class="rank grey_shade"><span>#11 - AMC 8p</span></h3>
-		<h3 class="rating grey_shade">
-			<img class="rt_img" src="../rt_certified.png" />
+		<h3 class="tv_rating grey_shade">
 			<span><%= @show_array[3]['rating'] %>/10</span>
 		</h3>
 	</div>
@@ -167,8 +164,7 @@
 	<div class="grid_2 poster">
 		<%= image_tag("#{@show_array[4]['photo_url']}", :size => "140x200") %>
 		<h3 class="rank grey_shade"><span>#13 - TBS 7p</span></h3>
-		<h3 class="rating grey_shade">
-			<img class="rt_img" src="../rt_fresh.png" />
+		<h3 class="tv_rating grey_shade">
 			<span><%= @show_array[4]['rating'] %>/10</span>
 		</h3>
 	</div>
@@ -207,8 +203,7 @@
 	<div class="grid_2 poster">
 		<%= image_tag("#{@show_array[5]['photo_url']}", :size => "140x200") %>
 		<h3 class="rank grey_shade"><span>#18 - FOX 8p</span></h3>
-		<h3 class="rating grey_shade">
-			<img class="rt_img" src="../rt_rotten.png" />
+		<h3 class="tv_rating grey_shade">
 			<span><%= @show_array[5]['rating'] %>/10</span>
 		</h3>
 	</div>
@@ -218,9 +213,14 @@
 	<a href="#" id="view_more">View More</a>
 </div>
 
-<div id="netflix_section" style="display: none">
-	<%= render :partial => 'netflix', :locals => { :shows => @show_array } %>
+<div id="hulu_section" style="display: none">
+	<%= render :partial => 'netflix', :locals => { :shows => @show_array, :header => "Hulu" } %>
 </div>
+
+<div id="netflix_section" style="display: none">
+	<%= render :partial => 'netflix', :locals => { :shows => @show_array.reverse, :header => "Netflix" } %>
+</div>
+
 
 <div id="tv_section">
 	<div class="container_12">

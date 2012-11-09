@@ -30,6 +30,17 @@ var Welcome = function() {
 					$("#netflix_section").slideUp('slow');
 				}
 			});
+			
+			$('#hulu').click(function() {
+				if ($(this).is(':checked')) {
+					$("#hulu_section").slideDown('slow');
+					//$("#netflix_section").slideDown('slow');
+				}
+				else {
+					$("#hulu_section").slideUp('slow');
+				}
+			});
+
 
 			$(".poster").hover(function(){
 				if ($(this).data("bouncing") == false || $(this).data("bouncing") == undefined){
