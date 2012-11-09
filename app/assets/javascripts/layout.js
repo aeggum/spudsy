@@ -32,6 +32,16 @@ var Welcome = function() {
 			});
 			
 			
+			$('#hulu').click(function() {
+				if ($(this).is(':checked')) {
+					$("#hulu_section").slideDown('slow');
+					//$("#netflix_section").slideDown('slow');
+				}
+				else {
+					$("#hulu_section").slideUp('slow');
+				}
+			});
+
 
 			$(".poster").hover(function(){
 				if ($(this).data("bouncing") == false || $(this).data("bouncing") == undefined){
@@ -52,8 +62,8 @@ var Welcome = function() {
 			   		onLoad:function() { 
 						document.documentElement.style.overflow = "hidden";
 						var id = $(this).attr('data-id');
-						console.log(id)
-						alert(id)
+						//console.log(id)
+						//alert(id)
 						
 			   		},
 			   		onClosed:function() {
