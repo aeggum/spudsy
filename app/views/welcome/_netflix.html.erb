@@ -8,7 +8,7 @@
 	<% if (index % 6 == 0) %>
 		<div class="container_12">
 	<% end %>
-		<div class="grid_2 poster">
+		<div data-id="<%= index %>" class="grid_2 poster tv_show">
 			<%= image_tag("#{show['photo_url']}", :size => "140x200") %>
 			<h3 class="tv_rating grey_shade">
 				<span><%= show['rating'] %>/10</span>

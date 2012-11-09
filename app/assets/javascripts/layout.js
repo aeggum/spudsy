@@ -30,6 +30,8 @@ var Welcome = function() {
 					$("#netflix_section").slideUp('slow');
 				}
 			});
+			
+			
 
 			$(".poster").hover(function(){
 				if ($(this).data("bouncing") == false || $(this).data("bouncing") == undefined){
@@ -42,12 +44,14 @@ var Welcome = function() {
 						
 			$(".poster").on('click', function() {
 				$(this).colorbox({
+					
 			    	width:"50%",
 			   		height:"50%",
 			   		inline: true,
 			   		href: "#popup",
 			   		onLoad:function() { 
 						document.documentElement.style.overflow = "hidden";
+						var id = $(this).attr('data-id');
 			   		},
 			   		onClosed:function() {
 						document.documentElement.style.overflow = "auto";
