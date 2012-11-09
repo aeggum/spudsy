@@ -47,12 +47,13 @@
 	<label for="tv">TV</label>
 </div>
 
-<div class="container_12">
+<div class="container_12" id="search_container">
 	<div class="prefix_6 grid_6">
 		<form id='search_form'>	
-			<input type='text' name='search' class='search_box' />
+			<input type='text' name='search' id='search_box' placeholder='Search for movies, TV shows, genres, or actors' />
 		</form>
 	</div>
+	<img src='../06-magnify.png' id='magnify_img' />
 </div>
 
 <div class="container_12">
@@ -213,8 +214,8 @@
 	</div>
 </div>
 
-<div class="container_2" id="view_more">
-	<button>View More</button>
+<div class="container_2">
+	<a href="#" id="view_more">View More</a>
 </div>
 
 <div id="netflix_section" style="display: none">

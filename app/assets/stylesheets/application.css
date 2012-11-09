@@ -55,12 +55,42 @@ label {
 	vertical-align: middle;
 }
 
+a {
+	color: #999 !important;
+}
+
 #netflix_partial .container_12 {
 	padding-top: 30px;	
 }
 
 #genre_select_chzn {
 	margin-top: 25px;
+}
+
+/* SEARCH */
+
+#search_box {
+	width: 100%;
+	border: 1px solid #ccc;
+	font-family: 'News Cycle';
+	font-size: 1.5em;
+	height: 45px;
+	padding-top: 0;
+}
+
+#search_container {
+	border-bottom: 1px solid #eee;
+	height: 55px;
+}
+
+#search_form {
+	margin: 0 !important;
+}
+
+#magnify_img {
+	position: absolute;
+	margin-top: 15px;
+	margin-left: -25px;
 }
 
 .container {
@@ -136,7 +166,7 @@ img.rt_img {
 .fixed_left_nav {
  	position: fixed; 
 	margin-left: -156px; 
-	top: 65px;
+	top: 105px;
 	width: 134px;
 	height: 320px;
 	border: 1px solid #EEE;

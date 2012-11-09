@@ -47,6 +47,15 @@
 	<label for="tv">TV</label>
 </div>
 
+<div class="container_12" id="search_container">
+	<div class="prefix_6 grid_6">
+		<form id='search_form'>	
+			<input type='text' name='search' id='search_box' placeholder='Search for movies, TV shows, genres, or actors' />
+		</form>
+	</div>
+	<img src='../06-magnify.png' id='magnify_img' />
+</div>
+
 <div class="container_12">
 	<div class="grid_12">	
 		<h1 class="giant_goldfish">Your picks</h1>
@@ -79,7 +88,7 @@
 		</div>
 	</div>
 	<div class="grid_2 poster">
-		<%= image_tag("#{@show_array[0]['poster']}", :size => "140x200") %>
+		<%= image_tag("#{@show_array[0]['photo_url']}", :size => "140x200") %>
 		<h3 class="rank grey_shade"><span>#4 - Netflix</span></h3>
 		<div class="tv rating grey_shade">
 			<span><%= @show_array[0]['rating'] %>/10</span>
@@ -94,7 +103,7 @@
 		</div>
 	</div>
 	<div class="grid_2 poster">
-		<%= image_tag("#{@show_array[1]['poster']}", :size => "140x200") %>
+		<%= image_tag("#{@show_array[1]['photo_url']}", :size => "140x200") %>
 		<h3 class="rank grey_shade"><span>#6 - Hulu+</span></h3>
 		<div class="rating grey_shade">
 			<img class="rt_img" src="../rt_rotten.png" />
@@ -113,7 +122,7 @@
 		</h3>
 	</div>
 	<div class="grid_2 poster">
-		<%= image_tag("#{@show_array[2]['poster']}", :size => "140x200") %>
+		<%= image_tag("#{@show_array[2]['photo_url']}", :size => "140x200") %>
 		<h3 class="rank grey_shade"><span>#8 - CBS 8p</span></h3>
 		<h3 class="rating grey_shade">
 			<img class="rt_img" src="../rt_rotten.png" />
@@ -137,7 +146,7 @@
 		</h3>
 	</div>
 	<div class="grid_2 poster">
-		<%= image_tag("#{@show_array[3]['poster']}", :size => "140x200") %>
+		<%= image_tag("#{@show_array[3]['photo_url']}", :size => "140x200") %>
 		<h3 class="rank grey_shade"><span>#11 - AMC 8p</span></h3>
 		<h3 class="rating grey_shade">
 			<img class="rt_img" src="../rt_certified.png" />
@@ -156,7 +165,7 @@
 
 <div class="container_12" id="poster_slider_3">
 	<div class="grid_2 poster">
-		<%= image_tag("#{@show_array[4]['poster']}", :size => "140x200") %>
+		<%= image_tag("#{@show_array[4]['photo_url']}", :size => "140x200") %>
 		<h3 class="rank grey_shade"><span>#13 - TBS 7p</span></h3>
 		<h3 class="rating grey_shade">
 			<img class="rt_img" src="../rt_fresh.png" />
@@ -196,7 +205,7 @@
 		</h3>
 	</div>
 	<div class="grid_2 poster">
-		<%= image_tag("#{@show_array[5]['poster']}", :size => "140x200") %>
+		<%= image_tag("#{@show_array[5]['photo_url']}", :size => "140x200") %>
 		<h3 class="rank grey_shade"><span>#18 - FOX 8p</span></h3>
 		<h3 class="rating grey_shade">
 			<img class="rt_img" src="../rt_rotten.png" />
@@ -206,7 +215,7 @@
 </div>
 
 <div class="container_2" id="view_more">
-	<button>View More</button>
+	<a href="#">View More</a>
 </div>
 
 <div id="netflix_section" style="display: none">
