@@ -24,46 +24,71 @@ movieTitles = Array.new
   # puts "Unable to open file!"
 # end
 
-(1..65).each { |i| 
-  result = Tmdb::TmdbMovie.top_rated(:page => i) 
-  # puts result[0].results
-  #puts result[0].results.class
-  #puts result[0].results[0].original_title
-  
-  movies = result[0].results
-  
-  movies.each { |movie|
-    movieTitles.push(movie.original_title)
-  }
-  
-}
+# (1..65).each { |i| 
+  # result = Tmdb::TmdbMovie.top_rated(:page => i) 
+  # # puts result[0].results
+  # #puts result[0].results.class
+  # #puts result[0].results[0].original_title
+#   
+  # movies = result[0].results
+#   
+  # movies.each { |movie|
+    # movieTitles.push(movie.original_title)
+  # }
+#   
+# }
 
 # puts movieTitles
 
-movie_array = Array.new
-movieTitles.each { |title| 
-  hash_movie = Hash.new
-  hash_movie['name'] = title
-  rt_movie = Rotten::Movie.find_first title
-  if rt_movie.nil?
-    next
-  end
-  hash_movie['rating'] = rt_movie.ratings['critics_score']
-  hash_movie['user_rating'] = rt_movie.ratings['audience_score']
-  hash_movie['mpaa_rating'] = rt_movie.mpaa_rating
-  hash_movie['description'] = rt_movie.synopsis
-  hash_movie['poster'] = rt_movie.posters['detailed']
-  hash_movie['release_date'] = rt_movie.release_dates['theater']
-  movie_array.push(hash_movie)
-}
+# movie_array = Array.new
+# movieTitles.each { |title| 
+  # hash_movie = Hash.new
+  # hash_movie['name'] = title
+  # rt_movie = Rotten::Movie.find_first title
+  # if rt_movie.nil?
+    # next
+  # end
+  # hash_movie['rating'] = rt_movie.ratings['critics_score']
+  # hash_movie['user_rating'] = rt_movie.ratings['audience_score']
+  # hash_movie['mpaa_rating'] = rt_movie.mpaa_rating
+  # hash_movie['description'] = rt_movie.synopsis
+  # hash_movie['poster'] = rt_movie.posters['detailed']
+  # hash_movie['release_date'] = rt_movie.release_dates['theater']
+  # movie_array.push(hash_movie)
+# }
 
 
 # puts movie_array
 
-File.open("test2.rb", "w") { |f| f.write(movie_array) }
+# File.open("test2.rb", "w") { |f| f.write(movie_array) }
 
-puts "All Done."
-# tvdb = TvdbParty::Search.new("FACBC9B54A326107")
+#puts "All Done."
+
+tvdb = TvdbParty::Search.new("FACBC9B54A326107")
+
+show_array = Array.new
+for i in 75000..75050
+  puts i
+  hash_show = Hash.new
+  tvdb_show = tvdb.get_series_by_id(i)
+  if tvdb_show.nil? || tvdb_show.posters('en').nil? || tvdb_show.posters('en').first.nil?
+    next
+  end
+  hash_show['overview'] = tvdb_show.overview
+  hash_show['title'] = tvdb_show.name
+  hash_show['rating'] = tvdb_show.rating 
+  hash_show['poster'] = tvdb_show.posters('en').first.nil?
+  # puts show
+  show_array.push(hash_show)
+end
+
+puts show_array.size
+puts "feck"
+File.open("test2.rb", "w") { |f| 
+  show_array.each { |x|
+    f.puts(x)
+  }
+}
 # 
 # tv_show_titles = ['Seinfeld', 'The West Wing', 'Person of Interest', 'The Walking Dead', '24', #'Family Guy', 
     # 'Dexter', 'Breaking Bad', 'Planet Earth', 'The Wire', 'Game of Thrones', 'Arrested Development', 'Firefly', 

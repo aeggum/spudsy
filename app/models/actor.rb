@@ -1,4 +1,4 @@
 class Actor < ActiveRecord::Base
-  attr_accessible :media_id, :media_type, :name
+  attr_accessible :name
   belongs_to :media, :polymorphic => true
 end

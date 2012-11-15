@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121108071034) do
+ActiveRecord::Schema.define(:version => 20121115054532) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "resource_id",   :null => false
@@ -36,26 +36,49 @@ ActiveRecord::Schema.define(:version => 20121108071034) do
     t.datetime "updated_at", :null => false
   end
 
+  create_table "genres", :force => true do |t|
+    t.string   "name"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  add_index "genres", ["name"], :name => "index_genres_on_name"
+
+  create_table "media_genres", :force => true do |t|
+    t.string   "media_type"
+    t.integer  "media_id"
+    t.integer  "genre_id"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  add_index "media_genres", ["media_id"], :name => "index_media_genres_on_media_id"
+  add_index "media_genres", ["media_type"], :name => "index_media_genres_on_media_type"
+
   create_table "movies", :force => true do |t|
     t.string   "name"
     t.float    "rating"
     t.text     "description"
     t.date     "release_date"
-    t.datetime "created_at",   :null => false
-    t.datetime "updated_at",   :null => false
     t.float    "user_rating"
     t.string   "mpaa_rating"
     t.string   "poster"
+    t.datetime "created_at",   :null => false
+    t.datetime "updated_at",   :null => false
   end
+
+  add_index "movies", ["name"], :name => "index_movies_on_name"
 
   create_table "tv_shows", :force => true do |t|
     t.string   "name"
     t.float    "rating"
     t.text     "description"
+    t.string   "poster"
     t.datetime "created_at",  :null => false
     t.datetime "updated_at",  :null => false
-    t.string   "photo_url"
   end
+
+  add_index "tv_shows", ["name"], :name => "index_tv_shows_on_name"
 
   create_table "users", :force => true do |t|
     t.string   "email",                  :default => "", :null => false

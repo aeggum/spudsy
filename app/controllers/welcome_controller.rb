@@ -11,8 +11,14 @@ class WelcomeController < ApplicationController
   def index 
    
     @movies = Movie.all(:limit => 25)
-    
     @show_array = get_shows 
+    @your_picks = Array.new
+    
+    
+    # puts the entire array onto the end of the your picks 
+    @your_picks.push(*@movies)
+    @your_picks.push(*@show_array)
+    
     # Doing some testing with the RT API wrapper
     # argo = Rotten::Movie.find_first "Argo"
     @argo_score = @movies[0].rating #argo.ratings['critics_score']
