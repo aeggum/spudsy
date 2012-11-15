@@ -10,9 +10,9 @@
 		<div class="container_12">
 	<% end %>
 		<div data-id="<%= index %>" class="grid_2 poster tv_show">
-			<%= image_tag("#{media['photo_url']}", :size => "140x200") %>
+			<%= image_tag("#{media['poster']}", :size => "140x200") %>
 			<h3 class="tv_rating grey_shade">
-				<span><%= show['rating'] %>/10</span>
+				<span><%= media['rating'] %>/10</span>
 			</h3>
 		</div> 
 	<% if (index % 6 == 5) %>
