@@ -27,6 +27,7 @@ gem 'addressable'
 gem 'amazon-ecs'
 gem 'httparty', '0.7.8'
 gem 'tvdb_party'
+gem 'squeel'
 # gem 'ruby-tmdb'
 # gem 'httparty'
 
