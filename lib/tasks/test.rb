@@ -67,28 +67,50 @@ movieTitles = Array.new
 tvdb = TvdbParty::Search.new("FACBC9B54A326107")
 
 show_array = Array.new
-for i in 75000..75050
-  puts i
-  hash_show = Hash.new
-  tvdb_show = tvdb.get_series_by_id(i)
-  if tvdb_show.nil? || tvdb_show.posters('en').nil? || tvdb_show.posters('en').first.nil?
-    next
-  end
-  hash_show['overview'] = tvdb_show.overview
-  hash_show['title'] = tvdb_show.name
-  hash_show['rating'] = tvdb_show.rating 
-  hash_show['poster'] = tvdb_show.posters('en').first.nil?
-  # puts show
-  show_array.push(hash_show)
+genre_array = Array.new
+for i in 400000..600000
+  begin
+    hash_show = Hash.new
+    tvdb_show = tvdb.get_series_by_id(i)
+    if tvdb_show.nil? || tvdb_show.posters('en').nil? || tvdb_show.posters('en').first.nil? || tvdb_show.name.nil? || tvdb_show.overview.nil?
+      next
+    else 
+      puts i
+      puts tvdb_show
+    end
+    hash_show['title'] = tvdb_show.name
+    hash_show['overview'] = tvdb_show.overview
+    hash_show['rating'] = tvdb_show.rating 
+    hash_show['poster'] = tvdb_show.posters('en').first.url
+    show_genres = tvdb_show.genres
+    
+    show_genres.each { |genre| 
+      genre_hash = { :name => genre }
+      unless genre_array.include?(genre_hash)
+        genre_array.push(genre_hash)
+      end 
+    }
+    
+    hash_show['genres'] = show_genres
+    # puts show
+    show_array.push(hash_show)
+    File.open("next200000_2.tv.txt", "a") { |f| 
+      f.puts(hash_show) 
+    }
+    rescue
+      puts 'Exception happened'
+    end
 end
 
+#puts genre_array
 puts show_array.size
-puts "feck"
-File.open("test2.rb", "w") { |f| 
-  show_array.each { |x|
-    f.puts(x)
-  }
-}
+# File.open("next200000.tv.txt", "a") { |f| 
+  # f.print(genre_array)
+  # f.puts
+  # show_array.each { |x|
+    # f.puts(x)
+  # }
+# }
 # 
 # tv_show_titles = ['Seinfeld', 'The West Wing', 'Person of Interest', 'The Walking Dead', '24', #'Family Guy', 
     # 'Dexter', 'Breaking Bad', 'Planet Earth', 'The Wire', 'Game of Thrones', 'Arrested Development', 'Firefly', 
