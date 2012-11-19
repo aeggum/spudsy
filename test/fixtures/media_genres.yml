@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  media_type: MyString
+  media_id: 
+  genre_id: 1
+
+two:
+  media_type: MyString
+  media_id: 
+  genre_id: 1

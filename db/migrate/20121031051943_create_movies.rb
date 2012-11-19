@@ -5,8 +5,13 @@ class CreateMovies < ActiveRecord::Migration
       t.float :rating
       t.text :description
       t.date :release_date
+      t.float :user_rating
+      t.string :mpaa_rating
+      t.string :poster
 
       t.timestamps
     end
+    
+    add_index :movies, :name
   end
 end

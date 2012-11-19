@@ -62,6 +62,10 @@
 	</div>
 </div>
 
+
+<div id="your_picks_section" style="display: none;">
+	<%= render :partial => 'your_picks', :locals => { :media => @your_picks } %>
+</div>
 <div class="container_12" id="poster_slider_1">
 	<div class="grid_2 poster">
 		<%= image_tag("#{@argo_poster}", :size => "140x200") %>
@@ -88,7 +92,7 @@
 		</div>
 	</div>
 	<div class="grid_2 poster">
-		<%= image_tag("#{@show_array[0]['photo_url']}", :size => "140x200") %>
+		<%= image_tag("#{@show_array[0]['poster']}", :size => "140x200") %>
 		<h3 class="rank grey_shade"><span>#4 - Netflix</span></h3>
 		<div class="tv_rating grey_shade">
 			<span><%= @show_array[0]['rating'] %>/10</span>
@@ -103,7 +107,7 @@
 		</div>
 	</div>
 	<div class="grid_2 poster">
-		<%= image_tag("#{@show_array[1]['photo_url']}", :size => "140x200") %>
+		<%= image_tag("#{@show_array[1]['poster']}", :size => "140x200") %>
 		<h3 class="rank grey_shade"><span>#6 - Hulu+</span></h3>
 		<div class="tv_rating grey_shade">
 			<span><%= @show_array[1]['rating'] %>/10</span>
@@ -121,7 +125,7 @@
 		</h3>
 	</div>
 	<div class="grid_2 poster">
-		<%= image_tag("#{@show_array[2]['photo_url']}", :size => "140x200") %>
+		<%= image_tag("#{@show_array[2]['poster']}", :size => "140x200") %>
 		<h3 class="rank grey_shade"><span>#8 - CBS 8p</span></h3>
 		<h3 class="tv_rating grey_shade">
 			<span><%= @show_array[2]['rating'] %>/10</span>
@@ -144,7 +148,7 @@
 		</h3>
 	</div>
 	<div class="grid_2 poster">
-		<%= image_tag("#{@show_array[3]['photo_url']}", :size => "140x200") %>
+		<%= image_tag("#{@show_array[3]['poster']}", :size => "140x200") %>
 		<h3 class="rank grey_shade"><span>#11 - AMC 8p</span></h3>
 		<h3 class="tv_rating grey_shade">
 			<span><%= @show_array[3]['rating'] %>/10</span>
@@ -162,7 +166,7 @@
 
 <div class="container_12" id="poster_slider_3">
 	<div class="grid_2 poster">
-		<%= image_tag("#{@show_array[4]['photo_url']}", :size => "140x200") %>
+		<%= image_tag("#{@show_array[4]['poster']}", :size => "140x200") %>
 		<h3 class="rank grey_shade"><span>#13 - TBS 7p</span></h3>
 		<h3 class="tv_rating grey_shade">
 			<span><%= @show_array[4]['rating'] %>/10</span>
@@ -201,7 +205,7 @@
 		</h3>
 	</div>
 	<div class="grid_2 poster">
-		<%= image_tag("#{@show_array[5]['photo_url']}", :size => "140x200") %>
+		<%= image_tag("#{@show_array[5]['poster']}", :size => "140x200") %>
 		<h3 class="rank grey_shade"><span>#18 - FOX 8p</span></h3>
 		<h3 class="tv_rating grey_shade">
 			<span><%= @show_array[5]['rating'] %>/10</span>
