@@ -1,7 +1,8 @@
 require 'action_view'
 gem 'httparty', '0.7.8'
 require 'tvdb_party'
-require "../rotten.rb"
+require "../lib/rotten.rb"
+require "../lib/test_movie.rb"
 require "tmdb"
 require 'pp'
 include ActionView::Helpers::DateHelper
@@ -9,98 +10,124 @@ include ActionView::Helpers::DateHelper
 Rotten.api_key = 'pykjuv5y44fywgpu2m7rt4dk'
 Tmdb::Tmdb.api_key = "8da8a86a8b272a70d20c08a35b576d50"
 Tmdb::Tmdb.default_language = "en"
+TestMovie.api_key='pykjuv5y44fywgpu2m7rt4dk'
 movieArray = Array.new
 movieTitles = Array.new
+movieOverviews = Array.new
+movieGenres = Array.new
+# genre_array = Array.new
 
-# TODO: Generate the seeds file with the top movies, or whatever.
-# TODO: We'll want to do something similar to below, but put into seeds.rb
 
-# file1 = File.open("test2.rb", "r+")
-#   
-# if file1
-  # content = file1.sysread(10)
-  # puts content
-# else 
-  # puts "Unable to open file!"
-# end
+(1..67).each { |i| 
+  result = Tmdb::TmdbMovie.top_rated(:page => i) 
+  #puts result[0].results
+  #puts result[0].results.class
+  #puts result[0].results[0].original_title
+  
+  movies = result[0].results
+  
+  movies.each { |movie|
+    movie = Tmdb::TmdbMovie.find(:title => movie.original_title, :limit => 1)
+    movieTitles.push(movie.original_title)
+    movieOverviews.push(movie.overview)
+    movie_genres = movie.genres
+   
+    # movieGenres.push(Test.genre_to_array(movie.genres))
+    unless movie_genres.nil?
+      genres = Array.new
+      movie_genres.each { |genre| 
+        genre_hash = { :name => genre.name }
+        # unless genre_array.include?(genre_hash)
+          # genre_array.push(genre_hash)
+        # end 
+        genres.push(genre_hash)
+      }
+      movieGenres.push(genres)
+    end
+  }
+  
+}
 
-# (1..65).each { |i| 
-  # result = Tmdb::TmdbMovie.top_rated(:page => i) 
-  # # puts result[0].results
-  # #puts result[0].results.class
-  # #puts result[0].results[0].original_title
-#   
-  # movies = result[0].results
-#   
-  # movies.each { |movie|
-    # movieTitles.push(movie.original_title)
-  # }
-#   
-# }
 
-# puts movieTitles
 
-# movie_array = Array.new
-# movieTitles.each { |title| 
-  # hash_movie = Hash.new
-  # hash_movie['name'] = title
-  # rt_movie = Rotten::Movie.find_first title
-  # if rt_movie.nil?
-    # next
-  # end
-  # hash_movie['rating'] = rt_movie.ratings['critics_score']
-  # hash_movie['user_rating'] = rt_movie.ratings['audience_score']
-  # hash_movie['mpaa_rating'] = rt_movie.mpaa_rating
-  # hash_movie['description'] = rt_movie.synopsis
-  # hash_movie['poster'] = rt_movie.posters['detailed']
-  # hash_movie['release_date'] = rt_movie.release_dates['theater']
-  # movie_array.push(hash_movie)
-# }
+# puts movieOverviews
+# puts movieTitles.size
+# puts genre_array
+
+
+movie_array = Array.new
+movieTitles.each_with_index { |title, index| 
+  hash_movie = Hash.new
+  hash_movie['name'] = title
+  rt_movie = Rotten::Movie.find_first title
+  if rt_movie.nil?
+    next
+  end
+  hash_movie['rating'] = rt_movie.ratings['critics_score']
+  hash_movie['user_rating'] = rt_movie.ratings['audience_score']
+  hash_movie['mpaa_rating'] = rt_movie.mpaa_rating
+  if (rt_movie.synopsis.nil? || rt_movie.synopsis.empty?)
+    hash_movie['description'] = movieOverviews[index]
+  else
+    hash_movie['description'] = rt_movie.synopsis
+  end
+  hash_movie['poster'] = rt_movie.posters['detailed']
+  hash_movie['release_date'] = rt_movie.release_dates['theater']
+  hash_movie['rt_id'] = rt_movie.id
+  hash_movie['runtime'] = rt_movie.runtime
+  hash_movie['genres'] = movieGenres[index]
+  movie_array.push(hash_movie)
+}
 
 
 # puts movie_array
 
-# File.open("test2.rb", "w") { |f| f.write(movie_array) }
+File.open("first_20_pages.movie.txt", "w") { |f| 
+  # f.puts(genre_array) 
+  f.puts(movie_array) 
+}
 
-#puts "All Done."
+puts "All Done."
 
-# tvdb = TvdbParty::Search.new("FACBC9B54A326107")
-# 
-# show_array = Array.new
-# genre_array = Array.new
-# for i in 400000..600000
-  # begin
-    # hash_show = Hash.new
-    # tvdb_show = tvdb.get_series_by_id(i)
-    # if tvdb_show.nil? || tvdb_show.posters('en').nil? || tvdb_show.posters('en').first.nil? || tvdb_show.name.nil? || tvdb_show.overview.nil?
-      # next
-    # else 
-      # puts i
-      # puts tvdb_show
-    # end
-    # hash_show['title'] = tvdb_show.name
-    # hash_show['overview'] = tvdb_show.overview
-    # hash_show['rating'] = tvdb_show.rating 
-    # hash_show['poster'] = tvdb_show.posters('en').first.url
-    # show_genres = tvdb_show.genres
-#     
-    # show_genres.each { |genre| 
-      # genre_hash = { :name => genre }
-      # unless genre_array.include?(genre_hash)
-        # genre_array.push(genre_hash)
-      # end 
-    # }
-#     
-    # hash_show['genres'] = show_genres
-    # # puts show
-    # show_array.push(hash_show)
-    # File.open("next200000_2.tv.txt", "a") { |f| 
-      # f.puts(hash_show) 
-    # }
-    # rescue
-      # puts 'Exception happened'
-    # end
-# end
+def grab_tv_shows(start_index, end_index)
+  tvdb = TvdbParty::Search.new("FACBC9B54A326107")
+  
+  show_array = Array.new
+  genre_array = Array.new
+  for i in start_index..end_index
+    begin
+      hash_show = Hash.new
+      tvdb_show = tvdb.get_series_by_id(i)
+      if tvdb_show.nil? || tvdb_show.posters('en').nil? || tvdb_show.posters('en').first.nil? || tvdb_show.name.nil? || tvdb_show.overview.nil?
+        next
+      else 
+        puts i
+        puts tvdb_show
+      end
+      hash_show['title'] = tvdb_show.name
+      hash_show['overview'] = tvdb_show.overview
+      hash_show['rating'] = tvdb_show.rating 
+      hash_show['poster'] = tvdb_show.posters('en').first.url
+      show_genres = tvdb_show.genres
+      
+      show_genres.each { |genre| 
+        genre_hash = { :name => genre }
+        unless genre_array.include?(genre_hash)
+          genre_array.push(genre_hash)
+        end 
+      }
+      
+      hash_show['genres'] = show_genres
+      # puts show
+      show_array.push(hash_show)
+      File.open("#{start_index}_to_#{end_index}.tv.txt", "a") { |f| 
+        f.puts(hash_show) 
+      }
+      rescue
+        puts 'Exception happened'
+      end
+  end
+end
 
 #puts genre_array
 # puts show_array.size
