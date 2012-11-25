@@ -71,6 +71,8 @@ module Rotten
         SearchResult.new( :path => path, :api_options => options, :class => Review, :json => json, :start => "reviews" )
       end
     end
+    
+    
 
     # Show cast 
     #

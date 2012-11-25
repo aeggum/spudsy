@@ -8,6 +8,8 @@ class CreateMovies < ActiveRecord::Migration
       t.float :user_rating
       t.string :mpaa_rating
       t.string :poster
+      t.integer :runtime
+      t.integer :rt_id
 
       t.timestamps
     end
