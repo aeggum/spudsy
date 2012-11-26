@@ -7,6 +7,7 @@ DemoApp::Application.routes.draw do
   get "welcome/index"
   get "welcome/details"
   get "tv_shows/show"
+  get "search/results"
 
   root :to => 'welcome#index'
   match "/landing", :to => "welcome#index"

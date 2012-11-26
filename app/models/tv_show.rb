@@ -7,4 +7,23 @@ class TvShow < ActiveRecord::Base
   has_many :actors, :as => :media
   has_many :media_genres, :as => :media
   has_many :genres, :as => :media, :through => :media_genres
+  
+  include PgSearch
+  pg_search_scope :search, against: [:name],
+      using: {tsearch: {dictionary: "english", any_word: "true"}}
+      
+  multisearchable :against => [:name]
+      #using: {tsearch: {dictionary: "english", any_word: "true"}},
+      #ignoring: :accents,
+      #:using =>:dmetaphone
+      
+  def self.text_search(query)
+    if query.present?
+      search(query)
+      
+    else
+      scoped
+    end
+  end
+  
 end

@@ -1,1 +1,81 @@
-<h1>FUCKKKKK</h1>
+<div class="fixed_left_nav">
+	<h2>Watch a</h2>	
+	<input id="movie" type="checkbox" value="movie" />	
+	<label for="movie">Movie</label>
+	<br />
+	<input id="tv_show" type="checkbox" value="tv_show" />	
+	<label for="tv_show">TV Show</label>
+	<select data-placeholder="Genre" class="chzn-select" id="genre_select" multiple style="width:125px;" >
+		<option value=""></option>
+		<option value="Action">Action</option>
+		<option value="Adventure">Adventure</option>
+		<option value="Animation">Animation</option>
+		<option value="Comedy">Comedy</option>
+		<option value="Crime">Crime</option>
+		<option value="Disaster">Disaster</option>
+		<option value="Documentary">Documentary</option>
+		<option value="Drama">Drama</option>
+		<option value="Eastern">Eastern</option>
+		<option value="Fantasy">Fantasy</option>
+		<option value="History">History</option>
+		<option value="Holiday">Holiday</option>
+		<option value="Horror">Horror</option>
+		<option value="Music">Music</option>
+		<option value="Musical">Musical</option>
+		<option value="Mystery">Mystery</option>
+		<option value="Road Movie">Road Movie</option>
+		<option value="Science Fiction">Science Fiction</option>
+		<option value="Short">Short</option>
+		<option value="Sport">Sport</option>
+		<option value="Suspense">Suspense</option>
+		<option value="Thriller">Thriller</option>
+		<option value="Western">Western</option>
+	</select>
+	
+	<h2>on</h2>	
+	<input id="hulu" type="checkbox" value="hulu" />	
+	<label for="hulu">Hulu+</label>
+	<br />
+	<input id="netflix" type="checkbox" value="netflix" />	
+	<label for="netflix">Netflix</label>
+	<br />
+	<input id="redbox" type="checkbox" value="redbox" />	
+	<label for="redbox">Redbox</label>
+	<br />
+	<input id="tv" type="checkbox" value="tv" />	
+	<label for="tv">TV</label>
+</div>
+<div class="container_12" id="search_container">
+	<div class="prefix_6 grid_6">
+		<!-- <form id='search_form'>	
+			<input type='text' name='search' id='search_box' placeholder='Search for movies, TV shows, genres, or actors' />
+		</form> -->
+		<%= form_tag "/results", :method => "get" do%>
+ 	 	<p>
+    		<%= text_field_tag :query, params[:query] %>
+  		</p>
+		<% end %>
+	</div>
+	<img src='../06-magnify.png' id='magnify_img' />
+</div>
+
+<div class = "container_12" id="results_container">
+
+<div class = "container_12">
+	<div class = "prefix_1 grid_4">
+	<h1>Results</h1>
+	</div>
+</div>
+
+<div class = "container_12" id="results_body">
+	<div class = "prefix_2 grid_6">
+	<% @search_results.each do |result|  %>
+		<h3 class = "grid_4"><%= result.searchable.name %></h3>
+	<%end%>
+	</div>
+	
+</div>
+
+</div>
+	
+
