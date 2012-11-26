@@ -48,7 +48,12 @@
 </div>
 
 <div class="container_12" id="search_container">
-	<div class="prefix_6 grid_6">
+	<div class="grid_6 suffix_2">
+		<form id='search_form'>	
+			<input type='text' name='search' id='search_box' placeholder='Search for movies, TV shows, genres, or actors' />
+		</form>
+	</div>
+	<div class="grid_4">
 		<form id='search_form'>	
 			<input type='text' name='search' id='search_box' placeholder='Search for movies, TV shows, genres, or actors' />
 		</form>
@@ -62,6 +67,10 @@
 	</div>
 </div>
 
+
+<div id="your_picks_section" style="display: none;">
+	<%= render :partial => 'your_picks', :locals => { :media => @your_picks } %>
+</div>
 <div class="container_12" id="poster_slider_1">
 	<div class="grid_2 poster">
 		<%= image_tag("#{@argo_poster}", :size => "140x200") %>
@@ -88,9 +97,9 @@
 		</div>
 	</div>
 	<div class="grid_2 poster">
-		<%= image_tag("#{@show_array[0]['photo_url']}", :size => "140x200") %>
+		<%= image_tag("#{@show_array[0]['poster']}", :size => "140x200") %>
 		<h3 class="rank grey_shade"><span>#4 - Netflix</span></h3>
-		<div class="tv rating grey_shade">
+		<div class="tv_rating grey_shade">
 			<span><%= @show_array[0]['rating'] %>/10</span>
 		</div>
 	</div>
@@ -103,10 +112,9 @@
 		</div>
 	</div>
 	<div class="grid_2 poster">
-		<%= image_tag("#{@show_array[1]['photo_url']}", :size => "140x200") %>
+		<%= image_tag("#{@show_array[1]['poster']}", :size => "140x200") %>
 		<h3 class="rank grey_shade"><span>#6 - Hulu+</span></h3>
-		<div class="rating grey_shade">
-			<img class="rt_img" src="../rt_rotten.png" />
+		<div class="tv_rating grey_shade">
 			<span><%= @show_array[1]['rating'] %>/10</span>
 		</div>
 	</div>
@@ -122,10 +130,9 @@
 		</h3>
 	</div>
 	<div class="grid_2 poster">
-		<%= image_tag("#{@show_array[2]['photo_url']}", :size => "140x200") %>
+		<%= image_tag("#{@show_array[2]['poster']}", :size => "140x200") %>
 		<h3 class="rank grey_shade"><span>#8 - CBS 8p</span></h3>
-		<h3 class="rating grey_shade">
-			<img class="rt_img" src="../rt_rotten.png" />
+		<h3 class="tv_rating grey_shade">
 			<span><%= @show_array[2]['rating'] %>/10</span>
 		</h3>
 	</div>
@@ -146,10 +153,9 @@
 		</h3>
 	</div>
 	<div class="grid_2 poster">
-		<%= image_tag("#{@show_array[3]['photo_url']}", :size => "140x200") %>
+		<%= image_tag("#{@show_array[3]['poster']}", :size => "140x200") %>
 		<h3 class="rank grey_shade"><span>#11 - AMC 8p</span></h3>
-		<h3 class="rating grey_shade">
-			<img class="rt_img" src="../rt_certified.png" />
+		<h3 class="tv_rating grey_shade">
 			<span><%= @show_array[3]['rating'] %>/10</span>
 		</h3>
 	</div>
@@ -165,10 +171,9 @@
 
 <div class="container_12" id="poster_slider_3">
 	<div class="grid_2 poster">
-		<%= image_tag("#{@show_array[4]['photo_url']}", :size => "140x200") %>
+		<%= image_tag("#{@show_array[4]['poster']}", :size => "140x200") %>
 		<h3 class="rank grey_shade"><span>#13 - TBS 7p</span></h3>
-		<h3 class="rating grey_shade">
-			<img class="rt_img" src="../rt_fresh.png" />
+		<h3 class="tv_rating grey_shade">
 			<span><%= @show_array[4]['rating'] %>/10</span>
 		</h3>
 	</div>
@@ -205,22 +210,26 @@
 		</h3>
 	</div>
 	<div class="grid_2 poster">
-		<%= image_tag("#{@show_array[5]['photo_url']}", :size => "140x200") %>
+		<%= image_tag("#{@show_array[5]['poster']}", :size => "140x200") %>
 		<h3 class="rank grey_shade"><span>#18 - FOX 8p</span></h3>
-		<h3 class="rating grey_shade">
-			<img class="rt_img" src="../rt_rotten.png" />
+		<h3 class="tv_rating grey_shade">
 			<span><%= @show_array[5]['rating'] %>/10</span>
 		</h3>
 	</div>
 </div>
 
-<div class="container_2" id="view_more">
-	<a href="#">View More</a>
+<div class="container_2">
+	<a href="#" id="view_more">View More</a>
+</div>
+
+<div id="hulu_section" style="display: none">
+	<%= render :partial => 'netflix', :locals => { :shows => @show_array, :header => "Hulu" } %>
 </div>
 
 <div id="netflix_section" style="display: none">
-	<%= render :partial => 'netflix', :locals => { :shows => @show_array } %>
+	<%= render :partial => 'netflix', :locals => { :shows => @show_array.reverse, :header => "Netflix" } %>
 </div>
+
 
 <div id="tv_section">
 	<div class="container_12">
@@ -239,7 +248,26 @@
 </div>
 
 <div id="hidden_div" style="display: none">
-	<div id="popup" >
-		<h1>Fuck That Shit</h1>
+	<div id="info_overlay" >
+		<div class="overlay_container" style="
+	overflow: hidden;
+	width: 99%;">
+			<div style= "float:left; width:45%">
+				<%= image_tag(@movies[0].poster, :size => "200x300") %>
+			</div>
+			<div style= "float:right; width:45%">
+				<h1><%=@movies[0].name%></h1> 
+				<h3>Rotten Tomotes Score: <%=@movies[0].rating%> </h3>
+				<h3>Rated: <%=@movies[0].mpaa_rating%> </h3>
+				<h3>Released: <%=@movies[0].release_date%></h3>
+			</div>
+		</div>
+		<div style="width:95% ">
+			<div class="overlay_info" style="overflow:hidden; height:200px">
+				<h3>Description</h3>
+				<p><%=@movies[0].description%></p>
+			</div>
+			<a href="#" id = "overlay_more_info" style="float: right">More Info</a>
+		</div>
 	</div>
 </div>

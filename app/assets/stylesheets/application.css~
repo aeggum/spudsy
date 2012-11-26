@@ -56,7 +56,7 @@ label {
 }
 
 a {
-	color: #999;
+	color: #999 !important;
 }
 
 #netflix_partial .container_12 {
@@ -74,7 +74,7 @@ a {
 	border: 1px solid #ccc;
 	font-family: 'News Cycle';
 	font-size: 1.5em;
-	height: 45px;
+	height: 40px;
 	padding-top: 0;
 }
 
@@ -88,7 +88,7 @@ a {
 }
 
 #magnify_img {
-	position: absolute;
+	/*position: absolute;*/
 	margin-top: 15px;
 	margin-left: -25px;
 }
@@ -121,13 +121,14 @@ a {
 
 .rating, .tv_rating {
 	position: absolute; 
-	top: 150px; 
-	left: 80px;
+	top: 158px; 
+	left: 65px;
 	padding: 5px;
 }
 
 .tv_rating {
 	left: 95px;
+	top: 150px;
 }
 
 .rating span {
@@ -149,7 +150,7 @@ img.rt_img {
 
 .brand {
 	font-family: LeagueGothic !important;
-	font-size: 35px !important;
+	font-size: 40px !important;
 }
 
 .brand:hover {

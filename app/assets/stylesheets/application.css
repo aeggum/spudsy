@@ -74,7 +74,7 @@ a {
 	border: 1px solid #ccc;
 	font-family: 'News Cycle';
 	font-size: 1.5em;
-	height: 45px;
+	height: 40px;
 	padding-top: 0;
 }
 
@@ -89,7 +89,7 @@ a {
 
 #magnify_img {
 	/*position: absolute;*/
-	margin-top: 15px;
+	margin-top: 11px;
 	margin-left: -25px;
 }
 
@@ -150,7 +150,7 @@ img.rt_img {
 
 .brand {
 	font-family: LeagueGothic !important;
-	font-size: 35px !important;
+	font-size: 40px !important;
 }
 
 .brand:hover {
