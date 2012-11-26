@@ -42,7 +42,7 @@ ActiveRecord::Schema.define(:version => 20121115054532) do
     t.datetime "updated_at", :null => false
   end
 
-  add_index "genres", ["name"], :name => "index_genres_on_name"
+  add_index "genres", ["name"], :name => "index_genres_on_name", :unique => true
 
   create_table "media_genres", :force => true do |t|
     t.string   "media_type"
@@ -63,6 +63,8 @@ ActiveRecord::Schema.define(:version => 20121115054532) do
     t.float    "user_rating"
     t.string   "mpaa_rating"
     t.string   "poster"
+    t.integer  "runtime"
+    t.integer  "rt_id"
     t.datetime "created_at",   :null => false
     t.datetime "updated_at",   :null => false
   end

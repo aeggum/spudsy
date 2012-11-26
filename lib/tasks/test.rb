@@ -24,6 +24,67 @@ movieTitles = Array.new
   # puts "Unable to open file!"
 # end
 
+(1000..20000).each { |i| 
+  # do something similar to what was done for tv shows
+  movie_array = Array.new
+  titles = Array.new
+  overviews = Array.new
+  genres = Array.new
+  begin 
+    # something that does something
+    movie = Tmdb::TmdbMovie.find(:id => i)
+    if (movie.nil? || movie.empty?)
+      next
+    end
+    titles.push(movie.original_title)
+    overviews.push(movie.overview)
+    
+    # genre array gets one index for each movie
+    unless movie.genres.nil?
+      genre_arr = Array.new
+      movie.genres.each { |genre| 
+        genre_hash = { :name => genre.name }
+        # unless genre_array.include?(genre_hash)
+          # genre_array.push(genre_hash)
+        # end 
+        genre_arr.push(genre_hash)
+      }
+      genres.push(genre_arr)
+    end
+    
+    titles.each_with_index { |title, index|
+      hash_movie = Hash.new
+      hash_movie['name'] = title
+      rt_movie = Rotten::Movie.find_first title
+      if rt_movie.nil?
+        next
+      end
+      hash_movie['rating'] = rt_movie.ratings['critics_score']
+      hash_movie['user_rating'] = rt_movie.ratings['audience_score']
+      hash_movie['mpaa_rating'] = rt_movie.mpaa_rating
+      # if the RT synopsis is empty, use the tmdb one
+      if (rt_movie.synopsis.nil? || rt_movie.synopsis.empty?)
+        hash_movie['description'] = overviews[index]
+      else
+        hash_movie['description'] = rt_movie.synopsis
+      end
+      hash_movie['poster'] = rt_movie.posters['detailed']
+      hash_movie['release_date'] = rt_movie.release_dates['theater']
+      hash_movie['rt_id'] = rt_movie.id
+      hash_movie['runtime'] = rt_movie.runtime
+      hash_movie['genres'] = genres[index]
+      movie_array.push(hash_movie)
+      File.open("test.movie.1000.20000.txt", "a") { |f| 
+        f.puts(hash_movie) 
+      }
+    }
+    
+    
+  rescue
+    # caught exception
+    print '.'
+  end 
+}
 # (1..65).each { |i| 
   # result = Tmdb::TmdbMovie.top_rated(:page => i) 
   # # puts result[0].results
@@ -64,31 +125,53 @@ movieTitles = Array.new
 
 #puts "All Done."
 
-tvdb = TvdbParty::Search.new("FACBC9B54A326107")
-
-show_array = Array.new
-for i in 75000..75050
-  puts i
-  hash_show = Hash.new
-  tvdb_show = tvdb.get_series_by_id(i)
-  if tvdb_show.nil? || tvdb_show.posters('en').nil? || tvdb_show.posters('en').first.nil?
-    next
-  end
-  hash_show['overview'] = tvdb_show.overview
-  hash_show['title'] = tvdb_show.name
-  hash_show['rating'] = tvdb_show.rating 
-  hash_show['poster'] = tvdb_show.posters('en').first.nil?
-  # puts show
-  show_array.push(hash_show)
-end
-
-puts show_array.size
-puts "feck"
-File.open("test2.rb", "w") { |f| 
-  show_array.each { |x|
-    f.puts(x)
-  }
-}
+# tvdb = TvdbParty::Search.new("FACBC9B54A326107")
+# 
+# show_array = Array.new
+# genre_array = Array.new
+# for i in 400000..600000
+  # begin
+    # hash_show = Hash.new
+    # tvdb_show = tvdb.get_series_by_id(i)
+    # if tvdb_show.nil? || tvdb_show.posters('en').nil? || tvdb_show.posters('en').first.nil? || tvdb_show.name.nil? || tvdb_show.overview.nil?
+      # next
+    # else 
+      # puts i
+      # puts tvdb_show
+    # end
+    # hash_show['title'] = tvdb_show.name
+    # hash_show['overview'] = tvdb_show.overview
+    # hash_show['rating'] = tvdb_show.rating 
+    # hash_show['poster'] = tvdb_show.posters('en').first.url
+    # show_genres = tvdb_show.genres
+#     
+    # show_genres.each { |genre| 
+      # genre_hash = { :name => genre }
+      # unless genre_array.include?(genre_hash)
+        # genre_array.push(genre_hash)
+      # end 
+    # }
+#     
+    # hash_show['genres'] = show_genres
+    # # puts show
+    # show_array.push(hash_show)
+    # File.open("next200000_2.tv.txt", "a") { |f| 
+      # f.puts(hash_show) 
+    # }
+    # rescue
+      # puts 'Exception occurred'
+    # end
+# end
+# 
+# #puts genre_array
+# puts show_array.size
+# File.open("next200000.tv.txt", "a") { |f| 
+  # f.print(genre_array)
+  # f.puts
+  # show_array.each { |x|
+    # f.puts(x)
+  # }
+# }
 # 
 # tv_show_titles = ['Seinfeld', 'The West Wing', 'Person of Interest', 'The Walking Dead', '24', #'Family Guy', 
     # 'Dexter', 'Breaking Bad', 'Planet Earth', 'The Wire', 'Game of Thrones', 'Arrested Development', 'Firefly', 
