@@ -111,6 +111,14 @@ a {
 	box-shadow: 1px 1px 5px;
 }
 
+.social_tabs:active {
+	margin-top: -14px;
+}
+
+.social_tabs:hover {
+	cursor: pointer;
+}
+
 .container {
 	width: 960px !important;
 	max-width: 100%;
