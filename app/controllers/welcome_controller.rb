@@ -19,6 +19,7 @@ class WelcomeController < ApplicationController
     @your_picks.push(*@movies)
     @your_picks.push(*@show_array)
     
+    
     # Doing some testing with the RT API wrapper
     # argo = Rotten::Movie.find_first "Argo"
     @argo_score = @movies[0].rating #argo.ratings['critics_score']
