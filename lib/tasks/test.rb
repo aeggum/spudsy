@@ -6,6 +6,7 @@ require "tmdb"
 require 'pp'
 include ActionView::Helpers::DateHelper
 
+# TODO: This file should not be used any more.  Look for gen_movie and gen_tv
 Rotten.api_key = 'pykjuv5y44fywgpu2m7rt4dk'
 Tmdb::Tmdb.api_key = "8da8a86a8b272a70d20c08a35b576d50"
 Tmdb::Tmdb.default_language = "en"
@@ -23,58 +24,78 @@ movieTitles = Array.new
 # else 
   # puts "Unable to open file!"
 # end
-
-(1000..20000).each { |i| 
+# TODO: need to do a year check as well, then everything should be squared away
+(1000..2000).each { |i| 
   # do something similar to what was done for tv shows
   movie_array = Array.new
   titles = Array.new
   overviews = Array.new
   genres = Array.new
+  dates = Array.new
   begin 
     # something that does something
     movie = Tmdb::TmdbMovie.find(:id => i)
     if (movie.nil? || movie.empty?)
       next
     end
-    titles.push(movie.original_title)
-    overviews.push(movie.overview)
     
     # genre array gets one index for each movie
     unless movie.genres.nil?
       genre_arr = Array.new
+      g_a = Array.new
       movie.genres.each { |genre| 
         genre_hash = { :name => genre.name }
         # unless genre_array.include?(genre_hash)
           # genre_array.push(genre_hash)
         # end 
         genre_arr.push(genre_hash)
+        g_a.push(genre.name)
       }
-      genres.push(genre_arr)
+      # genres.push(genre_arr)
+      genres.push(g_a)
     end
+   
+    titles.push(movie.original_title)
+    overviews.push(movie.overview)
+    dates.push(movie.release_date)
     
     titles.each_with_index { |title, index|
       hash_movie = Hash.new
       hash_movie['name'] = title
-      rt_movie = Rotten::Movie.find_first title
-      if rt_movie.nil?
+      results = Rotten::Movie.search title
+      
+      rt_movie = nil
+      results.each { |rt_mv| 
+        if (rt_mv.title == title && rt_mv.release_dates['theater'][0,4] == dates[index][0,4] && rt_mv.posters['detailed'] != "http://images.rottentomatoescdn.com/images/redesign/poster_default.gif")
+          rt_movie = rt_mv
+          puts rt_movie.title
+          break
+        end
+      }
+      
+      # if the movie is nil or hasn't been reviewed, it is not of any value to us
+      if rt_movie.nil? || rt_movie.ratings['critics_score'] == -1 
         next
       end
+      
       hash_movie['rating'] = rt_movie.ratings['critics_score']
       hash_movie['user_rating'] = rt_movie.ratings['audience_score']
       hash_movie['mpaa_rating'] = rt_movie.mpaa_rating
+      
       # if the RT synopsis is empty, use the tmdb one
       if (rt_movie.synopsis.nil? || rt_movie.synopsis.empty?)
         hash_movie['description'] = overviews[index]
       else
         hash_movie['description'] = rt_movie.synopsis
       end
+      
       hash_movie['poster'] = rt_movie.posters['detailed']
       hash_movie['release_date'] = rt_movie.release_dates['theater']
       hash_movie['rt_id'] = rt_movie.id
       hash_movie['runtime'] = rt_movie.runtime
       hash_movie['genres'] = genres[index]
       movie_array.push(hash_movie)
-      File.open("test.movie.1000.20000.txt", "a") { |f| 
+      File.open("official.movies.test.txt", "a") { |f| 
         f.puts(hash_movie) 
       }
     }
@@ -85,45 +106,7 @@ movieTitles = Array.new
     print '.'
   end 
 }
-# (1..65).each { |i| 
-  # result = Tmdb::TmdbMovie.top_rated(:page => i) 
-  # # puts result[0].results
-  # #puts result[0].results.class
-  # #puts result[0].results[0].original_title
-#   
-  # movies = result[0].results
-#   
-  # movies.each { |movie|
-    # movieTitles.push(movie.original_title)
-  # }
-#   
-# }
 
-# puts movieTitles
-
-# movie_array = Array.new
-# movieTitles.each { |title| 
-  # hash_movie = Hash.new
-  # hash_movie['name'] = title
-  # rt_movie = Rotten::Movie.find_first title
-  # if rt_movie.nil?
-    # next
-  # end
-  # hash_movie['rating'] = rt_movie.ratings['critics_score']
-  # hash_movie['user_rating'] = rt_movie.ratings['audience_score']
-  # hash_movie['mpaa_rating'] = rt_movie.mpaa_rating
-  # hash_movie['description'] = rt_movie.synopsis
-  # hash_movie['poster'] = rt_movie.posters['detailed']
-  # hash_movie['release_date'] = rt_movie.release_dates['theater']
-  # movie_array.push(hash_movie)
-# }
-
-
-# puts movie_array
-
-# File.open("test2.rb", "w") { |f| f.write(movie_array) }
-
-#puts "All Done."
 
 # tvdb = TvdbParty::Search.new("FACBC9B54A326107")
 # 
