@@ -9,7 +9,7 @@ class CreateMovies < ActiveRecord::Migration
       t.string :mpaa_rating
       t.string :poster
       t.integer :runtime
-      t.integer :rt_id
+      t.string :rt_id
 
       t.timestamps
     end
