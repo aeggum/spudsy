@@ -119,7 +119,6 @@ a {
 	margin-left: 10px;
 	background-position: center center;
 	border-radius: 0 7px 7px;
-	box-shadow: 1px 1px 5px;
 }
 
 .social_tabs:active {
