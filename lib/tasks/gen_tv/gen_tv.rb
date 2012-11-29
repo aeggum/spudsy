@@ -1,8 +1,6 @@
 require 'action_view'
 gem 'httparty', '0.7.8'
 require 'tvdb_party'
-require "../rotten.rb"
-require "tmdb"
 require 'pp'
 include ActionView::Helpers::DateHelper
 tvdb = TvdbParty::Search.new("FACBC9B54A326107")
@@ -14,23 +12,26 @@ tvdb = TvdbParty::Search.new("FACBC9B54A326107")
 ###############################################################################
 show_array = Array.new
 genre_array = Array.new
-start_index = 0     # starting index for tvdb search
-end_index = 1000    # ending index for tvdb search
+start_index = 25000     # starting index for tvdb search
+end_index = 100000    # ending index for tvdb search
 
 for i in start_index..end_index
   begin
     hash_show = Hash.new
     tvdb_show = tvdb.get_series_by_id(i)
-    if tvdb_show.nil? || tvdb_show.posters('en').nil? || tvdb_show.posters('en').first.nil? || tvdb_show.name.nil? || tvdb_show.overview.nil?
+    if tvdb_show.nil? || tvdb_show.posters('en').nil? || tvdb_show.posters('en').first.nil? || tvdb_show.name.nil? || tvdb_show.overview.nil? || tvdb_show.rating == 0.0
+      print "." + i + "."
       next
     else 
       puts i
       puts tvdb_show
     end
     hash_show['title'] = tvdb_show.name
-    hash_show['overview'] = tvdb_show.overview
-    hash_show['rating'] = tvdb_show.rating 
+    hash_show['tvdb_id'] = tvdb.id
+    hash_show['rating'] = tvdb_show.rating
+    hash_show['overview'] = tvdb_show.overview 
     hash_show['poster'] = tvdb_show.posters('en').first.url
+    hash_show['release_date'] = Date.parse(tvdb_show.first_aired).strftime("%Y-%m-%d")
     show_genres = tvdb_show.genres
     
     show_genres.each { |genre| 
@@ -47,7 +48,7 @@ for i in start_index..end_index
       f.puts(hash_show) 
     }
     rescue
-      puts '.'  # exception
+      print '.'  # exception
     end
 end
 
