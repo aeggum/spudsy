@@ -88,9 +88,31 @@ a {
 }
 
 #magnify_img {
-	/*position: absolute;*/
-	margin-top: 11px;
-	margin-left: -25px;
+	margin-top: 10px;
+	margin-left: -35px;
+}
+
+#twitter_tab {
+	background-image: url('../twitter.png');
+}
+
+#facebook_tab {
+	background-image: url('../facebook.png');
+}
+
+.social_tabs {
+	float: right;
+	margin-top: -16px;
+	width: 51px;
+	height: 51px;
+	margin-left: 10px;
+	background-position: center center;
+	border-radius: 0 7px 7px;
+	box-shadow: 1px 1px 5px;
+}
+
+.social_tabs:active {
+	margin-top: -14px;
 }
 
 .container {
