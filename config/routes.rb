@@ -7,10 +7,12 @@ DemoApp::Application.routes.draw do
   get "welcome/index"
   get "welcome/details"
   get "tv_shows/show"
+  get "search/results"
 
   root :to => 'welcome#index'
   match "/landing", :to => "welcome#index"
   match "/details", :to => "welcome#details"
+  match "/results", :to => "search#results"
   
   #map.resources :movies, :has_many => :actors
   resources :tv_shows# , :has_many => :actors
