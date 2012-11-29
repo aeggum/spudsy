@@ -56,7 +56,13 @@ label {
 }
 
 a {
-	color: #999;
+	color: #999 !important;
+}
+
+#scaled_page {
+ 	zoom: 0.9; 
+	-moz-transform: scale(0.9); 
+	-moz-transform-origin: 0 0;
 }
 
 #netflix_partial .container_12 {
@@ -74,13 +80,13 @@ a {
 	border: 1px solid #ccc;
 	font-family: 'News Cycle';
 	font-size: 1.5em;
-	height: 45px;
+	height: 40px;
 	padding-top: 0;
 }
 
 #search_container {
-	border-bottom: 1px solid #eee;
 	height: 55px;
+	border-bottom: 1px solid #eee;
 }
 
 #search_form {
@@ -88,9 +94,40 @@ a {
 }
 
 #magnify_img {
-	position: absolute;
-	margin-top: 15px;
-	margin-left: -25px;
+	margin-top: 10px;
+	margin-left: -35px;
+}
+
+#twitter_tab {
+	background-image: url('../twitter.png');
+}
+
+#facebook_tab {
+	background-image: url('../facebook.png');
+}
+
+.grey_border {
+	border-bottom: 1px solid #eee;
+	padding-bottom: 20px;
+}
+
+.social_tabs {
+	float: right;
+	margin-top: -10px;
+	width: 50px;
+	height: 50px;
+	margin-left: 10px;
+	background-position: center center;
+	border-radius: 0 7px 7px;
+	box-shadow: 1px 1px 5px;
+}
+
+.social_tabs:active {
+	margin-top: -9px;
+}
+
+.social_tabs:hover {
+	cursor: pointer;
 }
 
 .container {
@@ -121,13 +158,14 @@ a {
 
 .rating, .tv_rating {
 	position: absolute; 
-	top: 150px; 
-	left: 80px;
+	top: 158px; 
+	left: 65px;
 	padding: 5px;
 }
 
 .tv_rating {
 	left: 95px;
+	top: 150px;
 }
 
 .rating span {
@@ -149,7 +187,7 @@ img.rt_img {
 
 .brand {
 	font-family: LeagueGothic !important;
-	font-size: 35px !important;
+	font-size: 40px !important;
 }
 
 .brand:hover {
