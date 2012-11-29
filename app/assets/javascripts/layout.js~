@@ -13,6 +13,10 @@ var Welcome = function() {
 			
 			$('#twitter_tab').click(function() {
 				$('#twitter_section').slideDown('slow');
+			});
+
+			$('#facebook_tab').click(function() {
+				$('#facebook_section').slideDown('slow');
 			});			
 
 			$('#tv').click(function() {
