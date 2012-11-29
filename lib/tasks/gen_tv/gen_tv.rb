@@ -20,18 +20,16 @@ for i in start_index..end_index
     hash_show = Hash.new
     tvdb_show = tvdb.get_series_by_id(i)
     if tvdb_show.nil? || tvdb_show.posters('en').nil? || tvdb_show.posters('en').first.nil? || tvdb_show.name.nil? || tvdb_show.overview.nil? || tvdb_show.rating == 0.0
-      print "." + i + "."
       next
-    else 
-      puts i
+    else
       puts tvdb_show
     end
     hash_show['title'] = tvdb_show.name
-    hash_show['tvdb_id'] = tvdb.id
+    hash_show['tvdb_id'] = tvdb_show.id
     hash_show['rating'] = tvdb_show.rating
     hash_show['overview'] = tvdb_show.overview 
     hash_show['poster'] = tvdb_show.posters('en').first.url
-    hash_show['release_date'] = Date.parse(tvdb_show.first_aired).strftime("%Y-%m-%d")
+    hash_show['release_date'] = tvdb_show.first_aired.strftime("%Y-%m-%d")
     show_genres = tvdb_show.genres
     
     show_genres.each { |genre| 
