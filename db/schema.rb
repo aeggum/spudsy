@@ -64,7 +64,7 @@ ActiveRecord::Schema.define(:version => 20121115054532) do
     t.string   "mpaa_rating"
     t.string   "poster"
     t.integer  "runtime"
-    t.integer  "rt_id"
+    t.string   "rt_id"
     t.datetime "created_at",   :null => false
     t.datetime "updated_at",   :null => false
   end
