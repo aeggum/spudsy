@@ -62,7 +62,7 @@ var Welcome = function() {
 						
 			$(".poster").on('click', function() {
 				$(this).colorbox({	
-			    	width:"500px",
+			    	width:"800px",
 			   		height:"600px",
 			   		inline: true,
 			   		href: "#info_overlay",
