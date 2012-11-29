@@ -47,13 +47,8 @@
 </div>
 <div class="container_12" id="search_container">
 	<div class="prefix_6 grid_6">
-		<!-- <form id='search_form'>	
-			<input type='text' name='search' id='search_box' placeholder='Search for movies, TV shows, genres, or actors' />
-		</form> -->
 		<%= form_tag "/results", :method => "get" do%>
- 	 	<p>
-    		<%= text_field_tag :search_box, params[:search_box] %>
-  		</p>
+    		<%= text_field_tag :search_box, params[:search_box], :placeholder => 'Search for movies, TV shows, genres, or actors'%>
 		<% end %>
 	</div>
 	<img src='../06-magnify.png' id='magnify_img' />
