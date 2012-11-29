@@ -89,7 +89,7 @@ a {
 
 #magnify_img {
 	/*position: absolute;*/
-	margin-top: 15px;
+	margin-top: 11px;
 	margin-left: -25px;
 }
 
