@@ -14,8 +14,7 @@
  */
 @font-face {
 	font-family: LeagueGothic;
-	src: url('../fonts/leaguegothic-regular-webfont.ttf'),
-     		url('../fonts/leaguegothic-regular-webfont.eot'); /* IE9 */
+	src: url('../fonts/leaguegothic-regular-webfont.ttf'), url('../fonts/leaguegothic-regular-webfont.eot'); /* IE9 */
 }
 @font-face {
 	font-family: Franchise;
@@ -23,7 +22,7 @@
 }
 
 html {
-       overflow-y: scroll;
+	overflow-y: scroll;
 }
 
 body {
@@ -46,7 +45,7 @@ h2 {
 }
 
 hr {
-	margin-top: 25px !important;	
+	margin-top: 25px !important;
 	margin-bottom: 0px !important;
 }
 
@@ -60,7 +59,7 @@ a {
 }
 
 #netflix_partial .container_12 {
-	padding-top: 30px;	
+	padding-top: 30px;
 }
 
 #genre_select_chzn {
@@ -99,8 +98,8 @@ a {
 }
 
 .grey_shade {
-	color: white; 
-	font: 200 24px/45px LeagueGothic !important;  
+	color: white;
+	font: 200 24px/45px LeagueGothic !important;
 	background: rgb(0, 0, 0); /* fallback color */
 	background: rgba(0, 0, 0, 0.7);
 }
@@ -113,15 +112,15 @@ a {
 }
 
 .rank {
-	position: absolute; 
-	top: -18px; 
+	position: absolute;
+	top: -18px;
 	left: -8px;
 	padding: 5px 10px;
 }
 
 .rating, .tv_rating {
-	position: absolute; 
-	top: 158px; 
+	position: absolute;
+	top: 158px;
 	left: 65px;
 	padding: 5px;
 }
@@ -133,10 +132,10 @@ a {
 
 .rating span {
 	padding-left: 33px;
-} 
+}
 
 img.rt_img {
-	width:30px;
+	width: 30px;
 	position: absolute;
 	top: 12px;
 }
@@ -145,7 +144,7 @@ img.rt_img {
 	background-color: white;
 	border: 1px solid #EEE;
 	border-radius: 10px;
-	padding:  50px 10px 10px;
+	padding: 50px 10px 10px;
 }
 
 .brand {
@@ -165,8 +164,8 @@ img.rt_img {
 }
 
 .fixed_left_nav {
- 	position: fixed; 
-	margin-left: -156px; 
+	position: fixed;
+	margin-left: -156px;
 	top: 105px;
 	width: 134px;
 	height: 320px;
@@ -181,14 +180,18 @@ img.rt_img {
 	-moz-box-shadow: 5px 5px 5px #CCC;
 	-webkit-box-shadow: 5px 5px 5px #CCC;
 	box-shadow: 5px 5px 5px #CCC;
-	position: relative; 
-	cursor:pointer;
-	cursor:hand;
-   	width: 100%; /* for IE 6 */
+	position: relative;
+	cursor: pointer;
+	cursor: hand;
+	width: 100%; /* for IE 6 */
+}
+
+.search_result {
+	margin: 5px
 }
 
 #view_more {
-	float:right;
+	float: right;
 	padding: 15px;
 }
 

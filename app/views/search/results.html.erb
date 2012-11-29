@@ -68,14 +68,25 @@
 </div>
 
 <div class = "container_12" id="results_body">
-	<div class = "prefix_2 grid_6">
+	
 	<% @search_results.each do |result|  %>
-		<h3 class = "grid_4"><%= result.searchable.name %></h3>
+	
+	<div class = "search_result prefix_1 grid_10 suffix_1 ">
+		<div style="float: left; padding: 5px" ><%= image_tag("#{result.searchable.poster}", :size => "140x200") %></div>
+		<div>
+			<h3><%= result.searchable.name %></h3>
+		 	<%= result.searchable.description%> 
+		</div>
+	</div>
+	
 	<%end%>
+	
+	<div class = "grid_12">
+		<%=paginate @search_results %>
 	</div>
 	
 </div>
 
-</div>
+
 	
 

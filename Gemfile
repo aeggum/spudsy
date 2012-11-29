@@ -29,6 +29,9 @@ gem 'httparty', '0.7.8'
 gem 'tvdb_party'
 gem 'squeel'
 gem 'pg_search'
+gem 'kaminari'
+
+
 # gem 'ruby-tmdb'
 # gem 'httparty'
 

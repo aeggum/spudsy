@@ -193,6 +193,7 @@ DEPENDENCIES
   httparty (= 0.7.8)
   jquery-rails
   json
+  kaminari
   pg (= 0.12.2)
   pg_search
   rails (= 3.2.8)
