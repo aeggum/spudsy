@@ -20,6 +20,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
+
 <div class="navbar navbar-fixed-top navbar-inverse">
 	<div class="navbar-inner">
 	    	<div class="container">
@@ -37,35 +38,36 @@
 				</ul>
 	      		</div>
 	      		<div class="btn-group pull-right">
-		    	<a class="btn dropdown-toggle" data-toggle="dropdown" href="#" style="color: black">
-		      		<i class="icon-user"></i> 
-		      		<% if user_signed_in? %> 
-		      			<%= current_user.email %>
-		      		<% end %>
-		      		<span class="caret"></span>
-		    	</a>
-		    	<ul class="dropdown-menu">
-			      	<li><%= link_to "Profile" %> </li> <!-- , current_user %></li> -->
-			      	<li class="divider"></li>
-			      	<li><%= link_to "Settings", edit_user_registration_path %> </li> <!-- , edit_user_path(current_user) %></li> -->
-			      	<li class="divider"></li>
-			      	<li>
-			      		<% if user_signed_in? %>
-			      			<%= link_to "Sign out", destroy_user_session_path, :method => :delete %>
-			      		<% else %>
-								<%= link_to "Sign up", new_user_registration_path %>
-								<%= link_to "Sign in", new_user_session_path %>
-	  						<% end %>
-			      	</li>
-		    	</ul>
+			    	<a class="btn dropdown-toggle" data-toggle="dropdown" href="#" style="color: black">
+			      		<i class="icon-user"></i> 
+			      		<% if user_signed_in? %> 
+			      			<%= current_user.email %>
+			      		<% end %>
+			      		<span class="caret"></span>
+			    	</a>
+			    	<ul class="dropdown-menu">
+				      	<li><%= link_to "Profile" %> </li> <!-- , current_user %></li> -->
+				      	<li class="divider"></li>
+				      	<li><%= link_to "Settings", edit_user_registration_path %> </li> <!-- , edit_user_path(current_user) %></li> -->
+				      	<li class="divider"></li>
+				      	<li>
+				      		<% if user_signed_in? %>
+				      			<%= link_to "Sign out", destroy_user_session_path, :method => :delete %>
+				      		<% else %>
+									<%= link_to "Sign up", new_user_registration_path %>
+									<%= link_to "Sign in", new_user_session_path %>
+		  						<% end %>
+				      	</li>
+			    	</ul>
 		  	</div>
 	    	</div>
   	</div>
 </div>
 
-<div class="container content">
-	<%= yield %>
+<div id="scaled_page">
+	<div class="container content">
+		<%= yield %>
+	</div>
 </div>
-
 </body>
 </html>

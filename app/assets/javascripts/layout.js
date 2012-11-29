@@ -11,6 +11,14 @@ var Welcome = function() {
 		documentReady: function() {
 			$('#tv').prop('checked', true);
 			
+			$('#twitter_tab').click(function() {
+				$('#twitter_section').slideDown('slow');
+			});
+
+			$('#facebook_tab').click(function() {
+				$('#facebook_section').slideDown('slow');
+			});			
+
 			$('#tv').click(function() {
 				if ($(this).is(':checked')) {
 					// checkbox is now being checked
