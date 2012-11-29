@@ -57,10 +57,10 @@
 		<img src='../06-magnify.png' id='magnify_img' />
 	</div>
 	<div class="grid_4">
-		<div id="twitter_tab" class="grid_2 alpha social_tabs">
+		<div id="twitter_tab" class="social_tabs">
 			<img src='../twitter.png' />
 		</div>
-		<div id="facebook_tab" class="grid_2 omega social_tabs">
+		<div id="facebook_tab" class="social_tabs">
 			<img src='../facebook.png' />
 		</div>
 	</div>

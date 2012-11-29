@@ -92,9 +92,18 @@ a {
 	margin-left: -35px;
 }
 
+#twitter_tab {
+	background-image: url('../twitter.png');
+}
+
+#facebook_tab {
+	background-image: url('../facebook.png');
+}
+
 .social_tabs {
-	width: 50px;
-	height: 50px;
+	float: right;
+	margin-top: -21px;
+	width: 64px;
 }
 
 .container {
