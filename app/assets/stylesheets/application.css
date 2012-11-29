@@ -94,8 +94,10 @@ a {
 }
 
 #magnify_img {
-	margin-top: 10px;
-	margin-left: -35px;
+	position: absolute;
+	top: 0;
+	right: 0;
+	margin-top: 11px;
 }
 
 #twitter_tab {
@@ -104,6 +106,10 @@ a {
 
 #facebook_tab {
 	background-image: url('../facebook.png');
+}
+
+.relative_position {
+	position: relative;
 }
 
 .grey_border {
