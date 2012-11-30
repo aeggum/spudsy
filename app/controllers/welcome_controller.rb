@@ -12,6 +12,7 @@ class WelcomeController < ApplicationController
     @movies = Movie.all(:limit => 25)
     @show_array = TvShow.all(:limit => 25)
     @your_picks = Array.new
+    @movie = @movies[0]
     
     
     # puts the entire array onto the end of the your picks 

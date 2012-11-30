@@ -9,12 +9,16 @@
 	<% if (index % 6 == 0) %>
 		<div class="container_12">
 	<% end %>
-		<div data-id="<%= index %>" class="grid_2 poster tv_show">
+		<div data-id="<%= "#{media.class.to_s.downcase.pluralize}/#{media['id']}" %>" class="grid_2 poster tv_show">
 			<%= image_tag("#{media['poster']}", :size => "140x200") %>
 			<% if (media.class == Movie) %>
 			<h3 class="rating grey_shade">
 				<% if (media['rating'] >= 60) %>
-					<img class="rt_img" src="../rt_fresh.png" />
+					<% if (media['certified']) %>
+					<img class="rt_img" src="../rt_certified.png" />
+					<% else %>
+					<img class="rt_img test" src="../rt_fresh.png" />
+					<% end %>
 				<% else %>
 					<img class="rt_img" src="../rt_rotten.png" />
 				<% end%>
