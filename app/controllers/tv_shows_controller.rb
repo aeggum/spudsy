@@ -3,9 +3,9 @@ class TvShowsController < ApplicationController
   def show
     puts params[:id]
     @tv_show = TvShow.find(params[:id])
-    # return @tv_show
     respond_to do |format|
-      format.json { render :json => @tv_show }
+      #format.json { render :json => @movie }
+      format.html { render :partial => "tv_shows/overlay.html", :locals => { :tv_show => @tv_show} }
     end
   end
 end
