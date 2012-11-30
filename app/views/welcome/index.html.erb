@@ -122,10 +122,3 @@
 		</div>
 	</div>
 </div>
-
-<div id="testing_div" style="display: none;">
-	<p id="overlay_name"><%= @movie.name %></p>
-	<%= content_tag "div", id: "movies_test", data: {url: Movie.find(@movie.id) } do %>
-		<%= @movie.name %>
-	<% end %>
-</div>

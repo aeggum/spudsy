@@ -69,25 +69,8 @@ var Welcome = function() {
 				}).done(function(data) { 
 					console.log(data);
 					$("#info_overlay").html(data);
-					$("#overlay_name").html(data.name);
-					$("#movies_test").data(data);
 				});
 				
-				
-			});
-			/*
-			 * $(".poster").on('click', function() {
-				$.get($(this).attr('data-id'), function(data) {
-					// handle the result
-					console.log(data);
-				}).done(function(data) {
-					console.log(data);
-				});
-				
-				
-			});*/
-			 
-			/*$(".poster").on('click', function() {
 				$(this).colorbox({	
 			    	width:"800px",
 			   		height:"600px",
@@ -113,9 +96,8 @@ var Welcome = function() {
 						$("#overlay_more_info").show();
 						document.documentElement.style.overflow = "auto";
 			   		}
-			   		
-			  })
-			})*/
+			  	})
+			});
 
 
 			$(".chzn-select").chosen(); 
