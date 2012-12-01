@@ -8,6 +8,9 @@ class TvShow < ActiveRecord::Base
   has_many :media_genres, :as => :media
   has_many :genres, :as => :media, :through => :media_genres
   
+  scope :high_rating, where("(rating > 9.5)")
+  scope :low_rating, where("(rating < 3.0)")
+  
   include PgSearch
   pg_search_scope :search, against: [:name],
       using: {tsearch: {dictionary: "english", any_word: "true"}}

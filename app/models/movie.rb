@@ -8,6 +8,11 @@ class Movie < ActiveRecord::Base
   has_many :media_genres, :as => :media
   has_many :genres, :as => :media, :through => :media_genres
   
+  scope :high_rating, where("(rating > 90)")
+  scope :high_user_rating, where("(user_rating > 90)")
+  scope :low_rating, where("(rating < 35)")
+  scope :low_user_rating, where("(user_rating < 35)")
+  
   include PgSearch
   pg_search_scope :search, against: [:name],
       using: {tsearch: {dictionary: "english", any_word: "true"}, dmetaphone: {}},
