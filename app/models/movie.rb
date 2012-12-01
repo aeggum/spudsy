@@ -30,6 +30,53 @@ class Movie < ActiveRecord::Base
     end
   end
   
+  # Gets a basic rating for a movie.
+  # Looks at rating, user rating, certified, year
+  # TODO: will look at certified status, popularity, ?runtime?
+  def self.getRating movie
+    # TODO: change cFactor to commented line when new data is in
+    #cFactor = (movie.certified? ? 1.5 : 0.9)
+    cFactor = (movie.rating > 80 ? 1.5 : 0.9)
+    
+    rating = movie.rating * 1.5 * cFactor
+    rating += movie.user_rating * 0.5 * cFactor
+    
+    movie_year = movie.release_date.to_s[0, 4].to_i
+    this_year = Time.new.to_s[0,4].to_i
+    year_dif = (this_year - movie_year)
+    
+    # My way of making the year affect the ratings
+    # Essentialy a complicated algebraic equation
+    yFactor = 1
+    case year_dif 
+    when -10..10
+      yFactor = 1
+    when 10..20
+      yFactor = getYFactor(0, 0.01, year_dif - 10, 0.1)
+    when 20..40
+      yFactor = getYFactor(0.1, 0.0075, year_dif - 20, 0.25)
+    when 40..90
+      yFactor = getYFactor(0.25, 0.015, year_dif - 40, 0.99)
+    else 
+      yFactor = 0.01
+    end
+    
+    rating *= yFactor
+    rating /= 3       # absolute max score is 300
+    puts "Rating for #{movie.name}: #{rating}"
+  end
+  
+  def getRating movie
+    puts movie.rating
+  end
+  
+  private 
+    def self.getYFactor(startDrop, dropFactor, years_in_range, max) 
+      yFactor = startDrop
+      yFactor += dropFactor * (years_in_range)
+      yFactor = max if (yFactor > max)
+      1 - yFactor
+    end
 end
 
 
