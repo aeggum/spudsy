@@ -81,11 +81,13 @@ ActiveRecord::Schema.define(:version => 20121126040036) do
 
   create_table "tv_shows", :force => true do |t|
     t.string   "name"
+    t.string   "tvdb_id"
     t.float    "rating"
     t.text     "description"
     t.string   "poster"
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
+    t.date     "release_date"
+    t.datetime "created_at",   :null => false
+    t.datetime "updated_at",   :null => false
   end
 
   add_index "tv_shows", ["name"], :name => "index_tv_shows_on_name"

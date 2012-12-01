@@ -25,13 +25,15 @@ movieTitles = Array.new
   # puts "Unable to open file!"
 # end
 # TODO: need to do a year check as well, then everything should be squared away
-(1000..2000).each { |i| 
+(0..100000).each { |i| 
   # do something similar to what was done for tv shows
   movie_array = Array.new
   titles = Array.new
   overviews = Array.new
   genres = Array.new
   dates = Array.new
+  popularities = Array.new
+  
   begin 
     # something that does something
     movie = Tmdb::TmdbMovie.find(:id => i)
@@ -55,9 +57,11 @@ movieTitles = Array.new
       genres.push(g_a)
     end
    
+    # TODO: Do I want to keep the TMDB id as well?
     titles.push(movie.original_title)
     overviews.push(movie.overview)
     dates.push(movie.release_date)
+    popularities.push(movie.popularity)
     
     titles.each_with_index { |title, index|
       hash_movie = Hash.new
@@ -79,6 +83,14 @@ movieTitles = Array.new
       end
       
       hash_movie['rating'] = rt_movie.ratings['critics_score']
+      
+      # boolean for certified fresh or not
+      if (rt_movie.ratings['critics_rating'] == "Certified Fresh") 
+        hash_movie['certified'] = true
+      else 
+        hash_movie['certified'] = false
+      end
+      
       hash_movie['user_rating'] = rt_movie.ratings['audience_score']
       hash_movie['mpaa_rating'] = rt_movie.mpaa_rating
       
@@ -89,13 +101,14 @@ movieTitles = Array.new
         hash_movie['description'] = rt_movie.synopsis
       end
       
+      hash_movie['popularity'] = popularities[index]
       hash_movie['poster'] = rt_movie.posters['detailed']
       hash_movie['release_date'] = rt_movie.release_dates['theater']
       hash_movie['rt_id'] = rt_movie.id
       hash_movie['runtime'] = rt_movie.runtime
       hash_movie['genres'] = genres[index]
       movie_array.push(hash_movie)
-      File.open("official.movies.test.txt", "a") { |f| 
+      File.open("official.movies.txt", "a") { |f| 
         f.puts(hash_movie) 
       }
     }
@@ -103,7 +116,9 @@ movieTitles = Array.new
     
   rescue
     # caught exception
-    print '.'
+    if (i % 10 == 0) 
+      print '.' #print '.'
+    end
   end 
 }
 
