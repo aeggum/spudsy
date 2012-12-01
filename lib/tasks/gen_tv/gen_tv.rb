@@ -12,8 +12,8 @@ tvdb = TvdbParty::Search.new("FACBC9B54A326107")
 ###############################################################################
 show_array = Array.new
 genre_array = Array.new
-start_index = 25000     # starting index for tvdb search
-end_index = 100000    # ending index for tvdb search
+start_index = 400000     # starting index for tvdb search
+end_index = 450000    # ending index for tvdb search
 
 for i in start_index..end_index
   begin
@@ -32,12 +32,12 @@ for i in start_index..end_index
     hash_show['release_date'] = tvdb_show.first_aired.strftime("%Y-%m-%d")
     show_genres = tvdb_show.genres
     
-    show_genres.each { |genre| 
-      genre_hash = { :name => genre }
-      unless genre_array.include?(genre_hash)
-        genre_array.push(genre_hash)
-      end 
-    }
+    # show_genres.each { |genre| 
+      # genre_hash = { :name => genre }
+      # unless genre_array.include?(genre_hash)
+        # genre_array.push(genre_hash)
+      # end 
+    # }
     
     hash_show['genres'] = show_genres
     # puts show
@@ -51,10 +51,10 @@ for i in start_index..end_index
 end
 
 # put the genre array to the end of the file
-File.open("#{start_index}..#{end_index}.tv.txt", "a") { |f| 
-  f.puts(genre_array)
+# File.open("#{start_index}..#{end_index}.tv.txt", "a") { |f| 
+  # f.puts(genre_array)
   # f.puts
   # show_array.each { |x|
     # f.puts(x)
   # }
-}
+# }
