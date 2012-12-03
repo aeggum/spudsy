@@ -1,6 +1,7 @@
 require "rotten"
 require "tmdb"
 require 'amazon/ecs'
+include Geokit::Geocoders
 
 class WelcomeController < ApplicationController
   Rotten.api_key = 'pykjuv5y44fywgpu2m7rt4dk'
@@ -19,6 +20,24 @@ class WelcomeController < ApplicationController
     @your_picks.push(*@movies)
     @your_picks.push(*@show_array)
     
+    ip = request.remote_ip
+    location = IpGeocoder.geocode(ip)
+    latitude = location.lat
+    longitude = location.lng
+    
+    # if localhost, assume madison for now
+    if (ip == "127.0.0.1")
+      latitude = 43.0731
+      longitude = -89.4011
+    end
+    
+    ll = "#{latitude}, #{longitude}"
+    res = Geokit::Geocoders::GoogleGeocoder.reverse_geocode ll
+    full_address = res.full_address
+    zip_code = res.zip
+ 
+    # zip_code now holds the zip of the request
+        
   end
   
   def details
