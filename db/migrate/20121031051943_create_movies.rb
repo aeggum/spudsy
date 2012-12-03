@@ -10,6 +10,7 @@ class CreateMovies < ActiveRecord::Migration
       t.string :poster
       t.integer :runtime
       t.string :rt_id
+      t.float :spudsy_rating
 
       t.timestamps
     end

@@ -6,6 +6,7 @@ DemoApp::Application.routes.draw do
 
   get "welcome/index"
   get "welcome/details"
+  get "welcome/rotate_picks"
   get "search/results"
 
   root :to => 'welcome#index'

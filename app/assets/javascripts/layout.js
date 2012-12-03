@@ -62,12 +62,12 @@ var Welcome = function() {
 				
 				
 			$(".poster").on('click', function() {
-				console.log($(this).attr('data-id'));
+				//console.log($(this).attr('data-id'));
 				$.ajax({
 					url: $(this).attr('data-id')  // get movie#show for this movie
 					
 				}).done(function(data) { 
-					console.log(data);
+					//console.log(data);
 					$("#info_overlay").html(data);
 				});
 				
@@ -103,12 +103,16 @@ var Welcome = function() {
 			$(".chzn-select").chosen(); 
 			$(".chzn-select-deselect").chosen({allow_single_deselect:true});
 			
-			$("#view_more").on('click', function() {
-				page++;
-				$("#poster_slider_" + page).slideDown(250);
-				if (page >= 3) {
-					$("#view_more").hide();
-				}
+			// shows a different selection of picks when the view more link is pressed
+			$("#view_more").on('click', function(event) {
+				$.ajax({
+					url: "/welcome/rotate_picks"
+					
+				}).done(function(data) {
+					event.preventDefault();
+					$("#your_picks_section").slideDown(1000).hide();
+					$("#your_picks_section").html(data).slideDown(1000, 'swing').show();
+				});
 			});
 			
 			$("#overlay_more_info").on('click', function() {

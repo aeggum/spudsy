@@ -7,18 +7,21 @@ class WelcomeController < ApplicationController
   Rotten.api_key = 'pykjuv5y44fywgpu2m7rt4dk'
   Tmdb::Tmdb.api_key = "8da8a86a8b272a70d20c08a35b576d50"
   Tmdb::Tmdb.default_language = "en"
+  before_filter :set_your_picks, :only => :index
   
   def index 
    
-    @movies = Movie.all(:limit => 25)
-    @show_array = TvShow.all(:limit => 25)
-    @your_picks = Array.new
-    @movie = @movies[0]
+    # @movies = Movie.all(:limit => 30)
+    # @show_array = TvShow.all(:limit => 25)
+    # @your_picks = Array.new
+    # @movie = @movies[0]
     
     
     # puts the entire array onto the end of the your picks 
-    @your_picks.push(*@movies)
-    @your_picks.push(*@show_array)
+    # @your_picks.push(*@movies)
+    #@your_picks.push(*@show_array)
+    
+    #@your_picks.rotate(6) or however we want to do it
     
     ip = request.remote_ip
     location = IpGeocoder.geocode(ip)
@@ -40,6 +43,25 @@ class WelcomeController < ApplicationController
         
   end
   
+  respond_to :html, :json
+  def rotate_picks 
+    @@your_picks.rotate!(6)
+    @@your_picks.each do |pick|
+     print pick.name + ","
+    end
+    respond_to do |format|
+      # format.json { render :json => @your_picks }
+      format.html { render :partial => "your_picks", :locals => { :media => @@your_picks} }
+    end
+    puts
+    puts 
+    @@your_picks.each do |pick|
+      print pick.name + ","
+    end
+    @your_picks = @@your_picks
+  end
+  
+  
   def details
     # This is a placeholder - users will be redirected to it when they are signed in, for now
     # alternatively,
@@ -55,6 +77,18 @@ class WelcomeController < ApplicationController
     @total_pages = @res.total_pages
     @first = @res.items.first
   end
+  
+  # called before the others in the class get going
+  def set_your_picks
+    @movies = Movie.all(:limit => 30)
+    @show_array = TvShow.all(:limit => 30)
+    @@your_picks = Array.new
+    @movie = @movies[0]
+    @@your_picks.push(*@movies)
+    @your_picks = @@your_picks
+  end
+  
+  # TODO: Could get the next set of shows if user has cycled through all on main load..
   
   private 
   
