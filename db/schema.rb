@@ -65,8 +65,11 @@ ActiveRecord::Schema.define(:version => 20121126040036) do
     t.string   "poster"
     t.integer  "runtime"
     t.string   "rt_id"
-    t.datetime "created_at",   :null => false
-    t.datetime "updated_at",   :null => false
+    t.float    "popularity"
+    t.boolean  "certified"
+    t.float    "spudsy_rating"
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
   end
 
   add_index "movies", ["name"], :name => "index_movies_on_name"
@@ -106,6 +109,7 @@ ActiveRecord::Schema.define(:version => 20121126040036) do
     t.datetime "created_at",                             :null => false
     t.datetime "updated_at",                             :null => false
     t.boolean  "admin"
+    t.integer  "zip"
   end
 
   add_index "users", ["email"], :name => "index_users_on_email", :unique => true

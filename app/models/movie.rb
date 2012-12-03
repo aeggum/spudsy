@@ -3,7 +3,7 @@ class Movie < ActiveRecord::Base
   #Validates the follow are present before saving in the database
   validates :rating, :user_rating, :mpaa_rating, :name, :presence => true
   
-  attr_accessible :description, :name, :rating, :user_rating, :mpaa_rating, :poster, :release_date, :genre, :runtime, :rt_id, :spudsy_score
+  attr_accessible :description, :name, :rating, :user_rating, :mpaa_rating, :poster, :release_date, :genre, :runtime, :rt_id, :spudsy_score, :certified, :popularity
   has_many :actors, :as => :media
   has_many :media_genres, :as => :media
   has_many :genres, :as => :media, :through => :media_genres
@@ -12,6 +12,9 @@ class Movie < ActiveRecord::Base
   scope :high_user_rating, where("(user_rating > 90)")
   scope :low_rating, where("(rating < 35)")
   scope :low_user_rating, where("(user_rating < 35)")
+  scope :high_spudsy_score, where("(spudsy_rating) > 85")
+  before_save :default_values
+  
   
   include PgSearch
   pg_search_scope :search, against: [:name],
@@ -34,9 +37,7 @@ class Movie < ActiveRecord::Base
   # Looks at rating, user rating, certified, year
   # TODO: will look at certified status, popularity, ?runtime?
   def self.getRating movie
-    # TODO: change cFactor to commented line when new data is in
-    #cFactor = (movie.certified? ? 1.5 : 0.9)
-    cFactor = (movie.rating > 80 ? 1.5 : 0.9)
+    cFactor = (movie.certified? ? 1.5 : 0.75)
     
     rating = movie.rating * 1.5 * cFactor
     rating += movie.user_rating * 0.5 * cFactor
@@ -45,7 +46,7 @@ class Movie < ActiveRecord::Base
     this_year = Time.new.to_s[0,4].to_i
     year_dif = (this_year - movie_year)
     
-    # My way of making the year affect the ratings
+    # Way of making the year affect the ratings
     # Essentialy a complicated algebraic equation
     yFactor = 1
     case year_dif 
@@ -63,12 +64,16 @@ class Movie < ActiveRecord::Base
     
     rating *= yFactor
     rating /= 3       # absolute max score is 300
-    puts "Rating for #{movie.name}: #{rating}"
+    # puts "Rating for #{movie.name}: #{rating}"
     return rating
   end
   
   def getRating movie
     puts movie.rating
+  end
+  
+  def default_values
+    self.spudsy_rating = Movie.getRating(self)
   end
   
   private 

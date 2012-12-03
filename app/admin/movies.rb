@@ -5,12 +5,14 @@ ActiveAdmin.register Movie do
   scope "Popular", :high_user_rating
   scope "Critically disapproved", :low_rating
   scope "Hated", :low_user_rating
+  scope "Spudsy > 85", :high_spudsy_score
 
   index do
     column :id
     column :name
     column "RT rating", :rating
     column "RT user rating", :user_rating
+    column "Our rating", :spudsy_rating
     column 'Genres' do |movie|
       movie.genres.collect(&:name).join(", ")
     end
@@ -32,4 +34,5 @@ ActiveAdmin.register Movie do
   filter :rt_id, :label => "RT ID"
   filter :rating
   filter :user_rating
+  filter :spudsy_rating
 end

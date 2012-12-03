@@ -80,8 +80,9 @@ class WelcomeController < ApplicationController
   
   # called before the others in the class get going
   def set_your_picks
-    @movies = Movie.all(:limit => 30)
+    #@movies = Movie.all(:limit => 30)
     @show_array = TvShow.all(:limit => 30)
+    @movies = Movie.find(:all, :order => 'spudsy_rating DESC', :limit => 30)
     @@your_picks = Array.new
     @movie = @movies[0]
     @@your_picks.push(*@movies)

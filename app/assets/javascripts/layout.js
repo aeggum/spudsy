@@ -110,8 +110,45 @@ var Welcome = function() {
 					
 				}).done(function(data) {
 					event.preventDefault();
-					$("#your_picks_section").slideDown(1000).hide();
-					$("#your_picks_section").html(data).slideDown(1000, 'swing').show();
+					$("#your_picks_section").hide()
+					$("#your_picks_section").html(data).slideDown(500, 'swing').show();
+					$(".poster").on('click', function() {
+						//console.log($(this).attr('data-id'));
+						$.ajax({
+							url: $(this).attr('data-id')  // get movie#show for this movie
+							
+						}).done(function(data) { 
+							//console.log(data);
+							$("#info_overlay").html(data);
+						});
+						
+						$(this).colorbox({	
+					    	width:"800px",
+					   		height:"600px",
+					   		inline: true,
+					   		href: "#info_overlay",
+					   		speed: 500,
+					   		onLoad:function() { 
+								document.documentElement.style.overflow = "hidden";
+								var id = $(this).attr('data-id');
+								//console.log(id);
+								//alert(id)
+								//$.get('tv_shows/' + id, function(data) {
+									//alert(data);
+									//console.log(data);
+		      						// Handle the result
+		      						//$('.article-window').html(data);
+		    					//});
+								
+					   		},
+					   		onClosed:function() {
+					   			$(".overlay_info").css("overflow", "hidden");
+								$(".overlay_info").css("height", "200px");
+								$("#overlay_more_info").show();
+								document.documentElement.style.overflow = "auto";
+					   		}
+					  	})
+					});
 				});
 			});
 			
