@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121126040036) do
+ActiveRecord::Schema.define(:version => 20121204070028) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "resource_id",   :null => false
@@ -43,6 +43,17 @@ ActiveRecord::Schema.define(:version => 20121126040036) do
   end
 
   add_index "genres", ["name"], :name => "index_genres_on_name", :unique => true
+
+  create_table "hidden_user_media", :force => true do |t|
+    t.integer  "user_id"
+    t.integer  "media_id"
+    t.string   "media_type"
+    t.boolean  "liked"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  add_index "hidden_user_media", ["user_id"], :name => "index_hidden_user_media_on_user_id"
 
   create_table "media_genres", :force => true do |t|
     t.string   "media_type"

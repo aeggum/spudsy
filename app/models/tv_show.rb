@@ -7,6 +7,8 @@ class TvShow < ActiveRecord::Base
   has_many :actors, :as => :media
   has_many :media_genres, :as => :media
   has_many :genres, :as => :media, :through => :media_genres
+  has_many :hidden_user_medias, :as => :media
+  
   
   scope :high_rating, where("(rating > 9.5)")
   scope :low_rating, where("(rating < 3.0)")
