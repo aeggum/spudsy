@@ -25,7 +25,7 @@ movieTitles = Array.new
   # puts "Unable to open file!"
 # end
 # TODO: need to do a year check as well, then everything should be squared away
-(64080..75000).each { |i| 
+(75001..100000).each { |i| 
   # do something similar to what was done for tv shows
   movie_array = Array.new
   titles = Array.new
