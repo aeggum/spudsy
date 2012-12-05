@@ -80,6 +80,7 @@ a {
 	font-family: 'News Cycle';
 	font-size: 1.5em;
 	height: 40px;
+	line-height: 40px;
 	padding-top: 0;
 }
 
@@ -93,8 +94,10 @@ a {
 }
 
 #magnify_img {
-	margin-top: 10px;
-	margin-left: -35px;
+	position: absolute;
+	top: 0;
+	right: 0;
+	margin-top: 11px;
 }
 
 #twitter_tab {
@@ -103,6 +106,10 @@ a {
 
 #facebook_tab {
 	background-image: url('../facebook.png');
+}
+
+.relative_position {
+	position: relative;
 }
 
 .grey_border {
@@ -156,8 +163,8 @@ a {
 
 .rating, .tv_rating {
 	position: absolute;
-	top: 158px;
-	left: 65px;
+	top: 150px;
+	left: 75px;
 	padding: 5px;
 }
 

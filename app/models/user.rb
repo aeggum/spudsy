@@ -12,4 +12,6 @@ class User < ActiveRecord::Base
   # attr_accessible :title, :body
   scope :admin_user, where(:admin => true)
   
+  has_many :hidden_user_medias
+  
 end

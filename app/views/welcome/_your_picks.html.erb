@@ -1,19 +1,37 @@
 <div id="your_picks">
-	<div class="container_12">
-		<div class="grid_12">	
-			<h1 class="giant_goldfish">Your Picks</h1>
-		</div>
-	</div>
 	<% media.each_with_index do |media, index| %>
 	<% if index < 6 %>
 	<% if (index % 6 == 0) %>
 		<div class="container_12">
 	<% end %>
-		<div data-id="<%= index %>" class="grid_2 poster tv_show">
+		<% 
+		if media.class.to_s.downcase.pluralize == "movies" 
+			media_name = "movies" 
+		else 
+			media_name = "tv_shows"
+		end
+		%>
+		
+		<div data-id="<%= "#{media_name}/#{media['id']}" %>" class="grid_2 poster tv_show">
 			<%= image_tag("#{media['poster']}", :size => "140x200") %>
+			<% if (media.class == Movie) %>
+			<h3 class="rating grey_shade">
+				<% if (media['rating'] >= 60) %>
+					<% if (media['certified']) %>
+					<img class="rt_img" src="../rt_certified.png" />
+					<% else %>
+					<img class="rt_img test" src="../rt_fresh.png" />
+					<% end %>
+				<% else %>
+					<img class="rt_img" src="../rt_rotten.png" />
+				<% end%>
+				<span><%= media['rating'] %></span>
+			</h3>
+			<% else %>
 			<h3 class="tv_rating grey_shade">
 				<span><%= media['rating'] %>/10</span>
 			</h3>
+			<% end%>
 		</div> 
 	<% if (index % 6 == 5) %>
 		</div>

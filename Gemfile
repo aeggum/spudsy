@@ -30,6 +30,8 @@ gem 'tvdb_party'
 gem 'squeel'
 gem 'pg_search'
 gem 'kaminari'
+gem 'geocoder'
+gem 'geokit-rails3'
 
 
 # gem 'ruby-tmdb'

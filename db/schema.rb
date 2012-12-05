@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121126040036) do
+ActiveRecord::Schema.define(:version => 20121204070028) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "resource_id",   :null => false
@@ -44,6 +44,17 @@ ActiveRecord::Schema.define(:version => 20121126040036) do
 
   add_index "genres", ["name"], :name => "index_genres_on_name", :unique => true
 
+  create_table "hidden_user_media", :force => true do |t|
+    t.integer  "user_id"
+    t.integer  "media_id"
+    t.string   "media_type"
+    t.boolean  "liked"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  add_index "hidden_user_media", ["user_id"], :name => "index_hidden_user_media_on_user_id"
+
   create_table "media_genres", :force => true do |t|
     t.string   "media_type"
     t.integer  "media_id"
@@ -64,9 +75,12 @@ ActiveRecord::Schema.define(:version => 20121126040036) do
     t.string   "mpaa_rating"
     t.string   "poster"
     t.integer  "runtime"
-    t.integer  "rt_id"
-    t.datetime "created_at",   :null => false
-    t.datetime "updated_at",   :null => false
+    t.string   "rt_id"
+    t.float    "popularity"
+    t.boolean  "certified"
+    t.float    "spudsy_rating"
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
   end
 
   add_index "movies", ["name"], :name => "index_movies_on_name"
@@ -81,11 +95,13 @@ ActiveRecord::Schema.define(:version => 20121126040036) do
 
   create_table "tv_shows", :force => true do |t|
     t.string   "name"
+    t.string   "tvdb_id"
     t.float    "rating"
     t.text     "description"
     t.string   "poster"
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
+    t.date     "release_date"
+    t.datetime "created_at",   :null => false
+    t.datetime "updated_at",   :null => false
   end
 
   add_index "tv_shows", ["name"], :name => "index_tv_shows_on_name"
@@ -104,6 +120,7 @@ ActiveRecord::Schema.define(:version => 20121126040036) do
     t.datetime "created_at",                             :null => false
     t.datetime "updated_at",                             :null => false
     t.boolean  "admin"
+    t.integer  "zip"
   end
 
   add_index "users", ["email"], :name => "index_users_on_email", :unique => true

@@ -6,7 +6,7 @@ DemoApp::Application.routes.draw do
 
   get "welcome/index"
   get "welcome/details"
-  get "tv_shows/show"
+  get "welcome/rotate_picks"
   get "search/results"
 
   root :to => 'welcome#index'
@@ -16,6 +16,7 @@ DemoApp::Application.routes.draw do
   
   #map.resources :movies, :has_many => :actors
   resources :tv_shows# , :has_many => :actors
+  resources :movies
   
   
 

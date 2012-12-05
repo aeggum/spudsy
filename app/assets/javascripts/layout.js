@@ -59,10 +59,20 @@ var Welcome = function() {
 			},function () {
 			   	$(this).data("bouncing", false);
 			});
-						
+				
+				
 			$(".poster").on('click', function() {
+				//console.log($(this).attr('data-id'));
+				$.ajax({
+					url: $(this).attr('data-id')  // get movie#show for this movie
+					
+				}).done(function(data) { 
+					//console.log(data);
+					$("#info_overlay").html(data);
+				});
+				
 				$(this).colorbox({	
-			    	width:"500px",
+			    	width:"800px",
 			   		height:"600px",
 			   		inline: true,
 			   		href: "#info_overlay",
@@ -86,20 +96,60 @@ var Welcome = function() {
 						$("#overlay_more_info").show();
 						document.documentElement.style.overflow = "auto";
 			   		}
-			   		
-			  })
-			})
+			  	})
+			});
 
 
 			$(".chzn-select").chosen(); 
 			$(".chzn-select-deselect").chosen({allow_single_deselect:true});
 			
-			$("#view_more").on('click', function() {
-				page++;
-				$("#poster_slider_" + page).slideDown(250);
-				if (page >= 3) {
-					$("#view_more").hide();
-				}
+			// shows a different selection of picks when the view more link is pressed
+			$("#view_more").on('click', function(event) {
+				$.ajax({
+					url: "/welcome/rotate_picks"
+					
+				}).done(function(data) {
+					event.preventDefault();
+					$("#your_picks_section").hide()
+					$("#your_picks_section").html(data).slideDown(500, 'swing').show();
+					$(".poster").on('click', function() {
+						//console.log($(this).attr('data-id'));
+						$.ajax({
+							url: $(this).attr('data-id')  // get movie#show for this movie
+							
+						}).done(function(data) { 
+							//console.log(data);
+							$("#info_overlay").html(data);
+						});
+						
+						$(this).colorbox({	
+					    	width:"800px",
+					   		height:"600px",
+					   		inline: true,
+					   		href: "#info_overlay",
+					   		speed: 500,
+					   		onLoad:function() { 
+								document.documentElement.style.overflow = "hidden";
+								var id = $(this).attr('data-id');
+								//console.log(id);
+								//alert(id)
+								//$.get('tv_shows/' + id, function(data) {
+									//alert(data);
+									//console.log(data);
+		      						// Handle the result
+		      						//$('.article-window').html(data);
+		    					//});
+								
+					   		},
+					   		onClosed:function() {
+					   			$(".overlay_info").css("overflow", "hidden");
+								$(".overlay_info").css("height", "200px");
+								$("#overlay_more_info").show();
+								document.documentElement.style.overflow = "auto";
+					   		}
+					  	})
+					});
+				});
 			});
 			
 			$("#overlay_more_info").on('click', function() {

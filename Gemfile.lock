@@ -73,6 +73,12 @@ GEM
     fastercsv (1.5.5)
     formtastic (2.2.1)
       actionpack (>= 3.0)
+    geocoder (1.1.5)
+    geokit (1.6.5)
+      multi_json
+    geokit-rails3 (0.1.5)
+      geokit (~> 1.5)
+      rails (~> 3.0)
     has_scope (0.5.1)
     hike (1.2.1)
     httparty (0.7.8)
@@ -190,6 +196,8 @@ DEPENDENCIES
   amazon-ecs
   coffee-rails (~> 3.2.1)
   devise
+  geocoder
+  geokit-rails3
   httparty (= 0.7.8)
   jquery-rails
   json
