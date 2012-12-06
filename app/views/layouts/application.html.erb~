@@ -39,7 +39,7 @@
 			    	<a class="btn dropdown-toggle" data-toggle="dropdown" href="#" style="color: black">
 			      		<i class="icon-user"></i> 
 			      		<% if user_signed_in? %> 
-			      			<%= current_user.email %>
+			      			<%= current_user.username %>
 			      		<% end %>
 			      		<span class="caret"></span>
 			    	</a>
