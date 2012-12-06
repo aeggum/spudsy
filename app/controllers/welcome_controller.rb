@@ -145,8 +145,22 @@ class DataService
     register_user_xml = register_user
     setProviders(register_user_xml)
     
-    lineup_data_xml = request_lineup_data
-    @current_provider.createStations(lineup_data_xml)
+    # Now in the setProviders() method
+    # lineup_data_xml = request_lineup_data
+    # @current_provider.createStations(lineup_data_xml)
+    xml = request_program_slice(60)
+    programs = xml['ProgramDataReturn']['ProgramData']['Programs']
+    programs.each { |p|
+        
+    }
+    
+    
+    # FIXME: Below is wrong.  First, want to add all shows (not associated to station), then station's array of shows
+    # xml = request_program_slice(30)
+    # @current_provider.stations.each { |station|
+      # station.createPrograms(xml['ProgramDataReturn']['ProgramData']['Programs'])
+    # }
+    # raise TypeError, xml['ProgramDataReturn']['ProgramData']['Programs']
   end
   
   def register_user
@@ -186,13 +200,19 @@ class DataService
       @providers.push(provider)
     }
     
+    lineup_data_xml = request_lineup_data
+    @current_provider.createStations(lineup_data_xml)
+    
+    program_data_xml = request_program_slice(90)
+    @current_provider.createPrograms(program_data_xml)
+ 
     #raise TypeError, @current_provider.provider_id
   end
 end
 
 
 class Provider < DataService
-  attr_reader :provider_id, :service_type, :description, :city, :stations
+  attr_reader :provider_id, :service_type, :description, :city, :stations, :programs
   attr_writer :provider_id, :service_type, :description, :city
   
   def initialize(provider_id, service_type, description, city)
@@ -201,6 +221,7 @@ class Provider < DataService
     @description = description
     @city = city
     @stations = Array.new
+    @programs = Array.new
   end
   
   # Takes in xml from request lineup call, gets stations
@@ -209,11 +230,21 @@ class Provider < DataService
     stations = xml['LineupDataReturn']['St']
     stations.each { |s| 
       station = Station.new(s['s'], s['cs'], s['rf'], s['n'], s['maj'], s['min'])
-      # raise TypeError, station
       @stations.push(station)
     }
     
-    raise TypeError, @stations
+    # raise TypeError, @stations
+  end
+  
+  def createPrograms(xml) 
+    programs = xml['ProgramDataReturn']['ProgramData']['Programs']['Pr']
+    # raise TypeError, programs
+    programs.each { |p| 
+      program = Program.new(p['p'], p['t'], p['te'])
+      @programs.push(program)
+    }
+    
+    raise TypeError, @programs
   end
 end
 
@@ -228,9 +259,37 @@ class Station < Provider
     @name = name
     @major_channel = major_channel
     @minor_channel = minor_channel
+    @programs = Array.new
+  end
+  
+  # Takes in xml from request program slice call, makes programs
+  def createPrograms(xml)
+    raise TypeError, xml
   end
   
   def to_s
     "Station: id:#{@station_id}, callsign:#{@callsign}, name:#{@name}, maj.min:#{@major_channel}.#{@minor_channel}"
+  end
+end
+
+
+# TODO: There should be a Program subclass, say ProgramScheduled, that takes in the title, ep_title, and id, but also has times, and such
+class Program < Station
+  attr_reader :program_id, :title, :episode_title, :start_time_from_now, :end_time_from_now, :start_time_utc, :end_time_utc
+  attr_writer :program_id, :title, :episode_title, :start_time_from_now, :end_time_from_now, :start_time_utc, :end_time_utc
+  
+  def initialize(program_id, title, episode_title = nil, start_time_from_now = nil, end_time_from_now = nil, start_time_utc = nil, end_time_utc = nil)
+    @@request_time = 0;  #TODO
+    @program_id = program_id
+    @title = title
+    @episode_title = episode_title
+    @start_time_from_now = start_time_from_now
+    @end_time_from_now = end_time_from_now
+    @start_time_utc = start_time_utc
+    @end_time_utc = end_time_utc
+  end
+  
+  def to_s
+    "Program: id:#{@program_id}, title:#{@title}, start:#{@start_time_utc}, end:#{@end_time_utc}"
   end
 end
