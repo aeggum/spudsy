@@ -1,6 +1,7 @@
 require "rotten"
 require "tmdb"
 require 'amazon/ecs'
+require 'httparty'
 include Geokit::Geocoders
 
 class WelcomeController < ApplicationController
@@ -10,7 +11,8 @@ class WelcomeController < ApplicationController
   before_filter :set_your_picks, :only => :index
   
   def index 
-   
+    bim_uuid = "SPUDSYTEST0000000000000001"
+
     # @movies = Movie.all(:limit => 30)
     # @show_array = TvShow.all(:limit => 25)
     # @your_picks = Array.new
@@ -39,7 +41,29 @@ class WelcomeController < ApplicationController
     full_address = res.full_address
     zip_code = res.zip
  
+    DataService.new(zip_code, bim_uuid)
     # zip_code now holds the zip of the request
+    
+    reg_user_url = "http://iwavit.data.titantv.com/dataservice.asmx/RegisterUser?UUID=#{bim_uuid}&ZipCode=#{zip_code}"
+    t = ParseUrlXml.get(reg_user_url)
+    
+    providers = t['ProviderDataReturn']['ProviderRecord']
+    
+    default_provider = nil;
+    
+    providers.each { |provider|
+      puts provider['ServiceType']
+      if provider['ServiceType'] == "digital"
+        default_provider = provider;
+      end
+    }
+    
+    raise TypeError, default_provider;  #providers; #providers[2]['ServiceType']
+        # {"ProviderId"=>"G_53706", "ServiceType"=>"digital", "Description"=>"ATSC (digital) Broadcast", "City"=>nil}
+    request_lineup_data_url = "http://iwavit.data.titantv.com/dataservice.asmx/RequestLineupData?ProviderID=#{default_provider['ProviderId']}&UUID=#{bim_uuid}"
+    test = ParseUrlXml.get(request_lineup_data_url)
+   # raise TypeError, test
+    
         
   end
   
@@ -92,6 +116,121 @@ class WelcomeController < ApplicationController
   # TODO: Could get the next set of shows if user has cycled through all on main load..
   
   private 
+    def test_bim
+      include HTTParty
+      format :xml
+    end
   
     # put private methods here
+end
+
+class ParseUrlXml
+  include HTTParty
+  format :xml
+end
+
+class DataService
+  include HTTParty
+  format :xml
+  
+  attr_reader :zip_code, :uuid, :providers, :default_provider, :current_provider
+  attr_writer :zip_code, :uuid, :providers, :default_provider, :current_provider
+  
+  
+  def initialize(zip_code, uuid) 
+    @zip_code = zip_code
+    @uuid = uuid
+    @providers = Array.new
+    
+    register_user_xml = register_user
+    setProviders(register_user_xml)
+    
+    lineup_data_xml = request_lineup_data
+    @current_provider.createStations(lineup_data_xml)
+  end
+  
+  def register_user
+    @register_user_url = "http://iwavit.data.titantv.com/dataservice.asmx/RegisterUser?UUID=#{@uuid}&ZipCode=#{@zip_code}"
+    ParseUrlXml.get(@register_user_url)
+  end
+  
+  def request_lineup_data
+    @request_lineup_data_url = "http://iwavit.data.titantv.com/dataservice.asmx/RequestLineupData?ProviderID=#{@current_provider.provider_id}&UUID=#{@uuid}"
+    ParseUrlXml.get(@request_lineup_data_url)
+  end
+  
+  # TODO: Set this up to get future times and dates. Currently does only current
+  def request_program_slice(minutes = 180) 
+    now = Time.now.utc.to_s
+    current_date = now[0..9]
+    current_time = now[11..15]
+    @request_program_slice_url = "http://iwavit.data.titantv.com/dataservice.asmx/RequestProgramDataSlice?UUID=#{@uuid}&ProviderID=#{@current_provider.provider_id}&StartDate=#{current_date}&StartTime=#{current_time}&NumberOfMinutes=#{minutes}"
+    ParseUrlXml.get(@request_program_slice_url);
+  end
+  
+  def to_s
+    "DataService: {zip: #{@zip_code}, {uuid: #{@uuid}}, {current_provider: #{@current_provider}}"
+  end
+  
+  # Takes in xml from register user call, gets providers, sets default
+  def setProviders(xml)
+    providers = xml['ProviderDataReturn']['ProviderRecord']
+    providers.each { |p|
+      provider = Provider.new(p['ProviderId'], p['ServiceType'], p['Description'], p['City']);
+     
+      if (provider.service_type == "digital") 
+        @default_provider = provider
+        @current_provider = provider
+      end
+      
+      @providers.push(provider)
+    }
+    
+    #raise TypeError, @current_provider.provider_id
+  end
+end
+
+
+class Provider < DataService
+  attr_reader :provider_id, :service_type, :description, :city, :stations
+  attr_writer :provider_id, :service_type, :description, :city
+  
+  def initialize(provider_id, service_type, description, city)
+    @provider_id = provider_id
+    @service_type = service_type
+    @description = description
+    @city = city
+    @stations = Array.new
+  end
+  
+  # Takes in xml from request lineup call, gets stations
+  def createStations(xml)
+    # raise TypeError, xml['LineupDataReturn']['St']
+    stations = xml['LineupDataReturn']['St']
+    stations.each { |s| 
+      station = Station.new(s['s'], s['cs'], s['rf'], s['n'], s['maj'], s['min'])
+      # raise TypeError, station
+      @stations.push(station)
+    }
+    
+    raise TypeError, @stations
+  end
+end
+
+class Station < Provider
+  attr_reader :station_id, :callsign, :rf_channel, :name, :major_channel, :minor_channel
+  attr_writer :station_id, :callsign, :rf_channel, :name, :major_channel, :minor_channel
+  
+  def initialize(station_id, callsign, rf_channel, name, major_channel, minor_channel)
+    @station_id = station_id
+    @callsign = callsign
+    @rf_channel = rf_channel
+    @name = name
+    @major_channel = major_channel
+    @minor_channel = minor_channel
+  end
+  
+  def to_s
+    "Station: id:#{@station_id}, callsign:#{@callsign}, name:#{@name}, maj.min:#{@major_channel}.#{@minor_channel}"
+  end
 end
