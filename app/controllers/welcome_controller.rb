@@ -182,6 +182,48 @@ class DataService
     ParseUrlXml.get(@request_program_slice_url);
   end
   
+  def request_program_details()
+    # raise TypeError, @current_provider.program_schedules
+    # raise TypeError, @current_provider.stations
+    
+    schedule = @current_provider.program_schedules[4]
+    start_time = schedule.start_time_utc.to_s[0..-8]
+    # raise TypeError, schedule
+    request_program_details = "http://iwavit.data.titantv.com/dataservice.asmx/RequestProgramDetails?UUID=#{@uuid}&ProviderId=#{@current_provider.provider_id}&StationId=#{schedule.station_id}&StartTimeOfProgram=#{start_time}"
+    xml = ParseUrlXml.get( URI.encode(request_program_details) )
+    # raise TypeError, xml['ProgramDetailsReturn']['ProgramDetails']['Pr']
+    program = xml['ProgramDetailsReturn']['ProgramDetails']['Pr']
+    
+    # Set up all of the default options for the Program
+    options = Hash.new
+    options["id"] = schedule.program_id
+    options["title"] = program['t']
+    options['episode_title'] = program['te']
+    options['description'] = program['desc']
+    options['langauge'] = program['lang']
+    options['start_utc'] = program['st']
+    options['duration'] = program['dur']
+    options['hd'] = program['hd']
+    options['new'] = (program['rpt'] == "Repeat"? false : true)
+    options['ei'] =  false;
+    options['year'] = program['yr'];
+    options['original_air_date'] = program['oad']
+    options['tv_rating'] = program['tv']
+    options['mpaa_rating'] = program['mpaa']
+    options['star_rating'] = program['star']
+    options['genres'] = program['genre']
+    options['cast'] = program['cast']
+    
+    p = Program.new(options)
+    
+    station = @current_provider.stations[schedule.station_id]
+    station.programs.push(p)
+    # raise TypeError, station
+    raise TypeError, @current_provider.stations
+    
+  end
+    
+  
   def to_s
     "DataService: {zip: #{@zip_code}, {uuid: #{@uuid}}, {current_provider: #{@current_provider}}"
   end
@@ -204,16 +246,19 @@ class DataService
     @current_provider.createStations(lineup_data_xml)
     
     program_data_xml = request_program_slice(30)
-    @current_provider.createPrograms(program_data_xml)
+    # @current_provider.createPrograms(program_data_xml)
     @current_provider.createProgramSchedules(program_data_xml)
+    request_program_details()
+    raise TypeError, @current_provider.program_schedules
  
-    #raise TypeError, @current_provider.provider_id
+    # prints out everything we know, except for detailed program information
+    raise TypeError, to_s()
   end
 end
 
 
 class Provider < DataService
-  attr_reader :provider_id, :service_type, :description, :city, :stations, :programs
+  attr_reader :provider_id, :service_type, :description, :city, :stations, :programs, :program_schedules
   attr_writer :provider_id, :service_type, :description, :city
   
   def initialize(provider_id, service_type, description, city)
@@ -221,8 +266,9 @@ class Provider < DataService
     @service_type = service_type
     @description = description
     @city = city
-    @stations = Array.new
-    @programs = Array.new
+    #@stations = Array.new
+    @stations = Hash.new
+    # @programs = Array.new
     @program_schedules = Array.new
   end
   
@@ -232,23 +278,24 @@ class Provider < DataService
     stations = xml['LineupDataReturn']['St']
     stations.each { |s| 
       station = Station.new(s['s'], s['cs'], s['rf'], s['n'], s['maj'], s['min'])
-      @stations.push(station)
+      # @stations.push(station)
+      @stations[s['s']] = station
     }
     
     # raise TypeError, @stations
   end
   
-  def createPrograms(xml) 
-    programs = xml['ProgramDataReturn']['ProgramData']['Programs']['Pr']
-    # raise TypeError, xml['ProgramDataReturn']['ProgramData']['Schedules']['Sc']
-    # raise TypeError, programs
-    programs.each { |p| 
-      program = Program.new(p['p'], p['t'], p['te'])
-      @programs.push(program)
-    }
-    
+  # def createPrograms(xml) 
+    # programs = xml['ProgramDataReturn']['ProgramData']['Programs']['Pr']
+    # # raise TypeError, xml['ProgramDataReturn']['ProgramData']['Schedules']['Sc']
+    # # raise TypeError, programs
+    # programs.each { |p| 
+      # program = Program.new(p['p'], p['t'], p['te'])
+      # @programs.push(program)
+    # }
+    # 
     # raise TypeError, @programs
-  end
+  # end
   
   def createProgramSchedules(xml)
     schedules = xml['ProgramDataReturn']['ProgramData']['Schedules']['Sc']
@@ -256,8 +303,13 @@ class Provider < DataService
       #raise TypeError, sc
       now_utc = Time.now.utc
       schedule = ProgramSchedule.new(sc['s'], sc['p'], sc['st'], sc['et'], now_utc.advance(:minutes => sc['st'].to_i), now_utc.advance(:minutes => sc['et'].to_i))
-      raise TypeError, schedule  
+      @program_schedules.push(schedule)
+      # raise TypeError, schedule  
     }
+  end
+  
+  def to_s
+    "Provider: id: #{@provider_id}, type: #{@service_type}, description: #{@description}, city: #{@city}, \nstations: [#{@stations}], \nprograms: [#{@programs}], \nschedules: [#{@program_schedules}]"
   end
 end
 
@@ -281,30 +333,28 @@ class Station < Provider
   end
   
   def to_s
-    "Station: id:#{@station_id}, callsign:#{@callsign}, name:#{@name}, maj.min:#{@major_channel}.#{@minor_channel}"
+    "\nStation: id: #{@station_id}, callsign: #{@callsign}, name: #{@name}, maj.min: #{@major_channel}.#{@minor_channel}, programs: #{@programs}"
   end
 end
 
 
-# TODO: There should be a Program subclass, say ProgramScheduled, that takes in the title, ep_title, and id, but also has times, and such
 class Program < Station
-  attr_reader :program_id, :title, :episode_title, :start_time_from_now, :end_time_from_now, :start_time_utc, :end_time_utc
-  attr_writer :program_id, :title, :episode_title, :start_time_from_now, :end_time_from_now, :start_time_utc, :end_time_utc
+  # Essentially a whitelist of all variables for the class
+  attr_accessor :id, :title, :episode_title, :description, :language, :start_utc, :duration, :hd, :new, :ei, :year, :original_air_date, :tv_rating, :mpaa_rating, :star_rating, :genres, :cast_members
   
-  def initialize(program_id, title, episode_title = nil, start_time_from_now = nil, end_time_from_now = nil, start_time_utc = nil, end_time_utc = nil)
-    @@request_time = 0;  #TODO
-    @program_id = program_id
-    @title = title
-    @episode_title = episode_title
-    @start_time_from_now = start_time_from_now
-    @end_time_from_now = end_time_from_now
-    @start_time_utc = start_time_utc
-    @end_time_utc = end_time_utc
+  def initialize(options = {})
+    options.each { |key, value| 
+      instance_variable_set("@#{key}", value)   
+    }
   end
   
   def to_s
-    "Program: id:#{@program_id}, title:#{@title}, start:#{@start_time_utc}, end:#{@end_time_utc}"
+    str = "\nid: #{@id}, title: #{@title}, episode_title: #{@episode_title}, description: #{@description}, language: #{@language}, start: #{start_utc}, duration: #{@duration}, hd: #{@hd}, "
+    str += "new: #{@new}, ei: #{@ei}, year: #{@year}, original_air_date: #{@original_air_date}, tv_rating: #{@tv_rating}, mpaa_rating: #{@mpaa_rating}, stars: #{@star_rating}, "
+    str += "genres: #{@genres}, cast: #{@cast}"
+    return str;
   end
+ 
 end
 
 class ProgramSchedule < Provider
@@ -322,6 +372,6 @@ class ProgramSchedule < Provider
   end
   
   def to_s
-    "ProgramSchedule: station_id:#{@station_id}, program_id:#{@program_id}, start(minutes):#{@start_time_from_now}, end(minutes):#{@end_time_from_now}, start:#{@start_time_utc}, end:#{@end_time_utc}"
+    "\nProgramSchedule: station_id: #{@station_id}, program_id: #{@program_id}, start(minutes): #{@start_time_from_now}, end(minutes): #{@end_time_from_now}, start: #{@start_time_utc}, end: #{@end_time_utc}"
   end
 end
