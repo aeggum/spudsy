@@ -51,57 +51,15 @@ var Welcome = function() {
 			});
 
 
-			$(".poster").hover(function(){
-				if ($(this).data("bouncing") == false || $(this).data("bouncing") == undefined){
-				    $(this).effect("bounce", { distance: 5, times: 1 }, 500);
-				    $(this).data("bouncing", true);
-				}
-			},function () {
-			   	$(this).data("bouncing", false);
-			});
+			initBinding();
 				
 				
-			$(".poster").on('click', function() {
-				//console.log($(this).attr('data-id'));
-				$.ajax({
-					url: $(this).attr('data-id')  // get movie#show for this movie
-					
-				}).done(function(data) { 
-					//console.log(data);
-					$("#info_overlay").html(data);
-				});
-				
-				$(this).colorbox({	
-			    	width:"800px",
-			   		height:"600px",
-			   		inline: true,
-			   		href: "#info_overlay",
-			   		speed: 500,
-			   		onLoad:function() { 
-						document.documentElement.style.overflow = "hidden";
-						var id = $(this).attr('data-id');
-						//console.log(id);
-						//alert(id)
-						//$.get('tv_shows/' + id, function(data) {
-							//alert(data);
-							//console.log(data);
-      						// Handle the result
-      						//$('.article-window').html(data);
-    					//});
-						
-			   		},
-			   		onClosed:function() {
-			   			$(".overlay_info").css("overflow", "hidden");
-						$(".overlay_info").css("height", "200px");
-						$("#overlay_more_info").show();
-						document.documentElement.style.overflow = "auto";
-			   		}
-			  	})
-			});
-
 
 			$(".chzn-select").chosen(); 
 			$(".chzn-select-deselect").chosen({allow_single_deselect:true});
+			
+			//Hides the selected media for the logged in user
+			
 			
 			// shows a different selection of picks when the view more link is pressed
 			$("#view_more").on('click', function(event) {
@@ -112,43 +70,7 @@ var Welcome = function() {
 					event.preventDefault();
 					$("#your_picks_section").hide()
 					$("#your_picks_section").html(data).slideDown(500, 'swing').show();
-					$(".poster").on('click', function() {
-						//console.log($(this).attr('data-id'));
-						$.ajax({
-							url: $(this).attr('data-id')  // get movie#show for this movie
-							
-						}).done(function(data) { 
-							//console.log(data);
-							$("#info_overlay").html(data);
-						});
-						
-						$(this).colorbox({	
-					    	width:"800px",
-					   		height:"600px",
-					   		inline: true,
-					   		href: "#info_overlay",
-					   		speed: 500,
-					   		onLoad:function() { 
-								document.documentElement.style.overflow = "hidden";
-								var id = $(this).attr('data-id');
-								//console.log(id);
-								//alert(id)
-								//$.get('tv_shows/' + id, function(data) {
-									//alert(data);
-									//console.log(data);
-		      						// Handle the result
-		      						//$('.article-window').html(data);
-		    					//});
-								
-					   		},
-					   		onClosed:function() {
-					   			$(".overlay_info").css("overflow", "hidden");
-								$(".overlay_info").css("height", "200px");
-								$("#overlay_more_info").show();
-								document.documentElement.style.overflow = "auto";
-					   		}
-					  	})
-					});
+					initBinding();
 				});
 			});
 			
@@ -165,7 +87,74 @@ $(document).ready(function() {
 	Welcome.documentReady();
 });
 
-
+function initBinding() {
+	$(".poster").hover(function(){
+		if ($(this).data("bouncing") == false || $(this).data("bouncing") == undefined){
+		    $(this).effect("bounce", { distance: 5, times: 1 }, 500);
+		    $(this).data("bouncing", true);
+		}
+	},function () {
+	   	$(this).data("bouncing", false);
+	});
+			
+	$(".poster").on('click', function() {
+		//console.log($(this).attr('data-id'));
+		$.ajax({
+			url: $(this).attr('data-id')  // get movie#show for this movie
+			
+		}).done(function(data) { 
+			//console.log(data);
+			$("#info_overlay").html(data);
+		});
+		
+		$(this).colorbox({	
+	    	width:"800px",
+	   		height:"600px",
+	   		inline: true,
+	   		href: "#info_overlay",
+	   		speed: 500,
+	   		onLoad:function() { 
+				document.documentElement.style.overflow = "hidden";
+				var id = $(this).attr('data-id');
+				//console.log(id);
+				//alert(id)
+				//$.get('tv_shows/' + id, function(data) {
+					//alert(data);
+					//console.log(data);
+					// Handle the result
+					//$('.article-window').html(data);
+				//});
+				
+	   		},
+	   		onClosed:function() {
+	   			$(".overlay_info").css("overflow", "hidden");
+				$(".overlay_info").css("height", "200px");
+				$("#overlay_more_info").show();
+				document.documentElement.style.overflow = "auto";
+	   		}
+	  	})
+	});
+	$(".hide_media_button").on('click', function(event) {
+		var liked = "";
+		if (event.target.id == "hide_like") {
+			liked = "true";
+		} else if (event.target.id == "hide_dislike") {
+			liked = "false";
+		}
+		
+		console.log($(this).parent().attr('data-id'));
+		
+		var data = $(this).parent().attr('data-id').split(',');
+		
+		$.ajax({
+				type: "GET",
+				url: "/welcome/hide_media",
+				data: {"like": liked, "media_type": data[0] , "media_id": data[1]}
+		}).done (function(data) {
+			initBinding();
+		});
+	});
+}
 function expandPhoto() {
 
    var overlay = document.createElement("div");

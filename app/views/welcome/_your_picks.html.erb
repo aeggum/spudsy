@@ -12,27 +12,39 @@
 		end
 		%>
 		
-		<div data-id="<%= "#{media_name}/#{media['id']}" %>" class="grid_2 poster tv_show">
-			<%= image_tag("#{media['poster']}", :size => "140x200") %>
-			<% if (media.class == Movie) %>
-			<h3 class="rating grey_shade">
-				<% if (media['rating'] >= 60) %>
-					<% if (media['certified']) %>
-					<img class="rt_img" src="../rt_certified.png" />
+		<div class="grid_2">
+			<div data-id="<%= "#{media_name}/#{media['id']}" %>" class="poster tv_show">
+				
+				<%= image_tag("#{media['poster']}", :size => "140x200") %>
+				<% if (media.class == Movie) %>
+				<h3 class="rating grey_shade">
+					<% if (media['rating'] >= 60) %>
+						<% if (media['certified']) %>
+						<img class="rt_img" src="../rt_certified.png" />
+						<% else %>
+						<img class="rt_img test" src="../rt_fresh.png" />
+						<% end %>
 					<% else %>
-					<img class="rt_img test" src="../rt_fresh.png" />
-					<% end %>
+						<img class="rt_img" src="../rt_rotten.png" />
+					<% end%>
+					<span><%= media['rating'] %></span>
+				</h3>
 				<% else %>
-					<img class="rt_img" src="../rt_rotten.png" />
+				<h3 class="tv_rating grey_shade">
+					<span><%= media['rating'] %>/10</span>
+				</h3>
 				<% end%>
-				<span><%= media['rating'] %></span>
-			</h3>
-			<% else %>
-			<h3 class="tv_rating grey_shade">
-				<span><%= media['rating'] %>/10</span>
-			</h3>
-			<% end%>
-		</div> 
+			</div> 
+			<br />
+			<div>
+				<% if user_signed_in? %>
+					<span data-id="<%= "#{media_name},#{media['id']}" %>">
+						<a href = "#" class = "hide_media_button" id = "hide_like">Like</a>
+						<a href = "#" class = "hide_media_button" id = "hide_dislike" style = "float: right">Hate</a>
+					</span>
+				<%end%>
+			</div>
+		</div>
 	<% if (index % 6 == 5) %>
 		</div>
 	<% end %>

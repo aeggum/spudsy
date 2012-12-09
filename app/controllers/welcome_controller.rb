@@ -40,7 +40,7 @@ class WelcomeController < ApplicationController
     zip_code = res.zip
  
     # zip_code now holds the zip of the request
-        
+    @@hidden_since_rotate = Array.new;
   end
   
   respond_to :html, :json
@@ -59,8 +59,53 @@ class WelcomeController < ApplicationController
       print pick.name + ","
     end
     @your_picks = @@your_picks
+    
+    $index = [0,@your_picks.length-6].max
+    
+    while $index < @your_picks.length do
+      for pick in @@hidden_since_rotate do
+        
+        puts  "??????????????????????????????????????????????"
+        puts  @your_picks[$index].class.to_s
+        puts pick["media_type"]
+        puts @your_picks[$index].id
+        puts pick["media_id"]
+          if (@your_picks[$index].class.to_s == pick["media_type"] && @your_picks[$index].id.to_s == pick["media_id"]) 
+            puts @your_picks.delete_at($index)
+            #puts @@your_picks.delete_at($index)
+            puts '_____________________________________________'
+            $index -=1
+          end
+      end
+      $index +=1
+    end
+    
+    @@hidden_since_rotate = Array.new
+    
   end
   
+  def hide_media
+    if params[:media_type] == "movies"
+      mType = "Movie"
+    else 
+      mType = "TvShow"
+    end
+    
+    if params[:like] == "true"
+      liked = true
+    else
+      liked = false
+    end
+    
+    current_user.hidden_user_medias.push(HiddenUserMedia.new( :user_id => current_user.id, 
+                                                              :media_id => params[:media_id], 
+                                                              :media_type => mType,
+                                                              :liked => liked))
+    h = Hash.new
+    h["media_id"] = params[:media_id]
+    h["media_type"] = mType;                                            
+    @@hidden_since_rotate.push(h)
+  end
   
   def details
     # This is a placeholder - users will be redirected to it when they are signed in, for now
