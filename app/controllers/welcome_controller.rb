@@ -203,8 +203,9 @@ class DataService
     lineup_data_xml = request_lineup_data
     @current_provider.createStations(lineup_data_xml)
     
-    program_data_xml = request_program_slice(90)
+    program_data_xml = request_program_slice(30)
     @current_provider.createPrograms(program_data_xml)
+    @current_provider.createProgramSchedules(program_data_xml)
  
     #raise TypeError, @current_provider.provider_id
   end
@@ -222,6 +223,7 @@ class Provider < DataService
     @city = city
     @stations = Array.new
     @programs = Array.new
+    @program_schedules = Array.new
   end
   
   # Takes in xml from request lineup call, gets stations
@@ -238,13 +240,24 @@ class Provider < DataService
   
   def createPrograms(xml) 
     programs = xml['ProgramDataReturn']['ProgramData']['Programs']['Pr']
+    # raise TypeError, xml['ProgramDataReturn']['ProgramData']['Schedules']['Sc']
     # raise TypeError, programs
     programs.each { |p| 
       program = Program.new(p['p'], p['t'], p['te'])
       @programs.push(program)
     }
     
-    raise TypeError, @programs
+    # raise TypeError, @programs
+  end
+  
+  def createProgramSchedules(xml)
+    schedules = xml['ProgramDataReturn']['ProgramData']['Schedules']['Sc']
+    schedules.each { |sc| 
+      #raise TypeError, sc
+      now_utc = Time.now.utc
+      schedule = ProgramSchedule.new(sc['s'], sc['p'], sc['st'], sc['et'], now_utc.advance(:minutes => sc['st'].to_i), now_utc.advance(:minutes => sc['et'].to_i))
+      raise TypeError, schedule  
+    }
   end
 end
 
@@ -291,5 +304,24 @@ class Program < Station
   
   def to_s
     "Program: id:#{@program_id}, title:#{@title}, start:#{@start_time_utc}, end:#{@end_time_utc}"
+  end
+end
+
+class ProgramSchedule < Provider
+  attr_reader :station_id, :program_id, :start_time_from_now, :end_time_from_now, :start_time_utc, :end_time_utc
+  attr_writer :station_id, :program_id, :start_time_from_now, :end_time_from_now, :start_time_utc, :end_time_utc
+  
+  def initialize(station_id, program_id, start_time_from_now, end_time_from_now, start_time_utc, end_time_utc)
+    #super(program_id, start_time_from_now, end_time_from_now, start_time_utc, end_time_utc)
+    @station_id = station_id
+    @program_id = program_id
+    @start_time_from_now = start_time_from_now
+    @end_time_from_now = end_time_from_now
+    @start_time_utc = start_time_utc
+    @end_time_utc = end_time_utc
+  end
+  
+  def to_s
+    "ProgramSchedule: station_id:#{@station_id}, program_id:#{@program_id}, start(minutes):#{@start_time_from_now}, end(minutes):#{@end_time_from_now}, start:#{@start_time_utc}, end:#{@end_time_utc}"
   end
 end
