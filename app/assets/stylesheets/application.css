@@ -44,6 +44,10 @@ h2 {
 	line-height: 30px !important;
 }
 
+h3 {
+	font-weight: normal !important;
+}
+
 hr {
 	margin-top: 25px !important;
 	margin-bottom: 0px !important;
@@ -183,6 +187,15 @@ img.rt_img {
 	top: 12px;
 }
 
+img.rt_img_overlay {
+	width: 30px;
+	margin-top: -5px;
+}
+
+.italics {
+	font-style: italic;
+}
+
 .content {
 	background-color: white;
 	border: 1px solid #EEE;
@@ -231,6 +244,12 @@ img.rt_img {
 
 .search_result {
 	margin: 5px
+}
+
+.overlay_info {
+	padding-left: 5px;
+	overflow:hidden; 
+	height:200px;
 }
 
 #view_more {

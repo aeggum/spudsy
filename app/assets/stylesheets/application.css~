@@ -44,6 +44,10 @@ h2 {
 	line-height: 30px !important;
 }
 
+h3 {
+	font-weight: normal !important;
+}
+
 hr {
 	margin-top: 25px !important;
 	margin-bottom: 0px !important;
@@ -97,6 +101,7 @@ a {
 	position: absolute;
 	top: 0;
 	right: 0;
+	margin-top: 11px;
 }
 
 #twitter_tab {
@@ -162,8 +167,8 @@ a {
 
 .rating, .tv_rating {
 	position: absolute;
-	top: 158px;
-	left: 65px;
+	top: 150px;
+	left: 75px;
 	padding: 5px;
 }
 
@@ -182,6 +187,15 @@ img.rt_img {
 	top: 12px;
 }
 
+img.rt_img_overlay {
+	width: 30px;
+	margin-top: -5px;
+}
+
+.italics {
+	font-style: italic;
+}
+
 .content {
 	background-color: white;
 	border: 1px solid #EEE;
@@ -192,6 +206,7 @@ img.rt_img {
 .brand {
 	font-family: LeagueGothic !important;
 	font-size: 40px !important;
+	margin-left: -65px;
 }
 
 .brand:hover {
@@ -230,6 +245,12 @@ img.rt_img {
 
 .search_result {
 	margin: 5px
+}
+
+.overlay_info {
+	padding-left: 5px;
+	overflow:hidden; 
+	height:200px;
 }
 
 #view_more {

@@ -18,32 +18,31 @@ class WelcomeController < ApplicationController
   before_filter :geolocate, :only => :index
   # caches_action :index, :expires_in => 2.minutes
   caches_action :geolocate, :expires_in => 2.hours
-  before_filter :tvdata, :only => :index
+  # before_filter :tvdata, :only => :index
   
   
   def index 
-    reset_session
+    # reset_session
 
     # @movies = Movie.all(:limit => 30)
     # @show_array = TvShow.all(:limit => 25)
     # @your_picks = Array.new
     # @movie = @movies[0]
     
-    
+    # raise TypeError, session
     # puts the entire array onto the end of the your picks 
     # @your_picks.push(*@movies)
     #@your_picks.push(*@show_array)
     
     #@your_picks.rotate(6) or however we want to do it
     
-    
+    @@hidden_since_rotate = Array.new;
     #sleep 5;
     #Movie.all
     #raise TypeError, session[:data]
     
 
     
-        
   end
   
   def tvdata
@@ -70,8 +69,46 @@ class WelcomeController < ApplicationController
       print pick.name + ","
     end
     @your_picks = @@your_picks
+    
+    $index = [0,@your_picks.length-6].max
+    
+    while $index < @your_picks.length do
+      for pick in @@hidden_since_rotate do
+        
+          if (@your_picks[$index].class.to_s == pick["media_type"] && @your_picks[$index].id.to_s == pick["media_id"]) 
+            @your_picks.delete_at($index)
+            $index -=1
+          end
+      end
+      $index +=1
+    end
+    
+    @@hidden_since_rotate = Array.new
+    
   end
   
+  def hide_media
+    if params[:media_type] == "movies"
+      mType = "Movie"
+    else 
+      mType = "TvShow"
+    end
+    
+    if params[:like] == "true"
+      liked = true
+    else
+      liked = false
+    end
+    
+    current_user.hidden_user_medias.push(HiddenUserMedia.new( :user_id => current_user.id, 
+                                                              :media_id => params[:media_id], 
+                                                              :media_type => mType,
+                                                              :liked => liked))
+    h = Hash.new
+    h["media_id"] = params[:media_id]
+    h["media_type"] = mType;                                            
+    @@hidden_since_rotate.push(h)
+  end
   
   def details
     # This is a placeholder - users will be redirected to it when they are signed in, for now
@@ -128,282 +165,3 @@ class WelcomeController < ApplicationController
     # put private methods here
 end
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# class ParseUrlXml
-  # include HTTParty
-  # format :xml
-# end
-
-# class DataService2
-  # include HTTParty
-  # format :xml
-#   
-  # attr_reader :zip_code, :uuid, :providers, :default_provider, :current_provider
-  # attr_writer :zip_code, :uuid, :providers, :default_provider, :current_provider
-#   
-#   
-  # def initialize(zip_code, uuid, session) 
-    # @zip_code = zip_code
-    # @uuid = uuid
-    # @providers = Array.new
-    # @session = session
-#     
-#   
-    # register_user_xml = register_user
-    # setProviders(register_user_xml)
-#     
-#     
-#     
-    # # Now in the setProviders() method
-    # # lineup_data_xml = request_lineup_data
-    # # @current_provider.createStations(lineup_data_xml)
-    # #xml = request_program_slice(60)
-    # #programs = xml['ProgramDataReturn']['ProgramData']['Programs']
-    # #programs.each { |p|
-#         
-    # #}
-#     
-#     
-    # # FIXME: Below is wrong.  First, want to add all shows (not associated to station), then station's array of shows
-    # # xml = request_program_slice(30)
-    # # @current_provider.stations.each { |station|
-      # # station.createPrograms(xml['ProgramDataReturn']['ProgramData']['Programs'])
-    # # }
-    # # raise TypeError, xml['ProgramDataReturn']['ProgramData']['Programs']
-  # end
-#   
-  # def register_user
-    # @register_user_url = "http://iwavit.data.titantv.com/dataservice.asmx/RegisterUser?UUID=#{@uuid}&ZipCode=#{@zip_code}"
-    # ParseUrlXml.get(@register_user_url)
-  # end
-#   
-  # def request_lineup_data
-    # @request_lineup_data_url = "http://iwavit.data.titantv.com/dataservice.asmx/RequestLineupData?ProviderID=#{@current_provider.provider_id}&UUID=#{@uuid}"
-    # ParseUrlXml.get(@request_lineup_data_url)
-  # end
-#   
-  # # TODO: Set this up to get future times and dates. Currently does only current
-  # def request_program_slice(minutes = 180) 
-    # now = Time.now.utc.to_s
-    # current_date = now[0..9]
-    # current_time = now[11..15]
-    # @request_program_slice_url = "http://iwavit.data.titantv.com/dataservice.asmx/RequestProgramDataSlice?UUID=#{@uuid}&ProviderID=#{@current_provider.provider_id}&StartDate=#{current_date}&StartTime=#{current_time}&NumberOfMinutes=#{minutes}"
-    # ParseUrlXml.get(@request_program_slice_url);
-  # end
-#   
-  # def request_program_details()
-    # # raise TypeError, @current_provider.program_schedules
-    # # raise TypeError, @current_provider.stations
-#     
-    # @current_provider.program_schedules.each {  |schedule| 
-      # if (true)
-        # return;
-      # end
-      # # schedule = @current_provider.program_schedules[4]
-      # start_time = schedule.start_time_utc.to_s[0..-8]
-      # # raise TypeError, schedule
-      # request_program_details = "http://iwavit.data.titantv.com/dataservice.asmx/RequestProgramDetails?UUID=#{@uuid}&ProviderId=#{@current_provider.provider_id}&StationId=#{schedule.station_id}&StartTimeOfProgram=#{start_time}"
-      # xml = ParseUrlXml.get( URI.encode(request_program_details) )
-      # # raise TypeError, xml['ProgramDetailsReturn']['ProgramDetails']['Pr']
-      # program = xml['ProgramDetailsReturn']['ProgramDetails']['Pr']
-#       
-      # # Set up all of the default options for the Program
-      # options = Hash.new
-      # options["id"] = schedule.program_id
-      # options["title"] = program['t']
-      # options['episode_title'] = program['te']
-      # options['description'] = program['desc']
-      # options['langauge'] = program['lang']
-      # options['start_utc'] = program['st']
-      # options['duration'] = program['dur']
-      # options['hd'] = program['hd']
-      # options['new'] = (program['rpt'] == "Repeat"? false : true)
-      # options['ei'] =  false;
-      # options['year'] = program['yr'];
-      # options['original_air_date'] = program['oad']
-      # options['tv_rating'] = program['tv']
-      # options['mpaa_rating'] = program['mpaa']
-      # options['star_rating'] = program['star']
-      # options['genres'] = program['genre']
-      # options['cast'] = program['cast']
-#       
-      # p = Program.new(options)
-#       
-      # station = @current_provider.stations[schedule.station_id]
-      # station.programs.push(p)
-      # # raise TypeError, station
-      # # raise TypeError, @current_provider.stations
-    # }
-#     
-    # @session[:details] = true;
-    # # raise TypeError, @current_provider.stations
-  # end
-#     
-#   
-  # def to_s
-    # "DataService: {zip: #{@zip_code}, {uuid: #{@uuid}}, {current_provider: #{@current_provider}}"
-  # end
-#   
-  # # Takes in xml from register user call, gets providers, sets default
-  # def setProviders(xml)
-    # providers = xml['ProviderDataReturn']['ProviderRecord']
-    # providers.each { |p|
-      # provider = Provider.new(p['ProviderId'], p['ServiceType'], p['Description'], p['City']);
-#      
-      # if (provider.service_type == "digital") 
-        # @default_provider = provider
-        # @current_provider = provider
-      # end
-#       
-      # @providers.push(provider)
-    # }
-#     
-#    
-    # lineup_data_xml = request_lineup_data
-    # @current_provider.createStations(lineup_data_xml)
-#     
-    # program_data_xml = request_program_slice(30)
-    # # @current_provider.createPrograms(program_data_xml)
-    # @current_provider.createProgramSchedules(program_data_xml)
-#   
-    # request_program_details()
-#     
-    # #raise TypeError, @current_provider.program_schedules
-#  
-    # # prints out everything we know, except for detailed program information
-    # #raise TypeError, to_s()
-  # end
-# end
-# 
-# 
-# class Provider < DataService
-  # attr_reader :provider_id, :service_type, :description, :city, :stations, :programs, :program_schedules
-  # attr_writer :provider_id, :service_type, :description, :city
-#   
-  # def initialize(provider_id, service_type, description, city)
-    # @provider_id = provider_id
-    # @service_type = service_type
-    # @description = description
-    # @city = city
-    # #@stations = Array.new
-    # @stations = Hash.new
-    # # @programs = Array.new
-    # @program_schedules = Array.new
-  # end
-#   
-  # # Takes in xml from request lineup call, gets stations
-  # def createStations(xml)
-    # # raise TypeError, xml['LineupDataReturn']['St']
-    # stations = xml['LineupDataReturn']['St']
-    # stations.each { |s| 
-      # station = Station.new(s['s'], s['cs'], s['rf'], s['n'], s['maj'], s['min'])
-      # # @stations.push(station)
-      # @stations[s['s']] = station
-    # }
-#     
-    # # raise TypeError, @stations
-  # end
-#   
-  # # def createPrograms(xml) 
-    # # programs = xml['ProgramDataReturn']['ProgramData']['Programs']['Pr']
-    # # # raise TypeError, xml['ProgramDataReturn']['ProgramData']['Schedules']['Sc']
-    # # # raise TypeError, programs
-    # # programs.each { |p| 
-      # # program = Program.new(p['p'], p['t'], p['te'])
-      # # @programs.push(program)
-    # # }
-    # # 
-    # # raise TypeError, @programs
-  # # end
-#   
-  # def createProgramSchedules(xml)
-    # schedules = xml['ProgramDataReturn']['ProgramData']['Schedules']['Sc']
-    # schedules.each { |sc| 
-      # #raise TypeError, sc
-      # now_utc = Time.now.utc
-      # schedule = ProgramSchedule.new(sc['s'], sc['p'], sc['st'], sc['et'], now_utc.advance(:minutes => sc['st'].to_i), now_utc.advance(:minutes => sc['et'].to_i))
-      # @program_schedules.push(schedule)
-      # # raise TypeError, schedule  
-    # }
-  # end
-#   
-  # def to_s
-    # "Provider: id: #{@provider_id}, type: #{@service_type}, description: #{@description}, city: #{@city}, \nstations: [#{@stations}], \nprograms: [#{@programs}], \nschedules: [#{@program_schedules}]"
-  # end
-# end
-# 
-# class Station < Provider
-  # attr_reader :station_id, :callsign, :rf_channel, :name, :major_channel, :minor_channel
-  # attr_writer :station_id, :callsign, :rf_channel, :name, :major_channel, :minor_channel
-#   
-  # def initialize(station_id, callsign, rf_channel, name, major_channel, minor_channel)
-    # @station_id = station_id
-    # @callsign = callsign
-    # @rf_channel = rf_channel
-    # @name = name
-    # @major_channel = major_channel
-    # @minor_channel = minor_channel
-    # @programs = Array.new
-  # end
-#   
-  # # Takes in xml from request program slice call, makes programs
-  # def createPrograms(xml)
-    # raise TypeError, xml
-  # end
-#   
-  # def to_s
-    # "\nStation: id: #{@station_id}, callsign: #{@callsign}, name: #{@name}, maj.min: #{@major_channel}.#{@minor_channel}, programs: #{@programs}"
-  # end
-# end
-# 
-# 
-# class Program < Station
-  # # Essentially a whitelist of all variables for the class
-  # attr_accessor :id, :title, :episode_title, :description, :language, :start_utc, :duration, :hd, :new, :ei, :year, :original_air_date, :tv_rating, :mpaa_rating, :star_rating, :genres, :cast_members
-#   
-  # def initialize(options = {})
-    # options.each { |key, value| 
-      # instance_variable_set("@#{key}", value)   
-    # }
-  # end
-#   
-  # def to_s
-    # str = "\nid: #{@id}, title: #{@title}, episode_title: #{@episode_title}, description: #{@description}, language: #{@language}, start: #{start_utc}, duration: #{@duration}, hd: #{@hd}, "
-    # str += "new: #{@new}, ei: #{@ei}, year: #{@year}, original_air_date: #{@original_air_date}, tv_rating: #{@tv_rating}, mpaa_rating: #{@mpaa_rating}, stars: #{@star_rating}, "
-    # str += "genres: #{@genres}, cast: #{@cast}"
-    # return str;
-  # end
-#  
-# end
-# 
-# class ProgramSchedule < Provider
-  # attr_reader :station_id, :program_id, :start_time_from_now, :end_time_from_now, :start_time_utc, :end_time_utc
-  # attr_writer :station_id, :program_id, :start_time_from_now, :end_time_from_now, :start_time_utc, :end_time_utc
-#   
-  # def initialize(station_id, program_id, start_time_from_now, end_time_from_now, start_time_utc, end_time_utc)
-    # #super(program_id, start_time_from_now, end_time_from_now, start_time_utc, end_time_utc)
-    # @station_id = station_id
-    # @program_id = program_id
-    # @start_time_from_now = start_time_from_now
-    # @end_time_from_now = end_time_from_now
-    # @start_time_utc = start_time_utc
-    # @end_time_utc = end_time_utc
-  # end
-#   
-  # def to_s
-    # "\nProgramSchedule: station_id: #{@station_id}, program_id: #{@program_id}, start(minutes): #{@start_time_from_now}, end(minutes): #{@end_time_from_now}, start: #{@start_time_utc}, end: #{@end_time_utc}"
-  # end
-# end
