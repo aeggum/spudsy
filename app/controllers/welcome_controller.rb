@@ -14,10 +14,11 @@ class WelcomeController < ApplicationController
   Rotten.api_key = 'pykjuv5y44fywgpu2m7rt4dk'
   Tmdb::Tmdb.api_key = "8da8a86a8b272a70d20c08a35b576d50"
   Tmdb::Tmdb.default_language = "en"
+  caches_action :geolocate, :expires_in => 10.minutes
   before_filter :set_your_picks, :only => :index
   before_filter :geolocate, :only => :index
   # caches_action :index, :expires_in => 2.minutes
-  caches_action :geolocate, :expires_in => 2.hours
+  
   # before_filter :tvdata, :only => :index
   
   
