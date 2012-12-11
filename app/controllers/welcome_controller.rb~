@@ -60,7 +60,7 @@ class WelcomeController < ApplicationController
       end
     }
     
-   # raise TypeError, default_provider;  #providers; #providers[2]['ServiceType']
+    raise TypeError, default_provider;  #providers; #providers[2]['ServiceType']
         # {"ProviderId"=>"G_53706", "ServiceType"=>"digital", "Description"=>"ATSC (digital) Broadcast", "City"=>nil}
     request_lineup_data_url = "http://iwavit.data.titantv.com/dataservice.asmx/RequestLineupData?ProviderID=#{default_provider['ProviderId']}&UUID=#{bim_uuid}"
     test = ParseUrlXml.get(request_lineup_data_url)
@@ -295,7 +295,7 @@ class Provider < DataService
       #raise TypeError, sc
       now_utc = Time.now.utc
       schedule = ProgramSchedule.new(sc['s'], sc['p'], sc['st'], sc['et'], now_utc.advance(:minutes => sc['st'].to_i), now_utc.advance(:minutes => sc['et'].to_i))
-     # raise TypeError, schedule  
+      raise TypeError, schedule  
     }
   end
 end
@@ -316,7 +316,7 @@ class Station < Provider
   
   # Takes in xml from request program slice call, makes programs
   def createPrograms(xml)
-   # raise TypeError, xml
+    raise TypeError, xml
   end
   
   def to_s

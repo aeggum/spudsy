@@ -4,7 +4,7 @@
 	</div>
 	<div style= "float:right; width:60%">
 		<h1 class="giant_goldfish"><%=tv_show.name%></h1> 
-		<h3>Your rating: <%=tv_show.rating%> </h3>
+		<h3>Rating (for you) <%=tv_show.rating%> </h3>
 		<h3>Released: tv_show.release_date (soon)</h3>
 	</div>
 </div>

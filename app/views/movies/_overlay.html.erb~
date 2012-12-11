@@ -20,7 +20,7 @@
 	</div>
 </div>
 <div style="width:95% ">
-	<div class="overlay_info">
+	<div class="overlay_info" style="overflow:hidden; height:200px">
 		<h3>Description</h3>
 		<p><%=movie.description%></p>
 	</div>

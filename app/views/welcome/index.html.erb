@@ -109,24 +109,5 @@
 </div>
 
 <div id="hidden_div" style="display: none">
-	<div id="info_overlay" >
-		<div class="overlay_container" style="overflow: hidden; width: 99%;">
-			<div style= "float:left; width:45%">
-				<%= image_tag(@movie.poster, :size => "200x300") %>
-			</div>
-			<div style= "float:right; width:45%">
-				<h1><%=@movie.name%></h1> 
-				<h3>Rotten Tomotes Score: <%=@movie.rating%> </h3>
-				<h3>Rated: <%=@movie.mpaa_rating%> </h3>
-				<h3>Released: <%=@movie.release_date%></h3>
-			</div>
-		</div>
-		<div style="width:95% ">
-			<div class="overlay_info" style="overflow:hidden; height:200px">
-				<h3>Description</h3>
-				<p><%=@movie.description%></p>
-			</div>
-			<a href="#" id = "overlay_more_info" style="float: right">More Info</a>
-		</div>
-	</div>
+	<div id="info_overlay" ></div>
 </div>
