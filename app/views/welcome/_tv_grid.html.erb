@@ -13,22 +13,22 @@
 				<img border="0" src="/themes/_default/images/grid/navl.gif">
 			</td>
 			<td nowrap="" class="gridHeaderTimeCell" colspan="30">
-				<div class="gP"><%= Time.now.utc.floor(30.minutes).strftime("%I:%M%p") %></div>
+				<div class="gP"><%= Time.now.readable(30.minutes) %></div>
 			</td>
 			<td nowrap="" class="gridHeaderTimeCell" colspan="30">
-				<div class="gP"><%= (Time.now.utc.floor(30.minutes) + 30.minutes).strftime("%I:%M%p") %></div>
+				<div class="gP"><%= Time.now.utc.readable_plus(30.minutes, 30) %></div>
 			</td>
 			<td nowrap="" class="gridHeaderTimeCell" colspan="30">
-				<div class="gP"><%= (Time.now.utc.floor(30.minutes) + 60.minutes).strftime("%I:%M%p") %></div>
+				<div class="gP"><%= Time.now.utc.readable_plus(30.minutes, 60) %></div>
 			</td>
 			<td nowrap="" class="gridHeaderTimeCell" colspan="30">
-				<div class="gP"><%= (Time.now.utc.floor(30.minutes) + 90.minutes).strftime("%I:%M%p") %></div>
+				<div class="gP"><%= Time.now.utc.readable_plus(30.minutes, 90) %></div>
 			</td>
 			<td nowrap="" class="gridHeaderTimeCell" colspan="30">
-				<div class="gP"><%= (Time.now.utc.floor(30.minutes) + 120.minutes).strftime("%I:%M%p") %></div>
+				<div class="gP"><%= Time.now.utc.readable_plus(30.minutes, 120) %></div>
 			</td>
 			<td nowrap="" class="gridHeaderTimeCell" colspan="30">
-				<div class="gP"><%= (Time.now.utc.floor(30.minutes) + 150.minutes).strftime("%I:%M%p") %></div>
+				<div class="gP"><%= Time.now.utc.readable_plus(30.minutes, 150) %></div>
 			</td>
 			<td valign="middle" style="cursor:pointer" class="gridHeaderNavRightCell">
 				<img border="0" src="/themes/_default/images/grid/navr.gif">
