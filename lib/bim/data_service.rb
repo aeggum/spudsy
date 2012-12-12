@@ -50,11 +50,13 @@ class DataService
       options['start_time_utc'] = schedule.start_time_utc
       options['end_time_utc'] = schedule.end_time_utc
       pf = ProgramFull.new(options)
-      @current_provider.stations[schedule.station_id].programs2.push(pf)
+      @current_provider.stations[schedule.station_id].programs.push(pf)
     }
-    raise TypeError, @current_provider
+     # raise TypeError, @current_provider
   end
   
+  
+  # TODO: Make this more efficient or whatever
   def request_program_details()
     # raise TypeError, @current_provider.program_schedules
     # raise TypeError, @current_provider.stations

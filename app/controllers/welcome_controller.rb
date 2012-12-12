@@ -37,6 +37,8 @@ class WelcomeController < ApplicationController
     
     bim_uuid = "SPUDSYTEST0000000000000001"
     ds = DataService.new(session[:zip_code], bim_uuid, session)
+    @@stations = ds.current_provider.stations
+    # raise TypeError, @@stations
     # session[:testing] = ds.current_provider.stations
     #sleep 10;
   end
