@@ -38,7 +38,7 @@ class DataService
   def get_basic_programs() 
     @current_provider.program_schedules.each {  |schedule| 
       # raise TypeError, schedule
-      @current_provider.stations[schedule.station_id].programs.push(@current_provider.programs[schedule.program_id])
+      # @current_provider.stations[schedule.station_id].programs.push(@current_provider.programs[schedule.program_id])
       
       program = @current_provider.programs[schedule.program_id]
       options = Hash.new
@@ -50,6 +50,7 @@ class DataService
       options['start_time_utc'] = schedule.start_time_utc
       options['end_time_utc'] = schedule.end_time_utc
       pf = ProgramFull.new(options)
+      pf.setDuration(pf.end_time_from_now, pf.start_time_from_now)
       @current_provider.stations[schedule.station_id].programs.push(pf)
     }
      # raise TypeError, @current_provider

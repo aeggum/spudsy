@@ -8,6 +8,10 @@ class ProgramFull < Station
     }
   end
   
+  def setDuration(end_time, start_time) 
+    @duration = end_time.to_i - start_time.to_i
+  end
+  
   def to_s
     str = "\nid: #{@id}, title: #{@title}, episode_title: #{@episode_title}, description: #{@description}, language: #{@language}, start: #{start_utc}, duration: #{@duration}, hd: #{@hd}, "
     str += "new: #{@new}, ei: #{@ei}, year: #{@year}, original_air_date: #{@original_air_date}, tv_rating: #{@tv_rating}, mpaa_rating: #{@mpaa_rating}, stars: #{@star_rating}, "
