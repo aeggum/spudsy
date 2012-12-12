@@ -1,5 +1,5 @@
 .popTop {
-	box-shadow: 6px 6px 5px #AAA;
+	box-shadow: 5px 5px 5px #AAA;
 	text-shadow: 0 1px 1px white;
 	background: azure;
 }

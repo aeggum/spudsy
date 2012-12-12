@@ -29,18 +29,21 @@ class WelcomeController < ApplicationController
     
     @@hidden_since_rotate = Array.new;
     
-
+    bim_uuid = "SPUDSYTEST0000000000000001"
+    ds = DataService.new(session[:zip_code], bim_uuid, session)
+    @@stations = ds.current_provider.stations
+    #raise TypeError, @@stations
+    @@stations.keys[1..1].each { |key|
+	@station = @@stations[key]
+    }
+    # session[:testing] = ds.current_provider.stations
+    #sleep 10;
     
   end
   
   def tvdata
     
-    bim_uuid = "SPUDSYTEST0000000000000001"
-    ds = DataService.new(session[:zip_code], bim_uuid, session)
-    @@stations = ds.current_provider.stations
-    # raise TypeError, @@stations
-    # session[:testing] = ds.current_provider.stations
-    #sleep 10;
+    
   end
   
   respond_to :html, :json
