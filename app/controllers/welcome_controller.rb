@@ -12,6 +12,7 @@ class WelcomeController < ApplicationController
   require 'bim/program_full'
   require 'bim/program'
   require 'bim/parse_url_xml'
+  require 'bim/time'
   Rotten.api_key = 'pykjuv5y44fywgpu2m7rt4dk'
   Tmdb::Tmdb.api_key = "8da8a86a8b272a70d20c08a35b576d50"
   Tmdb::Tmdb.default_language = "en"
@@ -29,7 +30,7 @@ class WelcomeController < ApplicationController
     
     @@hidden_since_rotate = Array.new;
     
-
+   
     
   end
   
@@ -38,7 +39,7 @@ class WelcomeController < ApplicationController
     bim_uuid = "SPUDSYTEST0000000000000001"
     ds = DataService.new(session[:zip_code], bim_uuid, session)
     @@stations = ds.current_provider.stations
-    # raise TypeError, @@stations
+    raise TypeError, @@stations
     # session[:testing] = ds.current_provider.stations
     #sleep 10;
   end
