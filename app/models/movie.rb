@@ -69,9 +69,6 @@ class Movie < ActiveRecord::Base
     return rating
   end
   
-  def getRating movie
-    puts movie.rating
-  end
   
   def default_values
     self.spudsy_rating = Movie.getRating(self)
