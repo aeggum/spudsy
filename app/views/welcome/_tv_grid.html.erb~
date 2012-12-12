@@ -1,0 +1,80 @@
+<table class="gridTable" cellspacing="0" cellpadding="0" border="0">
+	<tbody>
+		<tr>
+			<td class="gridHeaderCellLeft">
+				<div title="Previous Day" class="ghcPrevDay"></div>
+				<div title="Next Day" class="ghcNextDay"></div>
+				<span title="Click to Go to Current Date/Time" class="ghcNow">12/11<!--0pan--></span>
+			</td>
+			<td valign="middle" class="gridHeaderCellRight">
+				<div onclick="scroll(0,0);" title="Go to Top" class="ghcTop"></div>
+			</td>
+			<td valign="middle" style="cursor:pointer" class="gridHeaderNavLeftCell">
+				<img border="0" src="/themes/_default/images/grid/navl.gif">
+			</td>
+			<td nowrap="" class="gridHeaderTimeCell" colspan="30">
+				<div class="gP">6:30 PM</div>
+			</td>
+			<td nowrap="" class="gridHeaderTimeCell" colspan="30">
+				<div class="gP">7 PM</div>
+			</td>
+			<td nowrap="" class="gridHeaderTimeCell" colspan="30">
+				<div class="gP">7:30 PM</div>
+			</td>
+			<td nowrap="" class="gridHeaderTimeCell" colspan="30">
+				<div class="gP">8 PM</div>
+			</td>
+			<td nowrap="" class="gridHeaderTimeCell" colspan="30">
+				<div class="gP">8:30 PM</div>
+			</td>
+			<td nowrap="" class="gridHeaderTimeCell" colspan="30">
+				<div class="gP">9 PM</div>
+			</td>
+			<td valign="middle" style="cursor:pointer" class="gridHeaderNavRightCell">
+				<img border="0" src="/themes/_default/images/grid/navr.gif">
+			</td>
+		</tr>
+		<tr valign="top" class="gridRow">
+			<td valign="middle" nowrap="" align="center" class="gridCallSignCell" >
+				<span class="gridCallSignText">WISC-DT</span>
+				<br>
+				<span class="gridNetworkText">CBS</span>
+			</td>
+			<td valign="middle" align="center" class="gridChannelCell">
+				<a href="#">
+					<span class="gridChannelText">3</span>
+				</a>
+			</td>
+			<td class="gLSC">
+				&nbsp;
+			</td>
+			<td class="gC c22b popBottom" colspan="30" title="Click to Show/Hide Details">
+				<div class="gP gH" id="cc">
+					<span class="ctt c22tt" id="tn">Entertainment Tonight</span>
+					<span class="cdt c4dt" style="float:right;">22%</span>
+				</div>
+			</td>
+			<td class="gC c4b popTop" colspan="60" title="Click to Show/Hide Details">
+				<div class="gP gH" id="cc">
+					<span class="ctt c4tt" id="tn">NCIS</span>
+					<span class="cdt c4dt"><br>Devil's Trifecta<br></span>
+					<span class="cdt c4dt" style="float:right;">88%</span>
+				</div>
+			</td>
+			<td class="gC c4b" colspan="60" title="Click to Show/Hide Details">
+				<div class="gP gH" id="cc">
+					<span class="ctt c4tt" id="tn">NCIS: Los Angeles</span>
+					<span class="cdt c4dt"><br>The Gold Standard<br></span>
+					<span class="cdt c4dt" style="float:right;">79%</span>
+				</div>
+			</td>
+			<td class="gERC c4b" colspan="31" title="Click to Show/Hide Details">
+				<div class="gP gH" id="cc">
+					<span class="ctt c4tt" id="tn">Vegas</span>
+					<span class="cdt c4dt"><br>Masquerade<br></span>
+					<span class="cdt c4dt" style="float:right;">48%</span>
+				</div>
+			</td>
+		</tr>
+	</tbody>
+</table>
