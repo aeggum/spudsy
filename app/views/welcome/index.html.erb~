@@ -1,4 +1,4 @@
-
+<%= debug session %>
 <div class="fixed_left_nav">
 	<h2>Watch a</h2>	
 	<input id="movie" type="checkbox" value="movie" />	
@@ -103,35 +103,11 @@
 	</div>
 	<div class="container_12">
 		<div class="grid_12">
-			<iframe src="http://www.titantv.com/#ctl00_Main_TVL_ctl00_Grid" style="width: 100%; height: 800px"></iframe>
+			<!--<iframe src="http://www.titantv.com/#ctl00_Main_TVL_ctl00_Grid" style="width: 100%; height: 800px"></iframe> -->
 		</div>
 	</div>
 </div>
 
 <div id="hidden_div" style="display: none">
-	<div id="info_overlay" >
-		<div class="overlay_container" style="overflow: hidden; width: 99%;">
-			<div style= "float:left; width:45%">
-				<%= image_tag(@movie.poster, :size => "200x300") %>
-			</div>
-			<div style= "float:right; width:45%">
-				<h1 class="giant_goldfish"><%=@movie.name%></h1> 
-				<% if (@movie.rating >= 60) %>
-					<img class="rt_img test" src="../rt_fresh.png" />
-				<% else %>
-					<img class="rt_img" src="../rt_rotten.png" />
-				<% end%>
-				<h3><%=@movie.rating%> </h3>
-				<h3>Rated: <%=@movie.mpaa_rating%> </h3>
-				<h3>Released: <%=@movie.release_date%></h3>
-			</div>
-		</div>
-		<div style="width:95% ">
-			<div class="overlay_info" style="overflow:hidden; height:200px">
-				<h3>Description</h3>
-				<p><%=@movie.description%></p>
-			</div>
-			<a href="#" id = "overlay_more_info" style="float: right">More Info</a>
-		</div>
-	</div>
+	<div id="info_overlay" ></div>
 </div>

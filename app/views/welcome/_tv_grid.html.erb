@@ -1,0 +1,75 @@
+<table class="gridTable" cellspacing="0" cellpadding="0" border="0">
+	<tbody>
+		<tr>
+			<td class="gridHeaderCellLeft">
+				<div title="Previous Day" class="ghcPrevDay"></div>
+				<div title="Next Day" class="ghcNextDay"></div>
+				<span title="Click to Go to Current Date/Time" class="ghcNow">12/11<!--0pan--></span>
+			</td>
+			<td valign="middle" class="gridHeaderCellRight">
+				<div onclick="scroll(0,0);" title="Go to Top" class="ghcTop"></div>
+			</td>
+			<td valign="middle" style="cursor:pointer" class="gridHeaderNavLeftCell">
+				<img border="0" src="/themes/_default/images/grid/navl.gif">
+			</td>
+			<td nowrap="" class="gridHeaderTimeCell" colspan="30">
+				<div class="gP"><%= Time.now.utc.floor(30.minutes).strftime("%I:%M%p") %></div>
+			</td>
+			<td nowrap="" class="gridHeaderTimeCell" colspan="30">
+				<div class="gP"><%= (Time.now.utc.floor(30.minutes) + 30.minutes).strftime("%I:%M%p") %></div>
+			</td>
+			<td nowrap="" class="gridHeaderTimeCell" colspan="30">
+				<div class="gP"><%= (Time.now.utc.floor(30.minutes) + 60.minutes).strftime("%I:%M%p") %></div>
+			</td>
+			<td nowrap="" class="gridHeaderTimeCell" colspan="30">
+				<div class="gP"><%= (Time.now.utc.floor(30.minutes) + 90.minutes).strftime("%I:%M%p") %></div>
+			</td>
+			<td nowrap="" class="gridHeaderTimeCell" colspan="30">
+				<div class="gP"><%= (Time.now.utc.floor(30.minutes) + 120.minutes).strftime("%I:%M%p") %></div>
+			</td>
+			<td nowrap="" class="gridHeaderTimeCell" colspan="30">
+				<div class="gP"><%= (Time.now.utc.floor(30.minutes) + 150.minutes).strftime("%I:%M%p") %></div>
+			</td>
+			<td valign="middle" style="cursor:pointer" class="gridHeaderNavRightCell">
+				<img border="0" src="/themes/_default/images/grid/navr.gif">
+			</td>
+		</tr>
+		
+		<% @stations.each_pair do |id, station| %>	
+			<tr valign="top" class="gridRow">
+				<td valign="middle" nowrap="" align="center" class="gridCallSignCell" >
+					<span class="gridCallSignText"><%= station.callsign %></span>
+					<br>
+					<span class="gridNetworkText"><%= station.name %></span>
+				</td>
+				<td valign="middle" align="center" class="gridChannelCell">
+					<a href="#">
+						<span class="gridChannelText"><%= station.major_channel %>.<%= station.minor_channel %></span>
+					</a>
+				</td>
+				<td class="gLSC">
+					&nbsp;
+				</td>
+
+				<% station.programs.each_with_index do |program, index| %>
+					<% if program.start_time_from_now.to_i < 0 %>
+						<% cols = program.duration + program.start_time_from_now.to_i %>
+					<% elsif program.end_time_from_now.to_i > 180 %>
+						<% cols = program.duration - (program.end_time_from_now.to_i - 180) %>
+					<% else %>
+						<% cols = program.duration %>
+					<% end %>		
+
+					<td class="gC c4b" colspan="<%= cols %>" title="Click to Show/Hide Details">
+						<div class="gP gH" id="cc">
+							<span class="ctt c4tt" id="tn"><%= program.title %></span>
+							<span class="cdt c4dt" style="float:right;">88%</span>
+							<span class="cdt c4dt"><br><%= program.episode_title %><br></span>
+						</div>
+					</td>
+	
+				<% end %>
+			</tr>
+		<% end %>
+	</tbody>
+</table>
