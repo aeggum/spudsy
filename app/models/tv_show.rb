@@ -3,7 +3,7 @@ class TvShow < ActiveRecord::Base
   #validates that the following are present before saving to the DB
   validates :name, :rating, :presence => true
   
-  attr_accessible :description, :name, :rating, :poster, :genres, :tvdb_id, :release_date
+  attr_accessible :description, :name, :rating, :poster, :genres, :tvdb_id, :release_date, :spudsy_ratings
   has_many :actors, :as => :media
   has_many :media_genres, :as => :media
   has_many :genres, :as => :media, :through => :media_genres
@@ -12,7 +12,8 @@ class TvShow < ActiveRecord::Base
   
   scope :high_rating, where("(rating > 9.5)")
   scope :low_rating, where("(rating < 3.0)")
-  #before_save :default_values
+  scope :high_spudsy_rating, where("(spudsy_rating) > 0.8")
+  before_save :default_values
   
   include PgSearch
   pg_search_scope :search, against: [:name],
@@ -39,7 +40,8 @@ class TvShow < ActiveRecord::Base
     rating = tv_show.rating * 1.5 * cFactor
     yFactor = getYFactor(tv_show.release_date.to_s[0..3])
     rating *= yFactor 
-    rating /= 33.75  # absolute max score
+    rating /= 25.875  # absolute max score
+    rating *= 10.0
   end
   
   # TODO: Need to add spudsy_rating to TvShow 
@@ -48,24 +50,24 @@ class TvShow < ActiveRecord::Base
   end
   
   private 
-    def getYFactor(release_year)
+    def self.getYFactor(release_year)
       current = Time.now.to_s[0..3].to_i
       release_year = release_year.to_i
       diff = current - release_year
       
       yFactor = 1
       case diff
-      when -10..3
-        yFactor = 1.5
-      when 3..7
-        yFactor = 1.2
-      when 7..11
+      when -10..5
+        yFactor = 1.15
+      when 5..9
+        yFactor = 1.05
+      when 9..14
         yFactor = 1.0
-      when 11..20
+      when 14..25
         yFactor = yFactorEq(1.0, 0.75, diff, 0.025)
-      when 20..40
+      when 25..45
         yFactor = yFactorEq(0.75, 0.50, diff, 0.0125)
-      when 40..60 
+      when 45..65 
         yFactor = yFactorEq(0.50, 0.20, diff, 0.015)
       else 
         yFactor = 0.10
@@ -74,7 +76,8 @@ class TvShow < ActiveRecord::Base
       return yFactor
     end
     
-    def yFactorEq(max, min, diff, x)
+    # algebraic equation for yFactor
+    def self.yFactorEq(max, min, diff, x)
       yFactor = max
       yFactor -= (x * diff)
       yFactor = min if (yFactor < min)
