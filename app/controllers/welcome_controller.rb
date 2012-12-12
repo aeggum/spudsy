@@ -9,38 +9,25 @@ class WelcomeController < ApplicationController
   require 'bim/provider'
   require 'bim/station'
   require 'bim/program_schedule'
+  require 'bim/program_full'
   require 'bim/program'
   require 'bim/parse_url_xml'
   Rotten.api_key = 'pykjuv5y44fywgpu2m7rt4dk'
   Tmdb::Tmdb.api_key = "8da8a86a8b272a70d20c08a35b576d50"
   Tmdb::Tmdb.default_language = "en"
-  caches_action :geolocate, :expires_in => 10.minutes
+  caches_action :geolocate, :expires_in => 1.hour
   before_filter :set_your_picks, :only => :index
   before_filter :geolocate, :only => :index
   # caches_action :index, :expires_in => 2.minutes
   
-  # before_filter :tvdata, :only => :index
+  before_filter :tvdata, :only => :index
   
   
   def index 
     # reset_session
 
-    # @movies = Movie.all(:limit => 30)
-    # @show_array = TvShow.all(:limit => 25)
-    # @your_picks = Array.new
-    # @movie = @movies[0]
-    
-    # raise TypeError, session
-    # puts the entire array onto the end of the your picks 
-    # @your_picks.push(*@movies)
-    #@your_picks.push(*@show_array)
-    
-    #@your_picks.rotate(6) or however we want to do it
     
     @@hidden_since_rotate = Array.new;
-    #sleep 5;
-    #Movie.all
-    #raise TypeError, session[:data]
     
 
     
