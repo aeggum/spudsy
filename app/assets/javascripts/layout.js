@@ -64,11 +64,11 @@ var Welcome = function() {
 			// shows a different selection of picks when the view more link is pressed
 			$("#view_more").on('click', function(event) {
 				$.ajax({
-					url: "/welcome/rotate_picks"
+					url: "/welcome/rotate_picks?forward=true"
 					
 				}).done(function(data) {
 					event.preventDefault();
-					$("#your_picks_section").hide()
+					$("#your_picks_section").hide();
 					$("#your_picks_section").html(data).slideDown(500, 'swing').show();
 					initBinding();
 				});
@@ -78,6 +78,16 @@ var Welcome = function() {
 				$(".overlay_info").css("overflow", "auto");
 				$(".overlay_info").css("height", "100%");
 				$("#overlay_more_info").hide();
+			});
+			
+			$("#previous_picks").on('click', function(event) {
+				$.ajax({
+					url: "/welcome/rotate_picks?forward=false"
+				}).done(function(data) {
+					$("#your_picks_section").hide();
+					$("#your_picks_section").html(data).slideUp(500, 'swing').show();
+					initBinding();
+				});
 			});
 		}
 	};

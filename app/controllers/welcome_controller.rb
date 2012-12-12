@@ -46,7 +46,17 @@ class WelcomeController < ApplicationController
   
   respond_to :html, :json
   def rotate_picks 
-    @@your_picks.rotate!(6)
+    #puts "-------------------------------------------------------------------------------------"
+    #puts params
+    #puts "-------------------------------------------------------------------------------------"
+    
+    # can rotate forwards or backwards
+    if (params[:forward] == "true")
+      @@your_picks.rotate!(6)
+    else
+      @@your_picks.rotate!(-6)
+    end
+    
     @@your_picks.each do |pick|
      print pick.name + ","
     end
