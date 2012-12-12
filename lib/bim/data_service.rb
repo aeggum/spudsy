@@ -28,7 +28,7 @@ class DataService
   
   # TODO: Set this up to get future times and dates. Currently does only current
   def request_program_slice(minutes = 180) 
-    now = Time.now.utc.floor(30.minutes).to_s
+    now = Time.now.utc.floor(30.minutes).utc.to_s
     current_date = now[0..9]
     current_time = now[11..15]
     @request_program_slice_url = "http://iwavit.data.titantv.com/dataservice.asmx/RequestProgramDataSlice?UUID=#{@uuid}&ProviderID=#{@current_provider.provider_id}&StartDate=#{current_date}&StartTime=#{current_time}&NumberOfMinutes=#{minutes}"
