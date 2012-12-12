@@ -13,7 +13,7 @@
 				<img border="0" src="/themes/_default/images/grid/navl.gif">
 			</td>
 			<td nowrap="" class="gridHeaderTimeCell" colspan="30">
-				<div class="gP">6:30 PM</div>
+				<div class="gP"><%= Time.now.utc.floor(30.minutes) %></div>
 			</td>
 			<td nowrap="" class="gridHeaderTimeCell" colspan="30">
 				<div class="gP">7 PM</div>

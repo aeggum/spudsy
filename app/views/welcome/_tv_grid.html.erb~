@@ -13,7 +13,7 @@
 				<img border="0" src="/themes/_default/images/grid/navl.gif">
 			</td>
 			<td nowrap="" class="gridHeaderTimeCell" colspan="30">
-				<div class="gP">6:30 PM</div>
+				<div class="gP"><%= Time.now.utc.floor(30.minutes).utc %></div>
 			</td>
 			<td nowrap="" class="gridHeaderTimeCell" colspan="30">
 				<div class="gP">7 PM</div>
@@ -51,8 +51,8 @@
 			</td>
 
 			<% @station.programs.each_with_index do |program, index| %>
-				<% if program.start_time_from_now.to_i < -30 %>
-					<% cols = program.start_time_from_now.to_i.abs % 30 + program.end_time_from_now.to_i %>
+				<% if program.start_time_from_now.to_i < 0 %>
+					<% cols = program.duration + program.start_time_from_now.to_i %>
 				<% elsif program.end_time_from_now.to_i > 180 %>
 					<% cols = program.duration - (program.end_time_from_now.to_i - 180) %>
 				<% else %>
