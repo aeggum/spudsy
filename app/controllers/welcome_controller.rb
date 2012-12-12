@@ -26,7 +26,8 @@ class WelcomeController < ApplicationController
   
   def index 
     # reset_session
-
+    now = Time.now.readable(30)
+    raise TypeError, now
     
     @@hidden_since_rotate = Array.new;
     
@@ -39,7 +40,7 @@ class WelcomeController < ApplicationController
     bim_uuid = "SPUDSYTEST0000000000000001"
     ds = DataService.new(session[:zip_code], bim_uuid, session)
     @@stations = ds.current_provider.stations
-    raise TypeError, @@stations
+   #  raise TypeError, @@stations
     # session[:testing] = ds.current_provider.stations
     #sleep 10;
   end
