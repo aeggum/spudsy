@@ -12,6 +12,7 @@ class WelcomeController < ApplicationController
   require 'bim/program_full'
   require 'bim/program'
   require 'bim/parse_url_xml'
+  require 'bim/time'
   Rotten.api_key = 'pykjuv5y44fywgpu2m7rt4dk'
   Tmdb::Tmdb.api_key = "8da8a86a8b272a70d20c08a35b576d50"
   Tmdb::Tmdb.default_language = "en"
