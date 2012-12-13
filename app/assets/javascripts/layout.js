@@ -142,8 +142,6 @@ function initBinding() {
 			liked = "false";
 		}
 		
-		console.log($(this).parent().attr('data-id'));
-		
 		var data = $(this).parent().attr('data-id').split(',');
 		
 		$.ajax({
@@ -151,6 +149,7 @@ function initBinding() {
 				url: "/welcome/hide_media",
 				data: {"like": liked, "media_type": data[0] , "media_id": data[1]}
 		}).done (function(data) {
+			$("#your_picks_section").html(data).slideDown(500, 'swing').show();
 			initBinding();
 		});
 	});
