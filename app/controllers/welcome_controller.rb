@@ -32,7 +32,6 @@ class WelcomeController < ApplicationController
     @provider_hash = @@provider_hash
     
     
-    
     #raise TypeError, @@stations
     
   end
@@ -107,23 +106,24 @@ class WelcomeController < ApplicationController
     end
     @your_picks = @@your_picks
     
-    $index = [0,@your_picks.length-6].max
-    
-    while $index < @your_picks.length do
-      for pick in @@hidden_since_rotate do
-        
-          if (@your_picks[$index].class.to_s == pick["media_type"] && @your_picks[$index].id.to_s == pick["media_id"]) 
-            @your_picks.delete_at($index)
-            $index -=1
-          end
-      end
-      $index +=1
-    end
+    # $index = [0,@your_picks.length-6].max
+#     
+    # while $index < @your_picks.length do
+      # for pick in @@hidden_since_rotate do
+#         
+          # if (@your_picks[$index].class.to_s == pick["media_type"] && @your_picks[$index].id.to_s == pick["media_id"]) 
+            # @your_picks.delete_at($index)
+            # $index -=1
+          # end
+      # end
+      # $index +=1
+    # end
     
     @@hidden_since_rotate = Array.new
     
   end
   
+  respond_to :html, :json
   def hide_media
     if params[:media_type] == "movies"
       mType = "Movie"
@@ -145,6 +145,26 @@ class WelcomeController < ApplicationController
     h["media_id"] = params[:media_id]
     h["media_type"] = mType;                                            
     @@hidden_since_rotate.push(h)
+    
+    $index = 0;
+    while $index < @@your_picks.length do
+        
+        if (@@your_picks[$index].class.to_s == h["media_type"] && @@your_picks[$index].id.to_s == h["media_id"])
+          puts "--------------------FUCK FUCK-----------------------" 
+          @@your_picks.delete_at($index)
+          $index == @@your_picks.length;
+        end
+   
+      $index +=1
+    end
+    
+    @your_picks = @@your_picks
+    
+    respond_to do |format|
+      puts "EAT MY DICK EAT MY DICK EAT MY DICK EAT MY DICK EAT MY DICK EAT MY DICK EAT MY DICK"
+      format.html { render :partial => "your_picks", :locals => { :media => @@your_picks} }
+    end
+    
   end
   
   def details
@@ -173,6 +193,31 @@ class WelcomeController < ApplicationController
     @@your_picks = Array.new
     @movie = @movies[0]
     @@your_picks.push(*@movies)
+    
+    
+    
+    if (current_user) 
+      hidden_media =  current_user.hidden_user_medias.all
+      hidden_ids = Array.new
+      
+      hidden_media.each do |media|
+        hidden_ids.push(media.media_id)
+      end
+      
+      index = 0;
+      while index < @@your_picks.length
+        pick = @@your_picks [index]
+        index_of_pick = hidden_ids.index(pick.id)
+        if (!index_of_pick.nil?) 
+          if pick.class.to_s == hidden_media[index_of_pick].media_type
+            @@your_picks.delete_at(index)
+            index -=1
+          end
+        end
+        index +=1;
+      end
+    end
+    
     @your_picks = @@your_picks
     $picks_forward = 0
   end
