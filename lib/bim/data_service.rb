@@ -28,13 +28,36 @@ class DataService
   
   # TODO: Set this up to get future times and dates. Currently does only current
   def request_program_slice(minutes = 180) 
-    now = Time.now.utc.to_s
+    now = Time.now.utc.floor(30.minutes).utc.to_s
     current_date = now[0..9]
     current_time = now[11..15]
     @request_program_slice_url = "http://iwavit.data.titantv.com/dataservice.asmx/RequestProgramDataSlice?UUID=#{@uuid}&ProviderID=#{@current_provider.provider_id}&StartDate=#{current_date}&StartTime=#{current_time}&NumberOfMinutes=#{minutes}"
     ParseUrlXml.get(@request_program_slice_url);
   end
   
+  def get_basic_programs() 
+    @current_provider.program_schedules.each {  |schedule| 
+      # raise TypeError, schedule
+      # @current_provider.stations[schedule.station_id].programs.push(@current_provider.programs[schedule.program_id])
+      
+      program = @current_provider.programs[schedule.program_id]
+      options = Hash.new
+      options["id"] = schedule.program_id
+      options["title"] = program.title
+      options['episode_title'] = program.episode_title
+      options['start_time_from_now'] = schedule.start_time_from_now
+      options['end_time_from_now'] = schedule.end_time_from_now
+      options['start_time_utc'] = schedule.start_time_utc
+      options['end_time_utc'] = schedule.end_time_utc
+      pf = ProgramFull.new(options)
+      pf.setDuration(pf.end_time_from_now, pf.start_time_from_now)
+      @current_provider.stations[schedule.station_id].programs.push(pf)
+    }
+     # raise TypeError, @current_provider
+  end
+  
+  
+  # TODO: Make this more efficient or whatever
   def request_program_details()
     # raise TypeError, @current_provider.program_schedules
     # raise TypeError, @current_provider.stations
@@ -42,6 +65,7 @@ class DataService
     @current_provider.program_schedules.each {  |schedule| 
       if (true)
         # return;
+        # raise TypeError, schedule
       end
       # schedule = @current_provider.program_schedules[4]
       start_time = schedule.start_time_utc.to_s[0..-8]
@@ -85,6 +109,8 @@ class DataService
     
     # raise TypeError, @current_provider.stations
   end
+  
+  
     
   
   def to_s
@@ -109,11 +135,12 @@ class DataService
     lineup_data_xml = request_lineup_data
     @current_provider.createStations(lineup_data_xml)
     
-    program_data_xml = request_program_slice(30)
-    # @current_provider.createPrograms(program_data_xml)
+    program_data_xml = request_program_slice(180)
+    @current_provider.createPrograms(program_data_xml)
     @current_provider.createProgramSchedules(program_data_xml)
   
-    request_program_details()
+    get_basic_programs()
+    # request_program_details()
     
     #raise TypeError, @current_provider.program_schedules
  

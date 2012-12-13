@@ -79,12 +79,23 @@
 		<h1 class="giant_goldfish">Your Picks</h1>
 	</div>
 </div>
-<div id="your_picks_section" class="grey_border">
-	<%= render :partial => 'your_picks', :locals => { :media => @your_picks } %>
+
+<div id="your_picks_container">
+	<div id="your_picks_section" class="grey_border">
+		<%= render :partial => 'your_picks', :locals => { :media => @your_picks } %>
+	</div>
+	
+	<div class="container_2">
+		<a href="#" id="previous_picks" style="display:none;">Previous picks</a>
+	</div>
+	
+	<div class="container_2">
+		<a href="#" id="view_more">View More</a>	  	
+	</div>
+
 </div>
-<div class="container_2">
-	<a href="#" id="view_more">View More</a>	  	
-</div>
+
+
 
 <div id="hulu_section" class="grey_border" style="display: none">
 	<%= render :partial => 'netflix', :locals => { :shows => @show_array, :header => "Hulu" } %>
@@ -103,7 +114,7 @@
 	</div>
 	<div class="container_12">
 		<div class="grid_12">
-			<!--<iframe src="http://www.titantv.com/#ctl00_Main_TVL_ctl00_Grid" style="width: 100%; height: 800px"></iframe> -->
+			<%= render :partial => 'tv_grid' %>
 		</div>
 	</div>
 </div>

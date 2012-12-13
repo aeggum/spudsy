@@ -3,12 +3,23 @@ var Welcome = function() {
 	*	Private Methods (separated just by closing brace)
 	*/
 	var page = 1;
+	
+	function _determinePrevious(times_forward) {
+		if (times_forward > 0) {
+			$("#previous_picks").show();
+		}
+		else {
+			$("#previous_picks").hide();
+		}
+	}
 
 	return {
 		/**
 		*	Public Methods (separated by commas)
 		*/
 		documentReady: function() {
+			var times_forward = 0;
+			
 			$('#tv').prop('checked', true);
 			
 			$('#twitter_tab').click(function() {
@@ -63,14 +74,17 @@ var Welcome = function() {
 			
 			// shows a different selection of picks when the view more link is pressed
 			$("#view_more").on('click', function(event) {
+				var yourPicksHeight = $("#your_picks_container").height();
+				$("#your_picks_container").css('height', yourPicksHeight);
 				$.ajax({
-					url: "/welcome/rotate_picks"
+					url: "/welcome/rotate_picks?forward=true"
 					
 				}).done(function(data) {
 					event.preventDefault();
-					$("#your_picks_section").hide()
-					$("#your_picks_section").html(data).slideDown(500, 'swing').show();
+					$("#your_picks_section").hide();
+					$("#your_picks_section").html(data).slideDown(500).show();
 					initBinding();
+					_determinePrevious(++times_forward);
 				});
 			});
 			
@@ -78,6 +92,17 @@ var Welcome = function() {
 				$(".overlay_info").css("overflow", "auto");
 				$(".overlay_info").css("height", "100%");
 				$("#overlay_more_info").hide();
+			});
+			
+			$("#previous_picks").on('click', function(event) {
+				$.ajax({
+					url: "/welcome/rotate_picks?forward=false"
+				}).done(function(data) {
+					$("#your_picks_section").hide();
+					$("#your_picks_section").html(data).slideDown(500).show();
+					initBinding();
+					_determinePrevious(--times_forward);
+				});
 			});
 		}
 	};

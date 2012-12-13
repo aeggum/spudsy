@@ -9,62 +9,70 @@ class WelcomeController < ApplicationController
   require 'bim/provider'
   require 'bim/station'
   require 'bim/program_schedule'
+  require 'bim/program_full'
   require 'bim/program'
   require 'bim/parse_url_xml'
+  require 'bim/time'
   Rotten.api_key = 'pykjuv5y44fywgpu2m7rt4dk'
   Tmdb::Tmdb.api_key = "8da8a86a8b272a70d20c08a35b576d50"
   Tmdb::Tmdb.default_language = "en"
-  caches_action :geolocate, :expires_in => 10.minutes
+  caches_action :geolocate, :expires_in => 1.hour
   before_filter :set_your_picks, :only => :index
   before_filter :geolocate, :only => :index
   # caches_action :index, :expires_in => 2.minutes
   
-  # before_filter :tvdata, :only => :index
+  before_filter :tvdata, :only => :index
   
   
   def index 
     # reset_session
-
-    # @movies = Movie.all(:limit => 30)
-    # @show_array = TvShow.all(:limit => 25)
-    # @your_picks = Array.new
-    # @movie = @movies[0]
-    
-    # raise TypeError, session
-    # puts the entire array onto the end of the your picks 
-    # @your_picks.push(*@movies)
-    #@your_picks.push(*@show_array)
-    
-    #@your_picks.rotate(6) or however we want to do it
     
     @@hidden_since_rotate = Array.new;
-    @@recently_hidden = Array.new;
     #sleep 5;
     #Movie.all
     #raise TypeError, session[:data]
     
-
+    bim_uuid = "SPUDSYTEST0000000000000001"
+    ds = DataService.new(session[:zip_code], bim_uuid, session)
+    @stations = ds.current_provider.stations
+    #raise TypeError, @@stations
     
   end
   
   def tvdata
     
-    bim_uuid = "SPUDSYTEST0000000000000001"
-    ds = DataService.new(session[:zip_code], bim_uuid, session)
-    # session[:testing] = ds.current_provider.stations
-    #sleep 10;
+    
   end
   
   respond_to :html, :json
   def rotate_picks 
-    @@your_picks.rotate!(6)
-    @@your_picks.each do |pick|
-     print pick.name + ","
+    #puts "-------------------------------------------------------------------------------------"
+    #puts params
+    #puts "-------------------------------------------------------------------------------------"
+    
+    # can rotate forwards or backwards
+    if (params[:forward] == "true")
+      $picks_forward += 6
+      @@your_picks.rotate!(6)
+      if $picks_forward == @@your_picks.size
+        add_more_picks 
+        @@your_picks.rotate!(-6)
+      end
+    else
+      $picks_forward -= 6
+      @@your_picks.rotate!(-6)
     end
+    
+    
+    # @@your_picks.each do |pick|
+     # print pick.name + ","
+    # end
+    
     respond_to do |format|
       # format.json { render :json => @your_picks }
       format.html { render :partial => "your_picks", :locals => { :media => @@your_picks} }
     end
+    
     puts
     puts 
     @@your_picks.each do |pick|
@@ -149,11 +157,13 @@ class WelcomeController < ApplicationController
     @first = @res.items.first
   end
   
+  
   # called before the others in the class get going
   def set_your_picks
     #@movies = Movie.all(:limit => 30)
+    @@full_movies = Movie.find(:all, :order => 'spudsy_rating DESC', :limit => 100)
     @show_array = TvShow.all(:limit => 30)
-    @movies = Movie.find(:all, :order => 'spudsy_rating DESC', :limit => 30)
+    @movies = @@full_movies[0...30] #Movie.find(:all, :order => 'spudsy_rating DESC', :limit => 30)
     @@your_picks = Array.new
     @movie = @movies[0]
     @@your_picks.push(*@movies)
@@ -183,8 +193,26 @@ class WelcomeController < ApplicationController
     end
     
     @your_picks = @@your_picks
+    $picks_forward = 0
   end
   
+  
+  # Adds 6 more movies to the movies list
+  def add_more_picks 
+    titles = @@your_picks.map { |m| m.name }.join ','
+    num_added = 0;
+    @@full_movies.each {  |m| 
+      unless titles.include?(m.name) 
+        @@your_picks.push(m)
+        num_added += 1
+          break if num_added == 6
+      end
+    }
+    
+  end
+  
+  
+  # Does geolocation to find zip code, latitude and longitude; cached
   def geolocate
     ip = request.remote_ip
     location = IpGeocoder.geocode(ip)
@@ -209,6 +237,7 @@ class WelcomeController < ApplicationController
   # TODO: Could get the next set of shows if user has cycled through all on main load..
   
   private 
+  
     
     # put private methods here
 end

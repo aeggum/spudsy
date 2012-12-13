@@ -9,7 +9,7 @@ class Provider < DataService
     @city = city
     #@stations = Array.new
     @stations = Hash.new
-    # @programs = Array.new
+    @programs = Hash.new
     @program_schedules = Array.new
   end
   
@@ -20,23 +20,28 @@ class Provider < DataService
     stations.each { |s| 
       station = Station.new(s['s'], s['cs'], s['rf'], s['n'], s['maj'], s['min'])
       # @stations.push(station)
-      @stations["#{s['s']}.#{s['min']}"] = station
+      @stations[s['s']] = station
     }
     
     # raise TypeError, @stations
   end
   
-  # def createPrograms(xml) 
-    # programs = xml['ProgramDataReturn']['ProgramData']['Programs']['Pr']
-    # # raise TypeError, xml['ProgramDataReturn']['ProgramData']['Schedules']['Sc']
-    # # raise TypeError, programs
-    # programs.each { |p| 
-      # program = Program.new(p['p'], p['t'], p['te'])
-      # @programs.push(program)
-    # }
-    # 
+  def createPrograms(xml) 
+    programs = xml['ProgramDataReturn']['ProgramData']['Programs']['Pr']
+    #raise TypeError, xml['ProgramDataReturn']['ProgramData']
+    # raise TypeError, programs
+    programs.each { |p| 
+      options = Hash.new
+      options["id"] = p['p']
+      options["title"] = p['t']
+      options['episode_title'] = p['te']
+      
+      program = Program.new(options)
+      @programs[p['p']] = program
+    }
+    
     # raise TypeError, @programs
-  # end
+  end
   
   def createProgramSchedules(xml)
     schedules = xml['ProgramDataReturn']['ProgramData']['Schedules']['Sc']
