@@ -22,16 +22,17 @@ class WelcomeController < ApplicationController
   # caches_action :index, :expires_in => 2.minutes
   
   before_filter :tvdata, :only => :index
+  before_filter :bim, :only => :index
   
   
   def index 
     # reset_session
     
     @@hidden_since_rotate = Array.new;
+    @provider_hash = @@provider_hash
     
-    bim_uuid = "SPUDSYTEST0000000000000001"
-    ds = DataService.new(session[:zip_code], bim_uuid, session)
-    @stations = ds.current_provider.stations
+    
+    
     #raise TypeError, @@stations
     
   end
@@ -39,6 +40,35 @@ class WelcomeController < ApplicationController
   def tvdata
     
     
+  end
+  
+  def bim
+    bim_uuid = "SPUDSYTEST0000000000000001"
+    ds = DataService.new(session[:zip_code], bim_uuid, session)
+    @@ds = ds
+    @@provider_hash = ds.selector_hash
+    @stations = ds.current_provider.stations
+  end
+  
+  def change_provider
+    type = params[:type]
+    desc = params[:desc]
+
+    puts "----------------------------------------------------"
+    puts type
+    puts desc
+    puts "----------------------------------------------------"
+    @@ds.changeProvider(type, desc)
+    
+   
+  end
+  
+  def get_providers
+    type = params[:type]
+    descs = @@provider_hash[type]
+    respond_to do |format|
+      format.html { render :partial => "provider_option", :locals => { :descs => descs } }
+    end
   end
   
   respond_to :html, :json

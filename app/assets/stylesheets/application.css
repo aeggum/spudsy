@@ -267,6 +267,14 @@ img.rt_img_overlay {
 	display: none;
 }
 
+#testing {
+	color:red;
+}
+
+.right {
+	float:right;
+}
+
 /* Giant Goldfish color palette */
 .aoi {
 	color: #69D2E7 !important;

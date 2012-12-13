@@ -2,8 +2,8 @@ class DataService
   include HTTParty
   format :xml
   
-  attr_reader :zip_code, :uuid, :providers, :default_provider, :current_provider
-  attr_writer :zip_code, :uuid, :providers, :default_provider, :current_provider
+  attr_reader :zip_code, :uuid, :providers, :default_provider, :current_provider, :selector_hash
+  attr_writer :zip_code, :uuid, :providers, :default_provider, :current_provider, :selector_hash
   
   
   def initialize(zip_code, uuid, session) 
@@ -14,6 +14,7 @@ class DataService
     
     register_user_xml = register_user
     setProviders(register_user_xml)
+    setSelectorHash()
   end
   
   def register_user
@@ -110,6 +111,21 @@ class DataService
     # raise TypeError, @current_provider.stations
   end
   
+  # Fills out hash of provider types -> Array(descriptions)
+  def setSelectorHash
+    providers = @providers
+    types = (providers.map { |p| p.service_type }).uniq
+    type_hash = Hash.new
+    types.each { |type|
+      type_hash[type.capitalize] = (providers.map { |p| 
+        if (p.service_type == type)
+          p.description 
+        end
+      }).compact
+    }
+    @selector_hash = type_hash
+  end
+  
   
     
   
@@ -146,6 +162,20 @@ class DataService
  
     # prints out everything we know, except for detailed program information
     #raise TypeError, to_s()
+  end
+  
+  def changeProvider(type, desc) 
+    #raise provider_id, TypeError
+    #raise TypeError, "#{type}, #{desc}, #{@providers}"
+    @providers.each { |p| 
+      if (p.service_type == type.downcase && p.description == desc)
+        @current_provider = p
+        #raise TypeError, p
+        break
+      end  
+    }
+    
+    #raise TypeError, @current_provider
   end
 end
 
