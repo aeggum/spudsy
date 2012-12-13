@@ -64,9 +64,9 @@
 						show = TvShow.where { name =~ program.title }[0]
 						spudsy_rating = 0
 						spudsy_rating = (show.spudsy_rating*100).to_i unless show.nil?
-						if spudsy_rating <= 25
+						if spudsy_rating < 40
 							styleClass = "popBottom"
-						elsif spudsy_rating > 25 && spudsy_rating < 85
+						elsif spudsy_rating >= 40 && spudsy_rating < 85
 							styleClass = "popMiddle"
 						else 
 							styleClass = "popTop"

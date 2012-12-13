@@ -26,7 +26,6 @@ class WelcomeController < ApplicationController
   
   def index 
     # reset_session
-
     
     @@hidden_since_rotate = Array.new;
     
@@ -34,8 +33,6 @@ class WelcomeController < ApplicationController
     ds = DataService.new(session[:zip_code], bim_uuid, session)
     @stations = ds.current_provider.stations
     #raise TypeError, @@stations
-    # session[:testing] = ds.current_provider.stations
-    #sleep 10;
     
   end
   
@@ -60,10 +57,12 @@ class WelcomeController < ApplicationController
     @@your_picks.each do |pick|
      print pick.name + ","
     end
+    
     respond_to do |format|
       # format.json { render :json => @your_picks }
       format.html { render :partial => "your_picks", :locals => { :media => @@your_picks} }
     end
+    
     puts
     puts 
     @@your_picks.each do |pick|
@@ -162,6 +161,7 @@ class WelcomeController < ApplicationController
   # TODO: Could get the next set of shows if user has cycled through all on main load..
   
   private 
+  
     
     # put private methods here
 end
