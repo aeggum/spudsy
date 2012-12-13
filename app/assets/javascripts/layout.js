@@ -82,7 +82,7 @@ var Welcome = function() {
 				}).done(function(data) {
 					event.preventDefault();
 					$("#your_picks_section").hide();
-					$("#your_picks_section").html(data).slideDown(500, 'swing').show();
+					$("#your_picks_section").html(data).slideDown(500).show();
 					initBinding();
 					_determinePrevious(++times_forward);
 				});
@@ -99,7 +99,7 @@ var Welcome = function() {
 					url: "/welcome/rotate_picks?forward=false"
 				}).done(function(data) {
 					$("#your_picks_section").hide();
-					$("#your_picks_section").html(data).slideDown(500, 'swing').show();
+					$("#your_picks_section").html(data).slideDown(500).show();
 					initBinding();
 					_determinePrevious(--times_forward);
 				});

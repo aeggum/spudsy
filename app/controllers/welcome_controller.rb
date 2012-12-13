@@ -49,14 +49,21 @@ class WelcomeController < ApplicationController
     
     # can rotate forwards or backwards
     if (params[:forward] == "true")
+      $picks_forward += 6
       @@your_picks.rotate!(6)
+      if $picks_forward == @@your_picks.size
+        add_more_picks 
+        @@your_picks.rotate!(-6)
+      end
     else
+      $picks_forward -= 6
       @@your_picks.rotate!(-6)
     end
     
-    @@your_picks.each do |pick|
-     print pick.name + ","
-    end
+    
+    # @@your_picks.each do |pick|
+     # print pick.name + ","
+    # end
     
     respond_to do |format|
       # format.json { render :json => @your_picks }
@@ -126,17 +133,37 @@ class WelcomeController < ApplicationController
     @first = @res.items.first
   end
   
+  
   # called before the others in the class get going
   def set_your_picks
     #@movies = Movie.all(:limit => 30)
+    @@full_movies = Movie.find(:all, :order => 'spudsy_rating DESC', :limit => 100)
     @show_array = TvShow.all(:limit => 30)
-    @movies = Movie.find(:all, :order => 'spudsy_rating DESC', :limit => 30)
+    @movies = @@full_movies[0...30] #Movie.find(:all, :order => 'spudsy_rating DESC', :limit => 30)
     @@your_picks = Array.new
     @movie = @movies[0]
     @@your_picks.push(*@movies)
     @your_picks = @@your_picks
+    $picks_forward = 0
   end
   
+  
+  # Adds 6 more movies to the movies list
+  def add_more_picks 
+    titles = @@your_picks.map { |m| m.name }.join ','
+    num_added = 0;
+    @@full_movies.each {  |m| 
+      unless titles.include?(m.name) 
+        @@your_picks.push(m)
+        num_added += 1
+          break if num_added == 6
+      end
+    }
+    
+  end
+  
+  
+  # Does geolocation to find zip code, latitude and longitude; cached
   def geolocate
     ip = request.remote_ip
     location = IpGeocoder.geocode(ip)
