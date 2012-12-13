@@ -40,8 +40,11 @@ class TvShow < ActiveRecord::Base
     rating = tv_show.rating * 1.5 * cFactor
     yFactor = getYFactor(tv_show.release_date.to_s[0..3])
     rating *= yFactor 
-    rating /= 25.875  # absolute max score
-    rating *= 10.0
+    rating /= 22.5  
+    if rating > 1.0
+      rating = 1.0
+    end
+    rating *= 100.0
   end
   
   # TODO: Need to add spudsy_rating to TvShow 
