@@ -11,6 +11,8 @@ DemoApp::Application.routes.draw do
   get "welcome/hide_media"
   get "welcome/get_providers"
   get "welcome/change_provider"
+  get "netflix/register"
+  get "netflix/verify"
 
   root :to => 'welcome#index'
   match "/landing", :to => "welcome#index"
