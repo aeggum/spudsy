@@ -1,6 +1,6 @@
-<table class="gridTable" cellspacing="0" cellpadding="0" border="0" style="width:100%;">
+<table class="gridTable" cellspacing="0" cellpadding="0" border="0">
 	<thead>
-		<tr>
+		<tr class="gridHeader">
 			<td class="gridHeaderCellLeft">
 				<div title="Previous Day" class="ghcPrevDay"></div>
 				<div title="Next Day" class="ghcNextDay"></div>
@@ -9,9 +9,7 @@
 			<td valign="middle" class="gridHeaderCellRight">
 				<div onclick="scroll(0,0);" title="Go to Top" class="ghcTop"></div>
 			</td>
-			<td valign="middle" style="cursor:pointer" class="gridHeaderNavLeftCell">
-				<img border="0" src="/themes/_default/images/grid/navl.gif">
-			</td>
+			<td valign="middle" style="cursor:pointer" class="gridHeaderNavLeftCell"></td>
 			<td nowrap="" class="gridHeaderTimeCell" colspan="30">
 				<div class="gP"><%= Time.now.readable(30.minutes) %></div>
 			</td>
@@ -30,13 +28,9 @@
 			<td nowrap="" class="gridHeaderTimeCell" colspan="30">
 				<div class="gP"><%= Time.now.utc.readable_plus(30.minutes, 150) %></div>
 			</td>
-			<td valign="middle" style="cursor:pointer" class="gridHeaderNavRightCell">
-				<img border="0" src="/themes/_default/images/grid/navr.gif">
-			</td>
 		</tr>
-	</thead>	
+	</thead>
 	<tbody id="stations">
 		<%= render 'stations', :stations => stations %>
-		
 	</tbody>
 </table>

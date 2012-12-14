@@ -45,6 +45,7 @@ class TvShow < ActiveRecord::Base
       rating = 1.0
     end
     rating *= 100.0
+    return rating.round
   end
   
   # TODO: Need to add spudsy_rating to TvShow 
@@ -60,20 +61,16 @@ class TvShow < ActiveRecord::Base
       
       yFactor = 1
       case diff
-      when -10..5
-        yFactor = 1.15
-      when 5..9
-        yFactor = 1.05
-      when 9..14
+      when -10..14
         yFactor = 1.0
       when 14..25
-        yFactor = yFactorEq(1.0, 0.75, diff, 0.025)
+        yFactor = yFactorEq(1.0, 0.90, diff, 0.010)
       when 25..45
-        yFactor = yFactorEq(0.75, 0.50, diff, 0.0125)
+        yFactor = yFactorEq(0.90, 0.75, diff, 0.15/20.0)
       when 45..65 
-        yFactor = yFactorEq(0.50, 0.20, diff, 0.015)
+        yFactor = yFactorEq(0.75, 0.50, diff, 0.25/20)
       else 
-        yFactor = 0.10
+        yFactor = 0.50
       end
       
       return yFactor

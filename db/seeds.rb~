@@ -47,3 +47,6 @@ Genre.create([{:name => "Action"}, {:name => "Adventure"}, {:name=>"Action and A
 
 
 
+
+
+

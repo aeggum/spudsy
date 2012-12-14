@@ -66,7 +66,7 @@ class Movie < ActiveRecord::Base
     rating *= yFactor
     rating /= 3       # absolute max score is 300
     # puts "Rating for #{movie.name}: #{rating}"
-    return rating
+    return rating.round
   end
   
   
