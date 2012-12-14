@@ -9,6 +9,23 @@
 .popBottom {
 	opacity: 0.4;
 }
+.grid_left {
+	float: left;
+	width: 80%;
+}
+.grid_right {
+	float: right;
+	width: 20%;
+}
+.episode_title {
+	font-size: 12px;
+	line-height: 12px;
+}
+.gridHeader td {
+	background-color: #F38630;
+	color: white;
+	border: 1px solid #423B28;
+}
 .hdSymbolTxt {
     font-weight: bold;
 }
@@ -25,9 +42,6 @@
 .gridSpacerRow {
 }
 .gridSpacerCell {
-}
-.gridRow td {
-	padding-bottom: 0px !important;
 }
 .gridHeaderCellLeft {
     /*-moz-border-bottom-colors: none;
@@ -320,6 +334,13 @@ div.dailyGridRight {
     border: 1px solid #4B4C4C;
     padding: 4px;
 }
+.gLSC_run {
+    background-color: white;
+    background-image: url("../images/grid/stripe_tile.gif");
+    border-right: none !important;
+    border-bottom:1px solid #4B4C4C;
+    padding: 4px;
+}
 .gRSC {
     background-color: #EEEEEE;
     background-image: url("../images/grid/stripe_tile.gif");
@@ -327,10 +348,10 @@ div.dailyGridRight {
     padding: 4px;
 }
 .gP {
-    margin: 4px;
+    margin: 3px 1px 1px 3px;
 }
 .gH {
-    height: 35px;
+    height: 55px;
     overflow: hidden;
 }
 .gNW {
@@ -342,8 +363,9 @@ div.dailyGridRight {
     cursor: pointer;
     /*font-family: Arial,Verdana,Helvetica,sans-serif;*/
     font-size: 16px;
-    line-height: 16px;
+    line-height: 14px;
     overflow: hidden;
+    border-collapse: separate !important
 }
 .gDC {
     border: 1px solid #4B4C4C;
