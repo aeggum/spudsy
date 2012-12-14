@@ -54,12 +54,12 @@ class WelcomeController < ApplicationController
     type = params[:type]
     desc = params[:desc]
 
-    puts "----------------------------------------------------"
-    puts type
-    puts desc
-    puts "----------------------------------------------------"
     @@ds.changeProvider(type, desc)
+    @stations = @@ds.current_provider.stations
     
+    respond_to do |format|
+      format.html { render :partial => "stations", :locals => { :stations => @stations } }
+    end
    
   end
   

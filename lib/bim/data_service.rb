@@ -170,12 +170,24 @@ class DataService
     @providers.each { |p| 
       if (p.service_type == type.downcase && p.description == desc)
         @current_provider = p
-        #raise TypeError, p
         break
       end  
     }
     
-    #raise TypeError, @current_provider
+    @current_provider.stations.clear
+    @current_provider.programs.clear
+    @current_provider.program_schedules.clear
+    
+    lineup_data_xml = request_lineup_data
+    @current_provider.createStations(lineup_data_xml)
+    
+    program_data_xml = request_program_slice(180)
+    @current_provider.createPrograms(program_data_xml)
+    @current_provider.createProgramSchedules(program_data_xml)
+  
+    get_basic_programs()
+    
+    # raise TypeError, @current_provider
   end
 end
 

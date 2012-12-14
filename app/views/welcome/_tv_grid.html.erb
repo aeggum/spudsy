@@ -1,5 +1,5 @@
-<table class="gridTable" cellspacing="0" cellpadding="0" border="0">
-	<tbody>
+<table class="gridTable" cellspacing="0" cellpadding="0" border="0" style="width:100%;">
+	<thead>
 		<tr>
 			<td class="gridHeaderCellLeft">
 				<div title="Previous Day" class="ghcPrevDay"></div>
@@ -34,58 +34,9 @@
 				<img border="0" src="/themes/_default/images/grid/navr.gif">
 			</td>
 		</tr>
+	</thead>	
+	<tbody id="stations">
+		<%= render 'stations', :stations => stations %>
 		
-		<% @stations.each_pair do |id, station| %>	
-			<tr valign="top" class="gridRow">
-				<td valign="middle" nowrap="" align="center" class="gridCallSignCell" >
-					<span class="gridCallSignText"><%= station.callsign %></span>
-					<br>
-					<span class="gridNetworkText"><%= station.name %></span>
-				</td>
-				<td valign="middle" align="center" class="gridChannelCell">
-					<a href="#">
-						<span class="gridChannelText"><%= station.major_channel %>.<%= station.minor_channel %></span>
-					</a>
-				</td>
-				<td class="gLSC">
-					&nbsp;
-				</td>
-
-				<% station.programs.each_with_index do |program, index| %>
-					<% if program.start_time_from_now.to_i < 0 %>
-						<% cols = program.duration + program.start_time_from_now.to_i %>
-					<% elsif program.end_time_from_now.to_i > 180 %>
-						<% cols = program.duration - (program.end_time_from_now.to_i - 180) %>
-					<% else %>
-						<% cols = program.duration %>
-					<% end %>	
-					
-					<% 
-						show = TvShow.where { name =~ program.title }[0]
-						spudsy_rating = 0
-						spudsy_rating = (show.spudsy_rating*100).to_i unless show.nil?
-						if spudsy_rating < 40
-							styleClass = "popBottom"
-						elsif spudsy_rating >= 40 && spudsy_rating < 85
-							styleClass = "popMiddle"
-						else 
-							styleClass = "popTop"
-						end
-					 %>
-						
-
-					<td class="gC c4b <%= styleClass %>" colspan="<%= cols %>" title="Click to Show/Hide Details">
-						<div class="gP gH" id="cc">
-							<span class="ctt c4tt" id="tn"><%= program.title %></span>
-							<% if (spudsy_rating > 0) %>
-								<span class="cdt c4dt" style="float:right;"><%= spudsy_rating %>%</span>
-							<% end %>
-							<span class="cdt c4dt"><br><%= program.episode_title %><br></span>
-						</div>
-					</td>
-	
-				<% end %>
-			</tr>
-		<% end %>
 	</tbody>
 </table>

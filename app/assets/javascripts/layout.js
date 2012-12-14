@@ -12,6 +12,18 @@ var Welcome = function() {
 			$("#previous_picks").hide();
 		}
 	}
+	
+	function _providerBinding() {
+		$("#choose_provider").on('change', function() {
+ 			var type = $("#service_type option:selected").val();
+ 			var desc = $("#choose_provider option:selected").val(); 
+ 			$.ajax({
+ 				url: "/welcome/change_provider?type=" + type + "&desc=" + desc //....
+ 			}).done(function(data) {
+ 				$("#stations").html(data); //console.log(data)
+ 			});
+ 		});
+	}
 
 	return {
 		/**
@@ -106,25 +118,19 @@ var Welcome = function() {
 			});
 			
 			$("#service_type").on('change', function() {
-				var type = $("#service_type option:selected").text()
+				var type = $("#service_type option:selected").text();
 			 	$.ajax({
 			 		url: "/welcome/get_providers?type=" + type
 			 	}).done(function(data) {
 			 		$("#choose_provider").hide();
 			 		$("#choose_provider").html(data).show();
 			 		
-			 		$("#choose_provider").on('change', function() {
-			 			// TODO: Another ajax call to change the current provider..
-			 			//alert($("#choose_provider option:selected").text());
-			 			var desc = $("#choose_provider option:selected").text();
-			 			$.ajax({
-			 				url: "/welcome/change_provider?type=" + type + "&desc=" + desc//....
-			 			}).done(function(data) {
-			 				
-			 			});
-			 		});
+			 		
 			 	});
+			 	
 			});
+			
+			_providerBinding();
 			
 			
 		}

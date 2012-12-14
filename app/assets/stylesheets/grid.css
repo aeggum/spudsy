@@ -133,6 +133,7 @@
     font-weight: bold;
     overflow: hidden;
     text-align: left;
+    width:100%;
 }
 .gridHeaderNavRightCell {
     background-color: #FFFFFF;
