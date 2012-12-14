@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121209060600) do
+ActiveRecord::Schema.define(:version => 20121212070620) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "resource_id",   :null => false
@@ -32,14 +32,6 @@ ActiveRecord::Schema.define(:version => 20121209060600) do
     t.string   "name"
     t.integer  "media_id"
     t.string   "media_type"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
-  end
-
-  create_table "authentications", :force => true do |t|
-    t.integer  "user_id"
-    t.string   "provider"
-    t.string   "uid"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
   end
@@ -118,11 +110,13 @@ ActiveRecord::Schema.define(:version => 20121209060600) do
     t.text     "description"
     t.string   "poster"
     t.date     "release_date"
-    t.datetime "created_at",   :null => false
-    t.datetime "updated_at",   :null => false
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
+    t.float    "spudsy_rating"
   end
 
   add_index "tv_shows", ["name"], :name => "index_tv_shows_on_name"
+  add_index "tv_shows", ["spudsy_rating"], :name => "index_tv_shows_on_spudsy_rating"
 
   create_table "users", :force => true do |t|
     t.string   "email",                  :default => "", :null => false

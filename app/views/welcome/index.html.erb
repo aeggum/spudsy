@@ -79,12 +79,23 @@
 		<h1 class="giant_goldfish">Your Picks</h1>
 	</div>
 </div>
-<div id="your_picks_section" class="grey_border">
-	<%= render :partial => 'your_picks', :locals => { :media => @your_picks } %>
+
+<div id="your_picks_container">
+	<div id="your_picks_section" class="grey_border">
+		<%= render :partial => 'your_picks', :locals => { :media => @your_picks } %>
+	</div>
+	
+	<div class="container_2">
+		<a href="#" id="previous_picks" style="display:none;">Previous picks</a>
+	</div>
+	
+	<div class="container_2">
+		<a href="#" id="view_more">View More</a>	  	
+	</div>
+
 </div>
-<div class="container_2">
-	<a href="#" id="view_more">View More</a>	  	
-</div>
+
+
 
 <div id="hulu_section" class="grey_border" style="display: none">
 	<%= render :partial => 'netflix', :locals => { :shows => @show_array, :header => "Hulu" } %>
@@ -95,10 +106,19 @@
 </div>
 
 
+
 <div id="tv_section">
 	<div class="container_12">
 		<div class="grid_12">	
 			<h1 class="giant_goldfish">TV</h1>
+		</div>
+	</div>
+	<div class="container_12" id="testing">
+		<div class="grid_6">
+			<%= select("service", "type", @provider_hash.keys.each {|p| p.capitalize }, {:prompt => "Choose your service"}) %>
+		</div>
+		<div class="grid_6 right" id="choose_provider">
+			<%= select("type", "type_key", @provider_hash.keys.each {|p| p.capitalize }, {:prompt => 'Select Your Provider'}) %>
 		</div>
 	</div>
 	<div class="container_12">

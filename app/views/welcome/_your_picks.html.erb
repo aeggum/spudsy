@@ -20,14 +20,14 @@
 				<h3 class="rating grey_shade">
 					<% if (media['rating'] >= 60) %>
 						<% if (media['certified']) %>
-						<img class="rt_img" src="../rt_certified.png" />
+						<img class="rt_img" src="../favicon.ico" />
 						<% else %>
-						<img class="rt_img test" src="../rt_fresh.png" />
+						<img class="rt_img test" src="../favicon.ico" />
 						<% end %>
 					<% else %>
-						<img class="rt_img" src="../rt_rotten.png" />
+						<img class="rt_img" src="../favicon.ico" />
 					<% end%>
-					<span><%= media['rating'] %></span>
+					<span><%= media['spudsy_rating'] %></span>
 				</h3>
 				<% else %>
 				<h3 class="tv_rating grey_shade">

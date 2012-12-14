@@ -252,6 +252,11 @@ img.rt_img_overlay {
 	height:200px;
 }
 
+#previous_picks {
+	float: left;
+	padding: 15px;
+}
+
 #view_more {
 	float: right;
 	padding: 15px;
@@ -260,6 +265,14 @@ img.rt_img_overlay {
 #poster_slider_2, #poster_slider_3 {
 	padding-top: 35px;
 	display: none;
+}
+
+#testing {
+	color:red;
+}
+
+.right {
+	float:right;
 }
 
 /* Giant Goldfish color palette */

@@ -3,11 +3,14 @@ ActiveAdmin.register TvShow do
   config.sort_order = "id_asc"
   scope "Loved", :high_rating
   scope "Hated", :low_rating
+  scope "Spudsy > 8", :high_spudsy_rating
+  
 
   index do
     column :id
     column :name
     column "tvdb user rating", :rating
+    column :spudsy_rating
     column 'Genres' do |tv_show|
       tv_show.genres.collect(&:name).join(", ")
     end
@@ -27,4 +30,5 @@ ActiveAdmin.register TvShow do
   filter :name
   filter :id
   filter :rating
+  filter :spudsy_rating
 end

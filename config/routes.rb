@@ -9,6 +9,8 @@ DemoApp::Application.routes.draw do
   get "welcome/rotate_picks"
   get "search/results"
   get "welcome/hide_media"
+  get "welcome/get_providers"
+  get "welcome/change_provider"
 
   root :to => 'welcome#index'
   match "/landing", :to => "welcome#index"

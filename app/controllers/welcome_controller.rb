@@ -22,21 +22,18 @@ class WelcomeController < ApplicationController
   # caches_action :index, :expires_in => 2.minutes
   
   before_filter :tvdata, :only => :index
+  before_filter :bim, :only => :index
   
   
   def index 
     # reset_session
-    now = Time.now.readable(30)
-    #raise TypeError, now
-    
+    # now = Time.now.readable(30)
+    #raise TypeError, now    
     @@hidden_since_rotate = Array.new;
+    @provider_hash = @@provider_hash
     
-    bim_uuid = "SPUDSYTEST0000000000000001"
-    ds = DataService.new(session[:zip_code], bim_uuid, session)
-    @stations = ds.current_provider.stations
+    
     #raise TypeError, @@stations
-    # session[:testing] = ds.current_provider.stations
-    #sleep 10;
     
   end
   
@@ -45,16 +42,64 @@ class WelcomeController < ApplicationController
     
   end
   
+  def bim
+    bim_uuid = "SPUDSYTEST0000000000000001"
+    ds = DataService.new(session[:zip_code], bim_uuid, session)
+    @@ds = ds
+    @@provider_hash = ds.selector_hash
+    @stations = ds.current_provider.stations
+  end
+  
+  def change_provider
+    type = params[:type]
+    desc = params[:desc]
+
+    puts "----------------------------------------------------"
+    puts type
+    puts desc
+    puts "----------------------------------------------------"
+    @@ds.changeProvider(type, desc)
+    
+   
+  end
+  
+  def get_providers
+    type = params[:type]
+    descs = @@provider_hash[type]
+    respond_to do |format|
+      format.html { render :partial => "provider_option", :locals => { :descs => descs } }
+    end
+  end
+  
   respond_to :html, :json
   def rotate_picks 
-    @@your_picks.rotate!(6)
-    @@your_picks.each do |pick|
-     print pick.name + ","
+    #puts "-------------------------------------------------------------------------------------"
+    #puts params
+    #puts "-------------------------------------------------------------------------------------"
+    
+    # can rotate forwards or backwards
+    if (params[:forward] == "true")
+      $picks_forward += 6
+      @@your_picks.rotate!(6)
+      if $picks_forward == @@your_picks.size
+        add_more_picks 
+        @@your_picks.rotate!(-6)
+      end
+    else
+      $picks_forward -= 6
+      @@your_picks.rotate!(-6)
     end
+    
+    
+    # @@your_picks.each do |pick|
+     # print pick.name + ","
+    # end
+    
     respond_to do |format|
       # format.json { render :json => @your_picks }
       format.html { render :partial => "your_picks", :locals => { :media => @@your_picks} }
     end
+    
     puts
     puts 
     @@your_picks.each do |pick|
@@ -62,23 +107,24 @@ class WelcomeController < ApplicationController
     end
     @your_picks = @@your_picks
     
-    $index = [0,@your_picks.length-6].max
-    
-    while $index < @your_picks.length do
-      for pick in @@hidden_since_rotate do
-        
-          if (@your_picks[$index].class.to_s == pick["media_type"] && @your_picks[$index].id.to_s == pick["media_id"]) 
-            @your_picks.delete_at($index)
-            $index -=1
-          end
-      end
-      $index +=1
-    end
+    # $index = [0,@your_picks.length-6].max
+#     
+    # while $index < @your_picks.length do
+      # for pick in @@hidden_since_rotate do
+#         
+          # if (@your_picks[$index].class.to_s == pick["media_type"] && @your_picks[$index].id.to_s == pick["media_id"]) 
+            # @your_picks.delete_at($index)
+            # $index -=1
+          # end
+      # end
+      # $index +=1
+    # end
     
     @@hidden_since_rotate = Array.new
     
   end
   
+  respond_to :html, :json
   def hide_media
     if params[:media_type] == "movies"
       mType = "Movie"
@@ -100,6 +146,26 @@ class WelcomeController < ApplicationController
     h["media_id"] = params[:media_id]
     h["media_type"] = mType;                                            
     @@hidden_since_rotate.push(h)
+    
+    $index = 0;
+    while $index < @@your_picks.length do
+        
+        if (@@your_picks[$index].class.to_s == h["media_type"] && @@your_picks[$index].id.to_s == h["media_id"])
+          puts "--------------------FUCK FUCK-----------------------" 
+          @@your_picks.delete_at($index)
+          $index == @@your_picks.length;
+        end
+   
+      $index +=1
+    end
+    
+    @your_picks = @@your_picks
+    
+    respond_to do |format|
+      puts "EAT MY DICK EAT MY DICK EAT MY DICK EAT MY DICK EAT MY DICK EAT MY DICK EAT MY DICK"
+      format.html { render :partial => "your_picks", :locals => { :media => @@your_picks} }
+    end
+    
   end
   
   def details
@@ -118,17 +184,62 @@ class WelcomeController < ApplicationController
     @first = @res.items.first
   end
   
+  
   # called before the others in the class get going
   def set_your_picks
     #@movies = Movie.all(:limit => 30)
+    @@full_movies = Movie.find(:all, :order => 'spudsy_rating DESC', :limit => 100)
     @show_array = TvShow.all(:limit => 30)
-    @movies = Movie.find(:all, :order => 'spudsy_rating DESC', :limit => 30)
+    @movies = @@full_movies[0...30] #Movie.find(:all, :order => 'spudsy_rating DESC', :limit => 30)
     @@your_picks = Array.new
     @movie = @movies[0]
     @@your_picks.push(*@movies)
+    
+    
+    
+    if (current_user) 
+      hidden_media =  current_user.hidden_user_medias.all
+      hidden_ids = Array.new
+      
+      hidden_media.each do |media|
+        hidden_ids.push(media.media_id)
+      end
+      
+      index = 0;
+      while index < @@your_picks.length
+        pick = @@your_picks [index]
+        index_of_pick = hidden_ids.index(pick.id)
+        if (!index_of_pick.nil?) 
+          if pick.class.to_s == hidden_media[index_of_pick].media_type
+            @@your_picks.delete_at(index)
+            index -=1
+          end
+        end
+        index +=1;
+      end
+    end
+    
     @your_picks = @@your_picks
+    $picks_forward = 0
   end
   
+  
+  # Adds 6 more movies to the movies list
+  def add_more_picks 
+    titles = @@your_picks.map { |m| m.name }.join ','
+    num_added = 0;
+    @@full_movies.each {  |m| 
+      unless titles.include?(m.name) 
+        @@your_picks.push(m)
+        num_added += 1
+          break if num_added == 6
+      end
+    }
+    
+  end
+  
+  
+  # Does geolocation to find zip code, latitude and longitude; cached
   def geolocate
     ip = request.remote_ip
     location = IpGeocoder.geocode(ip)
@@ -153,6 +264,7 @@ class WelcomeController < ApplicationController
   # TODO: Could get the next set of shows if user has cycled through all on main load..
   
   private 
+  
     
     # put private methods here
 end
