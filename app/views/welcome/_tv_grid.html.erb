@@ -1,6 +1,6 @@
 <table class="gridTable" cellspacing="0" cellpadding="0" border="0">
 	<tbody>
-		<tr>
+		<tr class="gridHeader">
 			<td class="gridHeaderCellLeft">
 				<div title="Previous Day" class="ghcPrevDay"></div>
 				<div title="Next Day" class="ghcNextDay"></div>
@@ -9,9 +9,7 @@
 			<td valign="middle" class="gridHeaderCellRight">
 				<div onclick="scroll(0,0);" title="Go to Top" class="ghcTop"></div>
 			</td>
-			<td valign="middle" style="cursor:pointer" class="gridHeaderNavLeftCell">
-				<img border="0" src="/themes/_default/images/grid/navl.gif">
-			</td>
+			<td valign="middle" style="cursor:pointer" class="gridHeaderNavLeftCell"></td>
 			<td nowrap="" class="gridHeaderTimeCell" colspan="30">
 				<div class="gP"><%= Time.now.readable(30.minutes) %></div>
 			</td>
@@ -30,9 +28,6 @@
 			<td nowrap="" class="gridHeaderTimeCell" colspan="30">
 				<div class="gP"><%= Time.now.utc.readable_plus(30.minutes, 150) %></div>
 			</td>
-			<td valign="middle" style="cursor:pointer" class="gridHeaderNavRightCell">
-				<img border="0" src="/themes/_default/images/grid/navr.gif">
-			</td>
 		</tr>
 		
 		<% @stations.each_pair do |id, station| %>	
@@ -47,11 +42,17 @@
 						<span class="gridChannelText"><%= station.major_channel %>.<%= station.minor_channel %></span>
 					</a>
 				</td>
-				<td class="gLSC">
-					&nbsp;
-				</td>
 
-				<% station.programs.each_with_index do |program, index| %>
+				<% station.programs.each_with_index do |program, index| %>				
+					<% if index == 0 && program.start_time_from_now.to_i < 0 %>
+						<td class="gLSC_run">
+							&nbsp;
+						</td>
+					<% elsif index == 0 %>
+						<td class="gLSC">
+							&nbsp;
+						</td>
+					<% end %>					
 					<% if program.start_time_from_now.to_i < 0 %>
 						<% cols = program.duration + program.start_time_from_now.to_i %>
 					<% elsif program.end_time_from_now.to_i > 180 %>
@@ -76,11 +77,15 @@
 
 					<td class="gC c4b <%= styleClass %>" colspan="<%= cols %>" title="Click to Show/Hide Details">
 						<div class="gP gH" id="cc">
-							<span class="ctt c4tt" id="tn"><%= program.title %></span>
-							<% if (spudsy_rating > 0) %>
-								<span class="cdt c4dt" style="float:right;"><%= spudsy_rating %>%</span>
-							<% end %>
-							<span class="cdt c4dt"><br><%= program.episode_title %><br></span>
+							<span class="grid_left">
+								<span class="ctt c4tt" id="tn"><%= program.title %></span>
+								<span class="cdt c4dt episode_title"><br><%= program.episode_title %></span>
+							</span>
+							<span class="grid_right">
+								<% if (spudsy_rating > 0) %>
+									<span class="cdt c4dt" style="float:right;"><%= spudsy_rating %>%</span>
+								<% end %>
+							</span>
 						</div>
 					</td>
 	
