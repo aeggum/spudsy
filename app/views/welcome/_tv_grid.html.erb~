@@ -13,68 +13,63 @@
 				<img border="0" src="/themes/_default/images/grid/navl.gif">
 			</td>
 			<td nowrap="" class="gridHeaderTimeCell" colspan="30">
-				<div class="gP">6:30 PM</div>
+				<div class="gP"><%= Time.now.utc.floor(30.minutes).strftime("%I:%M%p") %></div>
 			</td>
 			<td nowrap="" class="gridHeaderTimeCell" colspan="30">
-				<div class="gP">7 PM</div>
+				<div class="gP"><%= (Time.now.utc.floor(30.minutes) + 30.minutes).strftime("%I:%M%p") %></div>
 			</td>
 			<td nowrap="" class="gridHeaderTimeCell" colspan="30">
-				<div class="gP">7:30 PM</div>
+				<div class="gP"><%= (Time.now.utc.floor(30.minutes) + 60.minutes).strftime("%I:%M%p") %></div>
 			</td>
 			<td nowrap="" class="gridHeaderTimeCell" colspan="30">
-				<div class="gP">8 PM</div>
+				<div class="gP"><%= (Time.now.utc.floor(30.minutes) + 90.minutes).strftime("%I:%M%p") %></div>
 			</td>
 			<td nowrap="" class="gridHeaderTimeCell" colspan="30">
-				<div class="gP">8:30 PM</div>
+				<div class="gP"><%= (Time.now.utc.floor(30.minutes) + 120.minutes).strftime("%I:%M%p") %></div>
 			</td>
 			<td nowrap="" class="gridHeaderTimeCell" colspan="30">
-				<div class="gP">9 PM</div>
+				<div class="gP"><%= (Time.now.utc.floor(30.minutes) + 150.minutes).strftime("%I:%M%p") %></div>
 			</td>
 			<td valign="middle" style="cursor:pointer" class="gridHeaderNavRightCell">
 				<img border="0" src="/themes/_default/images/grid/navr.gif">
 			</td>
 		</tr>
-		<tr valign="top" class="gridRow">
-			<td valign="middle" nowrap="" align="center" class="gridCallSignCell" >
-				<span class="gridCallSignText">WISC-DT</span>
-				<br>
-				<span class="gridNetworkText">CBS</span>
-			</td>
-			<td valign="middle" align="center" class="gridChannelCell">
-				<a href="#">
-					<span class="gridChannelText">3</span>
-				</a>
-			</td>
-			<td class="gLSC">
-				&nbsp;
-			</td>
-			<td class="gC c22b popBottom" colspan="30" title="Click to Show/Hide Details">
-				<div class="gP gH" id="cc">
-					<span class="ctt c22tt" id="tn">Entertainment Tonight</span>
-					<span class="cdt c4dt" style="float:right;">22%</span>
-				</div>
-			</td>
-			<td class="gC c4b popTop" colspan="60" title="Click to Show/Hide Details">
-				<div class="gP gH" id="cc">
-					<span class="ctt c4tt" id="tn">NCIS</span>
-					<span class="cdt c4dt"><br>Devil's Trifecta<br></span>
-					<span class="cdt c4dt" style="float:right;">88%</span>
-				</div>
-			</td>
-			<td class="gC c4b" colspan="60" title="Click to Show/Hide Details">
-				<div class="gP gH" id="cc">
-					<span class="ctt c4tt" id="tn">NCIS: Los Angeles</span>
-					<span class="cdt c4dt"><br>The Gold Standard<br></span>
-					<span class="cdt c4dt" style="float:right;">79%</span>
-				</div>
-			</td>
-			<td class="gERC c4b" colspan="31" title="Click to Show/Hide Details">
-				<div class="gP gH" id="cc">
-					<span class="ctt c4tt" id="tn">Vegas</span>
-					<span class="cdt c4dt"><br>Masquerade<br></span>
-					<span class="cdt c4dt" style="float:right;">48%</span>
-				</div>
-			</td>
-		</tr>
+		
+		<% @@stations.each_pair do |id, station| %>	
+			<tr valign="top" class="gridRow">
+				<td valign="middle" nowrap="" align="center" class="gridCallSignCell" >
+					<span class="gridCallSignText"><%= station.callsign %></span>
+					<br>
+					<span class="gridNetworkText"><%= station.name %></span>
+				</td>
+				<td valign="middle" align="center" class="gridChannelCell">
+					<a href="#">
+						<span class="gridChannelText"><%= station.major_channel %>.<%= station.minor_channel %></span>
+					</a>
+				</td>
+				<td class="gLSC">
+					&nbsp;
+				</td>
+
+				<% station.programs.each_with_index do |program, index| %>
+					<% if program.start_time_from_now.to_i < 0 %>
+						<% cols = program.duration + program.start_time_from_now.to_i %>
+					<% elsif program.end_time_from_now.to_i > 180 %>
+						<% cols = program.duration - (program.end_time_from_now.to_i - 180) %>
+					<% else %>
+						<% cols = program.duration %>
+					<% end %>		
+
+					<td class="gC c4b" colspan="<%= cols %>" title="Click to Show/Hide Details">
+						<div class="gP gH" id="cc">
+							<span class="ctt c4tt" id="tn"><%= program.title %></span>
+							<span class="cdt c4dt" style="float:right;">88%</span>
+							<span class="cdt c4dt"><br><%= program.episode_title %><br></span>
+						</div>
+					</td>
+	
+				<% end %>
+			</tr>
+		<% end %>
 	</tbody>
 </table>

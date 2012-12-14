@@ -26,14 +26,12 @@
 }
 .gridSpacerCell {
 }
-.gridRow {
-}
 .gridHeaderCellLeft {
-    -moz-border-bottom-colors: none;
+    /*-moz-border-bottom-colors: none;
     -moz-border-image: none;
     -moz-border-left-colors: none;
     -moz-border-right-colors: none;
-    -moz-border-top-colors: none;
+    -moz-border-top-colors: none;*/
     background-color: #FFFFFF;
     background-image: url("../images/grid/time_gradient.gif");
     background-position: center bottom;
@@ -183,11 +181,11 @@ div.dailyGridRight {
     top: 0;
 }
 .gridDailyTimeHeaderRow {
-    -moz-border-bottom-colors: none;
+    /*-moz-border-bottom-colors: none;
     -moz-border-image: none;
     -moz-border-left-colors: none;
     -moz-border-right-colors: none;
-    -moz-border-top-colors: none;
+    -moz-border-top-colors: none;*/
     border-color: #4B4C4C -moz-use-text-color -moz-use-text-color;
     border-right: medium none;
     border-style: dashed none none;
@@ -355,11 +353,11 @@ div.dailyGridRight {
     position: absolute;
 }
 .gEBC {
-    -moz-border-bottom-colors: none;
+    /*-moz-border-bottom-colors: none;
     -moz-border-image: none;
     -moz-border-left-colors: none;
     -moz-border-right-colors: none;
-    -moz-border-top-colors: none;
+    -moz-border-top-colors: none;*/
     border-color: #4B4C4C -moz-use-text-color;
     border-style: solid none;
     border-width: 1px medium;
@@ -388,11 +386,11 @@ div.dailyGridRight {
     overflow: hidden;
 }
 .gELC {
-    -moz-border-bottom-colors: none;
+    /*-moz-border-bottom-colors: none;
     -moz-border-image: none;
     -moz-border-left-colors: none;
     -moz-border-right-colors: none;
-    -moz-border-top-colors: none;
+    -moz-border-top-colors: none;*/
     border-color: #4B4C4C #4B4C4C #4B4C4C -moz-use-text-color;
     border-style: solid solid solid none;
     border-width: 1px 1px 1px medium;
@@ -412,11 +410,11 @@ div.dailyGridRight {
     overflow: hidden;
 }
 .gERC {
-    -moz-border-bottom-colors: none;
+    /*-moz-border-bottom-colors: none;
     -moz-border-image: none;
     -moz-border-left-colors: none;
     -moz-border-right-colors: none;
-    -moz-border-top-colors: none;
+    -moz-border-top-colors: none;*/
     border-color: #4B4C4C -moz-use-text-color #4B4C4C #4B4C4C;
     border-style: solid none solid solid;
     border-width: 1px medium 1px 1px;
@@ -436,22 +434,22 @@ div.dailyGridRight {
     overflow: hidden;
 }
 .gLEC {
-    -moz-border-bottom-colors: none;
+    /*-moz-border-bottom-colors: none;
     -moz-border-image: none;
     -moz-border-left-colors: none;
     -moz-border-right-colors: none;
-    -moz-border-top-colors: none;
+    -moz-border-top-colors: none;*/
     border-color: #4B4C4C -moz-use-text-color #4B4C4C #4B4C4C;
     border-style: solid none solid solid;
     border-width: 1px medium 1px 1px;
     padding: 4px;
 }
 .gREC {
-    -moz-border-bottom-colors: none;
+    /*-moz-border-bottom-colors: none;
     -moz-border-image: none;
     -moz-border-left-colors: none;
     -moz-border-right-colors: none;
-    -moz-border-top-colors: none;
+    -moz-border-top-colors: none;*/
     border-color: #4B4C4C #4B4C4C #4B4C4C -moz-use-text-color;
     border-style: solid solid solid none;
     border-width: 1px 1px 1px medium;
@@ -468,11 +466,11 @@ div.dailyGridRight {
     font-size: 16px;
 }
 .gridLegendContainer {
-    -moz-border-bottom-colors: none;
+    /*-moz-border-bottom-colors: none;
     -moz-border-image: none;
     -moz-border-left-colors: none;
     -moz-border-right-colors: none;
-    -moz-border-top-colors: none;
+    -moz-border-top-colors: none;*/
     background-color: #4B4C4C;
     border-color: -moz-use-text-color #4B4C4C #4B4C4C;
     border-right: 1px solid #4B4C4C;
@@ -578,11 +576,11 @@ td.gAd {
     width: 650px;
 }
 .gpContent {
-    -moz-border-bottom-colors: none;
+    /*-moz-border-bottom-colors: none;
     -moz-border-image: none;
     -moz-border-left-colors: none;
     -moz-border-right-colors: none;
-    -moz-border-top-colors: none;
+    -moz-border-top-colors: none;*/
     background-color: #FFFFFF;
     border-color: -moz-use-text-color #999999 #999999;
     border-right: 1px solid #999999;
@@ -595,11 +593,11 @@ td.gAd {
     position: relative;
 }
 .gpContentTop {
-    -moz-border-bottom-colors: none;
+    /*-moz-border-bottom-colors: none;
     -moz-border-image: none;
     -moz-border-left-colors: none;
     -moz-border-right-colors: none;
-    -moz-border-top-colors: none;
+    -moz-border-top-colors: none;*/
     background-color: #FFFFFF;
     border-color: #999999 #999999 -moz-use-text-color;
     border-style: solid solid none;
@@ -619,11 +617,11 @@ td.gAd {
     position: relative;
 }
 .gpContent #contentInner {
-    -moz-border-bottom-colors: none;
+    /*-moz-border-bottom-colors: none;
     -moz-border-image: none;
     -moz-border-left-colors: none;
     -moz-border-right-colors: none;
-    -moz-border-top-colors: none;
+    -moz-border-top-colors: none;*/
     background-image: url("../images/popup/gradientB.jpg");
     background-position: right bottom;
     background-repeat: no-repeat;
@@ -635,11 +633,11 @@ td.gAd {
     padding: 10px;
 }
 .gpContentTop #contentInner {
-    -moz-border-bottom-colors: none;
+    /*-moz-border-bottom-colors: none;
     -moz-border-image: none;
     -moz-border-left-colors: none;
     -moz-border-right-colors: none;
-    -moz-border-top-colors: none;
+    -moz-border-top-colors: none;*/
     background-image: url("../images/popup/gradientT.jpg");
     background-position: right top;
     background-repeat: no-repeat;
@@ -650,11 +648,11 @@ td.gAd {
     padding: 10px;
 }
 .gpBar {
-    -moz-border-bottom-colors: none;
+    /*-moz-border-bottom-colors: none;
     -moz-border-image: none;
     -moz-border-left-colors: none;
     -moz-border-right-colors: none;
-    -moz-border-top-colors: none;
+    -moz-border-top-colors: none;*/
     background-color: #FFFFFF;
     border-color: #999999 #999999 -moz-use-text-color;
     border-style: solid solid none;
@@ -666,11 +664,11 @@ td.gAd {
     position: relative;
 }
 .gpBarBottom {
-    -moz-border-bottom-colors: none;
+    /*-moz-border-bottom-colors: none;
     -moz-border-image: none;
     -moz-border-left-colors: none;
     -moz-border-right-colors: none;
-    -moz-border-top-colors: none;
+    -moz-border-top-colors: none;*/
     background-color: #FFFFFF;
     border-color: -moz-use-text-color #999999 #999999;
     border-right: 1px solid #999999;
@@ -683,11 +681,11 @@ td.gAd {
     position: relative;
 }
 .gpBar #barInner {
-    -moz-border-bottom-colors: none;
+    /*-moz-border-bottom-colors: none;
     -moz-border-image: none;
     -moz-border-left-colors: none;
     -moz-border-right-colors: none;
-    -moz-border-top-colors: none;
+    -moz-border-top-colors: none;*/
     background-image: url("../images/popup/bar.jpg");
     background-repeat: no-repeat;
     border-color: #999999 #999999 -moz-use-text-color;
@@ -698,11 +696,11 @@ td.gAd {
     width: 628px;
 }
 .gpBarBottom #barInner {
-    -moz-border-bottom-colors: none;
+    /*-moz-border-bottom-colors: none;
     -moz-border-image: none;
     -moz-border-left-colors: none;
     -moz-border-right-colors: none;
-    -moz-border-top-colors: none;
+    -moz-border-top-colors: none;*/
     background-image: url("../images/popup/bar.jpg");
     background-repeat: no-repeat;
     border-color: #999999 #999999 -moz-use-text-color;
@@ -1020,11 +1018,11 @@ div.favSummaryHeader {
     text-align: left;
 }
 div.favSummaryContent {
-    -moz-border-bottom-colors: none;
+    /*-moz-border-bottom-colors: none;
     -moz-border-image: none;
     -moz-border-left-colors: none;
     -moz-border-right-colors: none;
-    -moz-border-top-colors: none;
+    -moz-border-top-colors: none;*/
     border-color: -moz-use-text-color #4B4C4C #4B4C4C;
     border-right: 1px solid #4B4C4C;
     border-style: none solid solid;
