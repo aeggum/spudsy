@@ -3,11 +3,22 @@
 	text-shadow: 0 1px 1px white;
 	background: azure;
 }
-.popMiddle {
+.popGood {
+	text-shadow: 0 1px 1px white;	
+	background: azure;
+}
+.popUnknown {
 
 }
-.popBottom {
+.popBad {
 	opacity: 0.4;
+}
+.grid_tv {
+	margin-top: 5px;
+	width: 24px;
+	height: 24px;
+	float: right;
+	padding-right: 2px;
 }
 .grid_left {
 	float: left;
@@ -337,7 +348,7 @@ div.dailyGridRight {
 .gLSC_run {
     background-color: white;
     background-image: url("../images/grid/stripe_tile.gif");
-    border-right: none !important;
+    border-right: 1px solid white;
     border-bottom:1px solid #4B4C4C;
     padding: 4px;
 }
@@ -348,7 +359,7 @@ div.dailyGridRight {
     padding: 4px;
 }
 .gP {
-    margin: 3px 1px 1px 3px;
+    margin: 3px 3px 1px 3px;
 }
 .gH {
     height: 55px;
@@ -557,6 +568,7 @@ div.dailyGridRight {
     color: #000000 !important;
     font-weight: bold !important;
     text-decoration: none !important;
+    font-size: 13px !important;
 }
 .cdt, .cdt a:link, .cdt a:visited, .cdt a:active, .cdt a:hover {
     color: #333333;
