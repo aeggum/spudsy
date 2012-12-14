@@ -64,7 +64,7 @@
 					<% 
 						show = TvShow.where { name =~ program.title }[0]
 						spudsy_rating = 0
-						spudsy_rating = (show.spudsy_rating).to_i unless show.nil?
+						spudsy_rating = (show.spudsy_rating*10).to_i unless show.nil?
 						if spudsy_rating == 0	
 							styleClass = "popUnknown"					
 						elsif spudsy_rating < 60

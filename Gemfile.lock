@@ -101,8 +101,6 @@ GEM
     kaminari (0.14.1)
       actionpack (>= 3.0.0)
       activesupport (>= 3.0.0)
-    launchy (2.1.2)
-      addressable (~> 2.3)
     less (2.2.2)
       commonjs (~> 0.2.6)
     less-rails (2.2.3)
@@ -121,10 +119,6 @@ GEM
     mime-types (1.19)
     multi_json (1.3.7)
     multipart-post (1.1.5)
-    netflix (0.2.1)
-      json
-      launchy
-      oauth
     nokogiri (1.5.5)
     oauth (0.4.7)
     oauth2 (0.8.0)
@@ -236,7 +230,6 @@ DEPENDENCIES
   jquery-rails
   json
   kaminari
-  netflix
   omniauth-facebook
   omniauth-twitter
   pg (= 0.12.2)
