@@ -65,10 +65,12 @@
 						show = TvShow.where { name =~ program.title }[0]
 						spudsy_rating = 0
 						spudsy_rating = (show.spudsy_rating*10).to_i unless show.nil?
-						if spudsy_rating < 40
-							styleClass = "popBottom"
-						elsif spudsy_rating >= 40 && spudsy_rating < 85
-							styleClass = "popMiddle"
+						if spudsy_rating == 0	
+							styleClass = "popUnknown"					
+						elsif spudsy_rating < 60
+							styleClass = "popBad"
+						elsif spudsy_rating >= 60 && spudsy_rating < 85
+							styleClass = "popGood"
 						else 
 							styleClass = "popTop"
 						end
@@ -84,6 +86,12 @@
 							<span class="grid_right">
 								<% if (spudsy_rating > 0) %>
 									<span class="cdt c4dt" style="float:right;"><%= spudsy_rating %>%</span>
+									<div style="clear:both;"></div>
+									<% if (spudsy_rating > 60) %>
+										<img src='../blue_tv.png' class="grid_tv" />
+									<% else %>
+										<img src='../static_tv.png' class="grid_tv" />
+									<% end %>
 								<% end %>
 							</span>
 						</div>
