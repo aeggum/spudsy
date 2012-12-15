@@ -37,6 +37,20 @@ class WelcomeController < ApplicationController
     
   end
   
+  def your_picks
+    # respond_to do |format|
+      # format.html { redirect_to welcome_index_path }
+      # format.js
+    # end
+    #raise TypeError, @your_picks
+    # raise TypeError, "@your_picks: #{$your_picks}"
+    respond_to do |format|
+      # format.json { render :json => @your_picks }
+      format.html { render :partial => "your_picks", :locals => { :media => $your_picks} }
+    end
+    # @your_picks = @@your_picks
+  end
+  
   def tvdata
     
     
@@ -105,7 +119,7 @@ class WelcomeController < ApplicationController
     @@your_picks.each do |pick|
       print pick.name + ","
     end
-    @your_picks = @@your_picks
+    $your_picks = @@your_picks
     
     # $index = [0,@your_picks.length-6].max
 #     
@@ -159,7 +173,7 @@ class WelcomeController < ApplicationController
       $index +=1
     end
     
-    @your_picks = @@your_picks
+    $your_picks = @@your_picks
     
     respond_to do |format|
       puts "EAT MY DICK EAT MY DICK EAT MY DICK EAT MY DICK EAT MY DICK EAT MY DICK EAT MY DICK"
@@ -219,7 +233,8 @@ class WelcomeController < ApplicationController
       end
     end
     
-    @your_picks = @@your_picks
+    # @your_picks = @@your_picks
+    $your_picks = Array.new
     $picks_forward = 0
   end
   

@@ -31,16 +31,20 @@
 					
 					<% 
 						show = TvShow.where { name =~ program.title }[0]
+						show = Movie.where { name =~ program.title }[0] if show.nil?
 						spudsy_rating = 0
 						spudsy_rating = (show.spudsy_rating).to_i unless show.nil?
 						if spudsy_rating == 0	
 							styleClass = "popUnknown"					
 						elsif spudsy_rating < 60
 							styleClass = "popBad"
+							$your_picks.push(show) unless $your_picks.include?(show)
 						elsif spudsy_rating >= 60 && spudsy_rating < 85
 							styleClass = "popGood"
+							$your_picks.push(show) unless $your_picks.include?(show)
 						else 
 							styleClass = "popTop"
+							$your_picks.push(show) unless $your_picks.include?(show)
 						end
 					 %>
 						
@@ -67,4 +71,6 @@
 	
 				<% end %>
 			</tr>
-		<% end %>
+		<% end 
+		#raise TypeError, $your_picks
+		%>

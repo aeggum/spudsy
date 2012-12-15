@@ -18,7 +18,7 @@
 				<%= image_tag("#{media['poster']}", :size => "140x200") %>
 				<% if (media.class == Movie) %>
 				<h3 class="rating grey_shade">
-					<% if (media['rating'] >= 60) %>
+					<% if (media['spudsy_rating'] >= 60) %>
 						<% if (media['certified']) %>
 						<img class="rt_img" src="../blue_tv.png" />
 						<% else %>
@@ -30,8 +30,13 @@
 					<span><%= media['spudsy_rating'] %></span>
 				</h3>
 				<% else %>
-				<h3 class="tv_rating grey_shade">
-					<span><%= media['rating'] %>/10</span>
+				<h3 class="rating grey_shade">
+					<% if (media['spudsy_rating'] >= 60) %>
+						<img class="rt_img" src="../blue_tv.png" />
+					<% else %>
+						<img class="rt_img" src="../static_tv.png" />
+					<% end %>
+					<span><%= media['spudsy_rating'] %></span>
 				</h3>
 				<% end%>
 			</div> 
