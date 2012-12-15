@@ -6,14 +6,14 @@ class DataService
   attr_writer :zip_code, :uuid, :providers, :default_provider, :current_provider, :selector_hash
   
   
-  def initialize(zip_code, uuid, session) 
+  def initialize(zip_code, uuid, session, default_provider_id = nil) 
     @zip_code = zip_code
     @uuid = uuid
     @providers = Array.new
     @session = session
     
     register_user_xml = register_user
-    setProviders(register_user_xml)
+    setProviders(register_user_xml, default_provider_id)
     setSelectorHash()
   end
   
@@ -134,13 +134,17 @@ class DataService
   end
   
   # Takes in xml from register user call, gets providers, sets default
-  def setProviders(xml)
+  def setProviders(xml, default_provider_id = nil)
     providers = xml['ProviderDataReturn']['ProviderRecord']
     providers.each { |p|
       provider = Provider.new(p['ProviderId'], p['ServiceType'], p['Description'], p['City']);
      
       if (provider.service_type == "digital") 
         @default_provider = provider
+        @current_provider = provider
+      end
+      
+      if (provider.provider_id == default_provider_id)
         @current_provider = provider
       end
       
@@ -164,11 +168,14 @@ class DataService
     #raise TypeError, to_s()
   end
   
-  def changeProvider(type, desc) 
+  def setProvider(options) 
+    type = options[:type]
+    desc = options[:desc]
+    id = options[:id]
     #raise provider_id, TypeError
     #raise TypeError, "#{type}, #{desc}, #{@providers}"
     @providers.each { |p| 
-      if (p.service_type == type.downcase && p.description == desc)
+      if ( (p.service_type == type.downcase && p.description == desc) || (p.provider_id == id) )
         @current_provider = p
         break
       end  

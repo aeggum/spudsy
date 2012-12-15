@@ -16,21 +16,15 @@ class WelcomeController < ApplicationController
   Rotten.api_key = 'pykjuv5y44fywgpu2m7rt4dk'
   Tmdb::Tmdb.api_key = "8da8a86a8b272a70d20c08a35b576d50"
   Tmdb::Tmdb.default_language = "en"
-  caches_action :geolocate, :expires_in => 1.hour
   before_filter :set_your_picks, :only => :index
-  before_filter :geolocate, :only => :index
+  before_filter :test_for_cookies, :only => :index
+  # before_filter :geolocate, :only => :index
   # caches_action :index, :expires_in => 2.minutes
-  before_filter :bim, :only => :index
+  # before_filter :bim, :only => :index
   
   
-  def index 
-    # reset_session
-    # now = Time.now.readable(30)
-    #raise TypeError, now    
+  def index
     $hidden_since_rotate = Array.new;
-    #@provider_hash = @@provider_hash
-    
-    #raise TypeError, @@stations
     
   end
   
@@ -82,8 +76,15 @@ class WelcomeController < ApplicationController
     desc = params[:desc]
     
     $your_picks.clear
-    $ds.changeProvider(type, desc)
+    $ds.setProvider( { :type => type, :desc => desc } )
     @stations = $ds.current_provider.stations
+    
+    cookies.delete(:provider_data)
+    provider_cookie = { :provider_id => $ds.current_provider.provider_id, :provider_hash => $ds.selector_hash }
+    cookies[:provider_data] = {
+      :value => Marshal.dump(provider_cookie),
+      :expires => 5.minutes.from_now
+    }
     
     respond_to do |format|
       format.html { render :partial => "stations", :locals => { :stations => @stations } }
@@ -192,11 +193,17 @@ class WelcomeController < ApplicationController
     
     
     # Calls bim's service to get tv data; all is in $ds
-    def bim
+    def bim(default_provider_id = nil)
       bim_uuid = "SPUDSYTEST0000000000000001"
-      $ds = DataService.new(session[:zip_code], bim_uuid, session)
+      $ds = DataService.new(session[:zip_code], bim_uuid, session, default_provider_id)
       $provider_hash = $ds.selector_hash
       @stations = $ds.current_provider.stations
+      
+      provider_cookie = { :provider_id => $ds.current_provider.provider_id, :provider_hash => $ds.selector_hash }
+      cookies[:provider_data] = {
+        :value => Marshal.dump(provider_cookie),
+        :expires => 5.minutes.from_now
+      }
     end
     
     
@@ -223,7 +230,39 @@ class WelcomeController < ApplicationController
     
     
     
-    # Does geolocation to find zip code, latitude and longitude; cached
+    def test_for_cookies
+
+     begin
+        location_data = Marshal.load(cookies[:location])
+        session[:zip_code] = location_data[:zip_code]
+        session[:latitude] = location_data[:latitude]
+        session[:longitude] = location_data[:longitude]
+     rescue
+        puts "Cookies with location data did not exist; calling geolocate."
+        geolocate()
+     end
+      
+     begin
+       provider_data = Marshal.load(cookies[:provider_data])
+       puts "Default provide found: #{provider_data[:provider_id]}."
+       bim(provider_data[:provider_id])
+     rescue
+       puts "No default provider data found. Calling bim()."
+       bim()
+     end
+      # raise TypeError, my_object
+      
+      
+      # provider_cookie = { :provider_id => $ds.current_provider.provider_id, :provider_hash => $ds.selector_hash, :provider_ids => ($ds.providers.map { |p| p.provider_id }.join ",") }
+      # cookies[:provider_data] = {
+        # :value => Marshal.dump(provider_cookie),
+        # :expires => 5.minutes.from_now
+      # }
+    end
+    
+    
+    
+    # Does geolocation to find zip code, latitude and longitude; saved in cookie.
     def geolocate
       ip = request.remote_ip
       location = IpGeocoder.geocode(ip)
@@ -243,6 +282,10 @@ class WelcomeController < ApplicationController
       session[:zip_code] = zip_code
       session[:latitude] = latitude
       session[:longitude] = longitude
+      
+      # Store data in cookie, to last 1 day from now (for now)
+      location_cookie = { :zip_code => zip_code, :latitude => latitude, :longitude => longitude }
+      cookies[:location] = { :value => Marshal.dump(location_cookie), :expires => 1.day.from_now }
     end
     
     
