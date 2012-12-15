@@ -27,16 +27,34 @@ class WelcomeController < ApplicationController
     # reset_session
     # now = Time.now.readable(30)
     #raise TypeError, now    
-    @@hidden_since_rotate = Array.new;
-    @provider_hash = @@provider_hash
+    $hidden_since_rotate = Array.new;
+    #@provider_hash = @@provider_hash
     
     #raise TypeError, @@stations
     
   end
   
+  def details
+    # This is a placeholder - users will be redirected to it when they are signed in, for now
+    # alternatively,
+    # Amazon::Ecs.configure do |options|
+      # options[:associate_tag] = 'Spudsy Devs'
+      # options[:AWS_access_key_id] = 'AKIAIKFAMUN6RODAOVKA'
+      # options[:AWS_secret_key] = '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'
+    # end
+# 
+    # # options provided on method call will merge with the default options
+    # res = Amazon::Ecs.item_search('Seinfeld', {:response_group => 'Medium', :sort => 'salesrank'})
+    # @res = res
+    # @total_pages = @res.total_pages
+    # @first = @res.items.first
+  end
+  
   # returns the your_picks section
   def your_picks
     #raise TypeError, "PICKS QUEUE: #{$picks_queue.size}, #{$picks_queue.next}"
+    
+    # Fill up the $your_picks Array with the picks from the PQ
     while (!$picks_queue.empty?)
       if ($your_picks.include?($picks_queue.next))
         $picks_queue.pop
@@ -44,15 +62,15 @@ class WelcomeController < ApplicationController
         $your_picks.push($picks_queue.pop)
       end
     end
-    respond_to do |format|
-      format.html { render :partial => "your_picks", :locals => { :media => $your_picks} }
-    end
+    
+    hide_hidden_picks()
+    render_your_picks()
   end
   
    # gets all providers available for this data source
   def get_providers
     type = params[:type]
-    descs = @@provider_hash[type]
+    descs = $provider_hash[type]
     respond_to do |format|
       format.html { render :partial => "provider_option", :locals => { :descs => descs } }
     end
@@ -64,45 +82,46 @@ class WelcomeController < ApplicationController
     desc = params[:desc]
     
     $your_picks.clear
-    @@ds.changeProvider(type, desc)
-    @stations = @@ds.current_provider.stations
+    $ds.changeProvider(type, desc)
+    @stations = $ds.current_provider.stations
     
     respond_to do |format|
       format.html { render :partial => "stations", :locals => { :stations => @stations } }
     end
-   
   end
   
   # rotates the 'your picks' section either forwards or backwards by 6
   def rotate_picks 
-    #puts "-------------------------------------------------------------------------------------"
-    #puts params
-    #puts "-------------------------------------------------------------------------------------"
+    
+    # May want to return something else so that the JS doesn't do the slideDown()..
+    if ($your_picks.size <= 6)
+      render_your_picks()
+      return
+    end
     
     # can rotate forwards or backwards
     if (params[:forward] == "true")
       $picks_forward += 6
-      @@your_picks.rotate!(6)
-      if $picks_forward == @@your_picks.size
+      $your_picks.rotate!(6)
+      if $picks_forward >= $your_picks.size
         add_more_picks()
-        @@your_picks.rotate!(-6)
+        $your_picks.rotate!(-6)
       end
     else
       $picks_forward -= 6
-      @@your_picks.rotate!(-6)
+      $your_picks.rotate!(-6)
     end
     
-    respond_to do |format|
-      # format.json { render :json => @your_picks }
-      format.html { render :partial => "your_picks", :locals => { :media => @@your_picks} }
-    end
+    render_your_picks()
+    $hidden_since_rotate = Array.new
     
-    $your_picks = @@your_picks
+    
+    # TODO: Do I need to recheck for hidden media types here, if more are brought in?
     
     # $index = [0,@your_picks.length-6].max
 #     
     # while $index < @your_picks.length do
-      # for pick in @@hidden_since_rotate do
+      # for pick in $hidden_since_rotate do
 #         
           # if (@your_picks[$index].class.to_s == pick["media_type"] && @your_picks[$index].id.to_s == pick["media_id"]) 
             # @your_picks.delete_at($index)
@@ -112,24 +131,20 @@ class WelcomeController < ApplicationController
       # $index +=1
     # end
     
-    @@hidden_since_rotate = Array.new
     
+   
   end
   
   # hides the media for the user, permanently
   def hide_media
+    # TODO: Make sure if it's not movies, it's tv_shows..otherwise give an error
     if params[:media_type] == "movies"
       mType = "Movie"
     else 
       mType = "TvShow"
     end
     
-    # store the liked/hated variable in the table (for the user)
-    if params[:like] == "true"
-      liked = true
-    else
-      liked = false
-    end
+    liked = (params[:like] == "true")? true : false
     
     # add the content to the HiddenUserMedia table
     current_user.hidden_user_medias.push(HiddenUserMedia.new( :user_id => current_user.id, 
@@ -139,44 +154,24 @@ class WelcomeController < ApplicationController
     h = Hash.new
     h["media_id"] = params[:media_id]
     h["media_type"] = mType;                                            
-    @@hidden_since_rotate.push(h)
+    $hidden_since_rotate.push(h)
     
-    $index = 0;
-    while $index < @@your_picks.length do
+    index = 0;
+    while index < $your_picks.length do
         
-        if (@@your_picks[$index].class.to_s == h["media_type"] && @@your_picks[$index].id.to_s == h["media_id"])
-          puts "--------------------FUCK FUCK-----------------------" 
-          @@your_picks.delete_at($index)
-          $index == @@your_picks.length;
+        if ($your_picks[index].class.to_s == h["media_type"] && $your_picks[index].id.to_s == h["media_id"])
+          $your_picks.delete_at(index)
+          break  # found the hidden variable, break out of loop
         end
    
-      $index +=1
+      index += 1
     end
-    
-    $your_picks = @@your_picks
-    
-    respond_to do |format|
-      format.html { render :partial => "your_picks", :locals => { :media => @@your_picks} }
-    end
-    
+        
+    render_your_picks()
   end
   
   
-  def details
-    # This is a placeholder - users will be redirected to it when they are signed in, for now
-    # alternatively,
-    Amazon::Ecs.configure do |options|
-      options[:associate_tag] = 'Spudsy Devs'
-      options[:AWS_access_key_id] = 'AKIAIKFAMUN6RODAOVKA'
-      options[:AWS_secret_key] = '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'
-    end
-
-    # options provided on method call will merge with the default options
-    res = Amazon::Ecs.item_search('Seinfeld', {:response_group => 'Medium', :sort => 'salesrank'})
-    @res = res
-    @total_pages = @res.total_pages
-    @first = @res.items.first
-  end
+  
   
   
 
@@ -189,14 +184,19 @@ class WelcomeController < ApplicationController
   
   
   private 
+    def render_your_picks() 
+      respond_to do |format|
+        format.html { render :partial => "your_picks", :locals => { :media => $your_picks} }
+      end
+    end
     
-    # Calls bim's service to get tv data; all is in @@ds
+    
+    # Calls bim's service to get tv data; all is in $ds
     def bim
       bim_uuid = "SPUDSYTEST0000000000000001"
-      ds = DataService.new(session[:zip_code], bim_uuid, session)
-      @@ds = ds
-      @@provider_hash = ds.selector_hash
-      @stations = ds.current_provider.stations
+      $ds = DataService.new(session[:zip_code], bim_uuid, session)
+      $provider_hash = $ds.selector_hash
+      @stations = $ds.current_provider.stations
     end
     
     
@@ -205,36 +205,16 @@ class WelcomeController < ApplicationController
     def set_your_picks
       #@movies = Movie.all(:limit => 30)
       $picks_queue = Containers::PriorityQueue.new
-      @@full_movies = Movie.find(:all, :order => 'spudsy_rating DESC', :limit => 100)
+      #@@full_movies = Movie.find(:all, :order => 'spudsy_rating DESC', :limit => 100)
       @show_array = TvShow.all(:limit => 30)
-      @movies = @@full_movies[0...30] #Movie.find(:all, :order => 'spudsy_rating DESC', :limit => 30)
-      @@your_picks = Array.new
-      @movie = @movies[0]
-      @@your_picks.push(*@movies)
+      #@movies = @@full_movies[0...30] #Movie.find(:all, :order => 'spudsy_rating DESC', :limit => 30)
+      #@@your_picks = Array.new
+      #@movie = @movies[0]
+      #@@your_picks.push(*@movies)
       
       
       
-      if (current_user) 
-        hidden_media =  current_user.hidden_user_medias.all
-        hidden_ids = Array.new
-        
-        hidden_media.each do |media|
-          hidden_ids.push(media.media_id)
-        end
-        
-        index = 0;
-        while index < @@your_picks.length
-          pick = @@your_picks [index]
-          index_of_pick = hidden_ids.index(pick.id)
-          if (!index_of_pick.nil?) 
-            if pick.class.to_s == hidden_media[index_of_pick].media_type
-              @@your_picks.delete_at(index)
-              index -=1
-            end
-          end
-          index +=1;
-        end
-      end
+      
       
       # @your_picks = @@your_picks
       $your_picks = Array.new
@@ -268,17 +248,42 @@ class WelcomeController < ApplicationController
     
     
     # Adds 6 more movies to the movies list
+    # Not used for now..
     def add_more_picks 
-      titles = @@your_picks.map { |m| m.name }.join ','
-      num_added = 0;
-      @@full_movies.each {  |m| 
-        unless titles.include?(m.name) 
-          @@your_picks.push(m)
-          num_added += 1
-            break if num_added == 6
+      # titles = $your_picks.map { |m| m.name }.join ','
+      # num_added = 0;
+      # @@full_movies.each {  |m| 
+        # unless titles.include?(m.name) 
+          # @@your_picks.push(m)
+          # num_added += 1
+            # break if num_added == 6
+        # end
+      # }
+    end
+    
+    
+    def hide_hidden_picks
+      if (current_user) 
+        hidden_media =  current_user.hidden_user_medias.all
+        hidden_ids = Array.new
+        
+        hidden_media.each do |media|
+          hidden_ids.push(media.media_id)
         end
-      }
-      
+        
+        index = 0;
+        while index < $your_picks.length
+          pick = $your_picks[index]
+          index_of_pick = hidden_ids.index(pick.id)
+          if (!index_of_pick.nil?) 
+            if pick.class.to_s == hidden_media[index_of_pick].media_type
+              $your_picks.delete_at(index)
+              index -=1
+            end
+          end
+          index +=1;
+        end
+      end
     end
 end
 

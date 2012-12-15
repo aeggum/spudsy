@@ -109,10 +109,10 @@
 	</div>
 	<div class="container_12" id="testing">
 		<div class="grid_6">
-			<%= select("service", "type", @provider_hash.keys.each {|p| p.capitalize }, {:prompt => "Choose your service"}) %>
+			<%= select("service", "type", $provider_hash.keys.each {|p| p.capitalize }, {:prompt => "Choose your service"}) %>
 		</div>
 		<div class="grid_6 right" id="choose_provider">
-			<%= select("type", "type_key", @provider_hash.keys.each {|p| p.capitalize }, {:prompt => 'Select Your Provider'}) %>
+			<%= select("type", "type_key", $provider_hash.keys.each {|p| p.capitalize }, {:prompt => 'Select Your Provider'}) %>
 		</div>
 	</div>
 	<div class="container_12">
