@@ -34,6 +34,7 @@ gem 'geocoder'
 gem 'geokit-rails3'
 gem 'omniauth-twitter'
 gem 'omniauth-facebook'
+gem 'algorithms'
 
 # gem 'ruby-tmdb'
 # gem 'httparty'

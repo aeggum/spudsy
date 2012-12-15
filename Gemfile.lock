@@ -43,6 +43,7 @@ GEM
       i18n (~> 0.6)
       multi_json (~> 1.0)
     addressable (2.3.2)
+    algorithms (0.5.0)
     amazon-ecs (2.2.4)
       nokogiri (~> 1.4)
       ruby-hmac (~> 0.3)
@@ -221,6 +222,7 @@ DEPENDENCIES
   activeadmin
   activerecord-postgresql-adapter
   addressable
+  algorithms
   amazon-ecs
   coffee-rails (~> 3.2.1)
   devise

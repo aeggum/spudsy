@@ -38,13 +38,16 @@
 							styleClass = "popUnknown"					
 						elsif spudsy_rating < 60
 							styleClass = "popBad"
-							$your_picks.push(show) unless $your_picks.include?(show)
+							$picks_queue.push(show, show.spudsy_rating)
+							
 						elsif spudsy_rating >= 60 && spudsy_rating < 85
 							styleClass = "popGood"
-							$your_picks.push(show) unless $your_picks.include?(show)
+							$picks_queue.push(show, show.spudsy_rating)
+							#$your_picks.push(show) unless $your_picks.include?(show)
 						else 
 							styleClass = "popTop"
-							$your_picks.push(show) unless $your_picks.include?(show)
+							$picks_queue.push(show, show.spudsy_rating)
+							#$your_picks.push(show) unless $your_picks.include?(show)
 						end
 					 %>
 						

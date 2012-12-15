@@ -20,8 +20,6 @@ class WelcomeController < ApplicationController
   before_filter :set_your_picks, :only => :index
   before_filter :geolocate, :only => :index
   # caches_action :index, :expires_in => 2.minutes
-  
-  before_filter :tvdata, :only => :index
   before_filter :bim, :only => :index
   
   
@@ -32,42 +30,40 @@ class WelcomeController < ApplicationController
     @@hidden_since_rotate = Array.new;
     @provider_hash = @@provider_hash
     
-    
     #raise TypeError, @@stations
     
   end
   
+  # returns the your_picks section
   def your_picks
-    # respond_to do |format|
-      # format.html { redirect_to welcome_index_path }
-      # format.js
-    # end
-    #raise TypeError, @your_picks
-    # raise TypeError, "@your_picks: #{$your_picks}"
+    #raise TypeError, "PICKS QUEUE: #{$picks_queue.size}, #{$picks_queue.next}"
+    while (!$picks_queue.empty?)
+      if ($your_picks.include?($picks_queue.next))
+        $picks_queue.pop
+      else 
+        $your_picks.push($picks_queue.pop)
+      end
+    end
     respond_to do |format|
-      # format.json { render :json => @your_picks }
       format.html { render :partial => "your_picks", :locals => { :media => $your_picks} }
     end
-    # @your_picks = @@your_picks
   end
   
-  def tvdata
-    
-    
+   # gets all providers available for this data source
+  def get_providers
+    type = params[:type]
+    descs = @@provider_hash[type]
+    respond_to do |format|
+      format.html { render :partial => "provider_option", :locals => { :descs => descs } }
+    end
   end
   
-  def bim
-    bim_uuid = "SPUDSYTEST0000000000000001"
-    ds = DataService.new(session[:zip_code], bim_uuid, session)
-    @@ds = ds
-    @@provider_hash = ds.selector_hash
-    @stations = ds.current_provider.stations
-  end
-  
+  # changes the current provider (will regenerate tv grid)
   def change_provider
     type = params[:type]
     desc = params[:desc]
-
+    
+    $your_picks.clear
     @@ds.changeProvider(type, desc)
     @stations = @@ds.current_provider.stations
     
@@ -77,15 +73,7 @@ class WelcomeController < ApplicationController
    
   end
   
-  def get_providers
-    type = params[:type]
-    descs = @@provider_hash[type]
-    respond_to do |format|
-      format.html { render :partial => "provider_option", :locals => { :descs => descs } }
-    end
-  end
-  
-  respond_to :html, :json
+  # rotates the 'your picks' section either forwards or backwards by 6
   def rotate_picks 
     #puts "-------------------------------------------------------------------------------------"
     #puts params
@@ -96,7 +84,7 @@ class WelcomeController < ApplicationController
       $picks_forward += 6
       @@your_picks.rotate!(6)
       if $picks_forward == @@your_picks.size
-        add_more_picks 
+        add_more_picks()
         @@your_picks.rotate!(-6)
       end
     else
@@ -104,21 +92,11 @@ class WelcomeController < ApplicationController
       @@your_picks.rotate!(-6)
     end
     
-    
-    # @@your_picks.each do |pick|
-     # print pick.name + ","
-    # end
-    
     respond_to do |format|
       # format.json { render :json => @your_picks }
       format.html { render :partial => "your_picks", :locals => { :media => @@your_picks} }
     end
     
-    puts
-    puts 
-    @@your_picks.each do |pick|
-      print pick.name + ","
-    end
     $your_picks = @@your_picks
     
     # $index = [0,@your_picks.length-6].max
@@ -138,7 +116,7 @@ class WelcomeController < ApplicationController
     
   end
   
-  respond_to :html, :json
+  # hides the media for the user, permanently
   def hide_media
     if params[:media_type] == "movies"
       mType = "Movie"
@@ -146,12 +124,14 @@ class WelcomeController < ApplicationController
       mType = "TvShow"
     end
     
+    # store the liked/hated variable in the table (for the user)
     if params[:like] == "true"
       liked = true
     else
       liked = false
     end
     
+    # add the content to the HiddenUserMedia table
     current_user.hidden_user_medias.push(HiddenUserMedia.new( :user_id => current_user.id, 
                                                               :media_id => params[:media_id], 
                                                               :media_type => mType,
@@ -176,11 +156,11 @@ class WelcomeController < ApplicationController
     $your_picks = @@your_picks
     
     respond_to do |format|
-      puts "EAT MY DICK EAT MY DICK EAT MY DICK EAT MY DICK EAT MY DICK EAT MY DICK EAT MY DICK"
       format.html { render :partial => "your_picks", :locals => { :media => @@your_picks} }
     end
     
   end
+  
   
   def details
     # This is a placeholder - users will be redirected to it when they are signed in, for now
@@ -199,88 +179,106 @@ class WelcomeController < ApplicationController
   end
   
   
-  # called before the others in the class get going
-  def set_your_picks
-    #@movies = Movie.all(:limit => 30)
-    @@full_movies = Movie.find(:all, :order => 'spudsy_rating DESC', :limit => 100)
-    @show_array = TvShow.all(:limit => 30)
-    @movies = @@full_movies[0...30] #Movie.find(:all, :order => 'spudsy_rating DESC', :limit => 30)
-    @@your_picks = Array.new
-    @movie = @movies[0]
-    @@your_picks.push(*@movies)
-    
-    
-    
-    if (current_user) 
-      hidden_media =  current_user.hidden_user_medias.all
-      hidden_ids = Array.new
-      
-      hidden_media.each do |media|
-        hidden_ids.push(media.media_id)
-      end
-      
-      index = 0;
-      while index < @@your_picks.length
-        pick = @@your_picks [index]
-        index_of_pick = hidden_ids.index(pick.id)
-        if (!index_of_pick.nil?) 
-          if pick.class.to_s == hidden_media[index_of_pick].media_type
-            @@your_picks.delete_at(index)
-            index -=1
-          end
-        end
-        index +=1;
-      end
-    end
-    
-    # @your_picks = @@your_picks
-    $your_picks = Array.new
-    $picks_forward = 0
-  end
+
   
   
-  # Adds 6 more movies to the movies list
-  def add_more_picks 
-    titles = @@your_picks.map { |m| m.name }.join ','
-    num_added = 0;
-    @@full_movies.each {  |m| 
-      unless titles.include?(m.name) 
-        @@your_picks.push(m)
-        num_added += 1
-          break if num_added == 6
-      end
-    }
-    
-  end
   
   
-  # Does geolocation to find zip code, latitude and longitude; cached
-  def geolocate
-    ip = request.remote_ip
-    location = IpGeocoder.geocode(ip)
-    latitude = location.lat
-    longitude = location.lng
-    
-    # if localhost, assume madison for now
-    if (ip == "127.0.0.1")
-      latitude = 43.0731
-      longitude = -89.4011
-    end
-    
-    ll = "#{latitude}, #{longitude}"
-    res = Geokit::Geocoders::GoogleGeocoder.reverse_geocode ll
-    full_address = res.full_address
-    zip_code = res.zip
-    session[:zip_code] = zip_code
-    session[:latitude] = latitude
-    session[:longitude] = longitude
-  end
   
-  # TODO: Could get the next set of shows if user has cycled through all on main load..
+  
+  
   
   private 
-  
     
-    # put private methods here
+    # Calls bim's service to get tv data; all is in @@ds
+    def bim
+      bim_uuid = "SPUDSYTEST0000000000000001"
+      ds = DataService.new(session[:zip_code], bim_uuid, session)
+      @@ds = ds
+      @@provider_hash = ds.selector_hash
+      @stations = ds.current_provider.stations
+    end
+    
+    
+    
+    # Sets up various things for the controller
+    def set_your_picks
+      #@movies = Movie.all(:limit => 30)
+      $picks_queue = Containers::PriorityQueue.new
+      @@full_movies = Movie.find(:all, :order => 'spudsy_rating DESC', :limit => 100)
+      @show_array = TvShow.all(:limit => 30)
+      @movies = @@full_movies[0...30] #Movie.find(:all, :order => 'spudsy_rating DESC', :limit => 30)
+      @@your_picks = Array.new
+      @movie = @movies[0]
+      @@your_picks.push(*@movies)
+      
+      
+      
+      if (current_user) 
+        hidden_media =  current_user.hidden_user_medias.all
+        hidden_ids = Array.new
+        
+        hidden_media.each do |media|
+          hidden_ids.push(media.media_id)
+        end
+        
+        index = 0;
+        while index < @@your_picks.length
+          pick = @@your_picks [index]
+          index_of_pick = hidden_ids.index(pick.id)
+          if (!index_of_pick.nil?) 
+            if pick.class.to_s == hidden_media[index_of_pick].media_type
+              @@your_picks.delete_at(index)
+              index -=1
+            end
+          end
+          index +=1;
+        end
+      end
+      
+      # @your_picks = @@your_picks
+      $your_picks = Array.new
+      $picks_forward = 0
+    end
+    
+    
+    
+    # Does geolocation to find zip code, latitude and longitude; cached
+    def geolocate
+      ip = request.remote_ip
+      location = IpGeocoder.geocode(ip)
+      latitude = location.lat
+      longitude = location.lng
+      
+      # if localhost, assume madison for now
+      if (ip == "127.0.0.1")
+        latitude = 43.0731
+        longitude = -89.4011
+      end
+      
+      ll = "#{latitude}, #{longitude}"
+      res = Geokit::Geocoders::GoogleGeocoder.reverse_geocode ll
+      full_address = res.full_address
+      zip_code = res.zip
+      session[:zip_code] = zip_code
+      session[:latitude] = latitude
+      session[:longitude] = longitude
+    end
+    
+    
+    
+    # Adds 6 more movies to the movies list
+    def add_more_picks 
+      titles = @@your_picks.map { |m| m.name }.join ','
+      num_added = 0;
+      @@full_movies.each {  |m| 
+        unless titles.include?(m.name) 
+          @@your_picks.push(m)
+          num_added += 1
+            break if num_added == 6
+        end
+      }
+      
+    end
 end
 
