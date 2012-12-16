@@ -25,7 +25,7 @@ class WelcomeController < ApplicationController
   
   def index
     $hidden_since_rotate = Array.new;
-    
+    #raise TypeError, $ds
   end
   
   def details
@@ -50,10 +50,11 @@ class WelcomeController < ApplicationController
     
     # Fill up the $your_picks Array with the picks from the PQ
     while (!$picks_queue.empty?)
-      if ($your_picks.include?($picks_queue.next))
+      if ($your_picks_new.include?($picks_queue.next))
         $picks_queue.pop
       else 
         # ml = MediaLive($picks_queue.next.class)
+        $your_picks_new.push($picks_queue.next)
         $your_picks.push($picks_queue.pop)
       end
     end
@@ -77,6 +78,7 @@ class WelcomeController < ApplicationController
     desc = params[:desc]
     
     $your_picks.clear
+    $your_picks_new.clear
     $ds.setProvider( { :type => type, :desc => desc } )
     @stations = $ds.current_provider.stations
     
@@ -84,7 +86,7 @@ class WelcomeController < ApplicationController
     provider_cookie = { :provider_id => $ds.current_provider.provider_id, :provider_hash => $ds.selector_hash }
     cookies[:provider_data] = {
       :value => Marshal.dump(provider_cookie),
-      :expires => 5.minutes.from_now
+      :expires => 15.minutes.from_now
     }
     
     respond_to do |format|
@@ -292,7 +294,7 @@ class WelcomeController < ApplicationController
       cookies[:location] = { :value => Marshal.dump(location_cookie), :expires => 1.day.from_now }
     end
     
-    
+
     
     # Adds 6 more movies to the movies list
     # Not used for now..
@@ -349,7 +351,7 @@ class MediaLive
   end
   
   def ==(another)
-    return @class == another.class && @media == another.media && @network == another.network && @channel == another.channel && @start_time == another.start_time
+    return @class == another.class && @media == another.media && @network == another.network #&& @channel == another.channel && @start_time == another.start_time
   end
   
   def to_s

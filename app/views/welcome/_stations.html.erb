@@ -7,7 +7,7 @@
 				</td>
 				<td valign="middle" align="center" class="gridChannelCell">
 					<a href="#">
-						<span class="gridChannelText"><%= station.major_channel %>.<%= station.minor_channel %></span>
+						<span class="gridChannelText"><%= station.channel %></span>
 					</a>
 				</td>
 
@@ -39,19 +39,20 @@
 							styleClass = "popUnknown"					
 						elsif spudsy_rating < 60
 							styleClass = "popBad"
-							#$picks_queue.push(show, show.spudsy_rating)
+							# $picks_queue_new.push(show, show.spudsy_rating)
+							#raise TypeError, station
 							ml = MediaLive.new(show.class, show, station.name, "#{station.major_channel}.#{station.minor_channel}", program.start_time_utc)
 							$picks_queue.push(ml, show.spudsy_rating)
 							
 						elsif spudsy_rating >= 60 && spudsy_rating < 85
 							styleClass = "popGood"
-							#$picks_queue.push(show, show.spudsy_rating)
-							#$your_picks.push(show) unless $your_picks.include?(show)
+							# $picks_queue_new.push(show, show.spudsy_rating)
+							# $your_picks_new.push(show) unless $your_picks.include?(show)
 							ml = MediaLive.new(show.class, show, station.name, "#{station.major_channel}.#{station.minor_channel}", program.start_time_utc)
 							$picks_queue.push(ml, show.spudsy_rating)
 						else 
 							styleClass = "popTop"
-							#$picks_queue.push(show, show.spudsy_rating)
+							# $picks_queue_new.push(show, show.spudsy_rating)
 							# attr_accessor :class, :media, :network, :channel, :start_time
 							#$your_picks.push(show) unless $your_picks.include?(show)
 							ml = MediaLive.new(show.class, show, station.name, "#{station.major_channel}.#{station.minor_channel}", program.start_time_utc)

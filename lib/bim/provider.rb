@@ -20,6 +20,7 @@ class Provider < DataService
     stations.each { |s| 
       station = Station.new(s['s'], s['cs'], s['rf'], s['n'], s['maj'], s['min'])
       # @stations.push(station)
+      # raise TypeError, station
       @stations[s['s']] = station
     }
     
