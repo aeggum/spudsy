@@ -3,7 +3,7 @@ class TvShow < ActiveRecord::Base
   #validates that the following are present before saving to the DB
   validates :name, :rating, :presence => true
   
-  attr_accessible :description, :name, :rating, :poster, :genres, :tvdb_id, :release_date, :spudsy_ratings
+  attr_accessible :description, :name, :rating, :poster, :genres, :tvdb_id, :release_date, :spudsy_ratings, :imdb_id, :runtime, :mpaa
   has_many :actors, :as => :media
   has_many :media_genres, :as => :media
   has_many :genres, :as => :media, :through => :media_genres
@@ -35,6 +35,9 @@ class TvShow < ActiveRecord::Base
   
   # TODO: Get a rating for each tvshow
   def self.getRating tv_show
+    if (tv_show.rating == 0 || tv_show.rating.nil?)
+      return 10
+    end
     cFactor = (tv_show.rating > 7.5)? 1.5 : 0.7
     
     rating = tv_show.rating * 1.5 * cFactor
@@ -59,6 +62,7 @@ class TvShow < ActiveRecord::Base
       release_year = release_year.to_i
       diff = current - release_year
       
+      # TODO: Make years matter less
       yFactor = 1
       case diff
       when -10..14
