@@ -263,7 +263,7 @@ img.rt_img_overlay {
 
 #view_more {
 	float: right;
-	padding: 15px;
+	padding: 0 15px;
 }
 
 #poster_slider_2, #poster_slider_3 {

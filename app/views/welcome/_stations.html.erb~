@@ -14,7 +14,7 @@
 				<% station.programs.each_with_index do |program, index| %>				
 					<% if index == 0 && program.start_time_from_now.to_i < 0 %>
 						<td class="gLSC_run">
-							⇠
+							↩
 						</td>
 					<% elsif index == 0 %>
 						<td class="gLSC">

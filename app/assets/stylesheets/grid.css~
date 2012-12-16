@@ -4,14 +4,11 @@
 	background: azure;
 }
 .popGood {
-	text-shadow: 0 1px 1px white;	
-	background: azure;
 }
 .popUnknown {
-
+	opacity: 0.4;
 }
 .popBad {
-	opacity: 0.4;
 }
 .grid_tv {
 	margin-top: 5px;
@@ -161,6 +158,7 @@
     font-weight: bold;
     overflow: hidden;
     text-align: left;
+    width:100%;
 }
 .gridHeaderNavRightCell {
     background-color: #FFFFFF;
@@ -351,6 +349,7 @@ div.dailyGridRight {
     border-right: 1px solid white;
     border-bottom:1px solid #4B4C4C;
     padding: 4px;
+    vertical-align: bottom;
 }
 .gRSC {
     background-color: #EEEEEE;
@@ -568,7 +567,7 @@ div.dailyGridRight {
     color: #000000 !important;
     font-weight: bold !important;
     text-decoration: none !important;
-    font-size: 13px !important;
+    font-size: 14px !important;
 }
 .cdt, .cdt a:link, .cdt a:visited, .cdt a:active, .cdt a:hover {
     color: #333333;
