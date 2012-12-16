@@ -131,6 +131,10 @@ a {
 	border-radius: 0 7px 7px;
 }
 
+.grey_label {
+	color: #888;
+}
+
 .social_tabs:active {
 	margin-top: -9px;
 }

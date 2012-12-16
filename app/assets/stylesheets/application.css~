@@ -131,6 +131,10 @@ a {
 	border-radius: 0 7px 7px;
 }
 
+.grey_label {
+	color: #888;
+}
+
 .social_tabs:active {
 	margin-top: -9px;
 }
@@ -184,7 +188,7 @@ a {
 img.rt_img {
 	width: 30px;
 	position: absolute;
-	top: 12px;
+	top: 9px;
 }
 
 img.rt_img_overlay {

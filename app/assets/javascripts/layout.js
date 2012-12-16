@@ -40,13 +40,19 @@ var Welcome = function() {
 	 */
 	function _providerBinding() {
 		$("#choose_provider").on('change', function() {
- 			var type = $("#service_type option:selected").val();
+			$("#stations").css('opacity','0.9');
+			$("#stations").css('background-color','#CCC');
+			$('#ajax-loader').show(); 			
+			var type = $("#service_type option:selected").val();
  			var desc = $("#choose_provider option:selected").val(); 
  			$.ajax({
  				url: "/welcome/change_provider?type=" + type + "&desc=" + desc //....
  			}).done(function(data) {
  				$("#stations").html(data); //console.log(data)
  				_regenYourPicks();
+				$('#ajax-loader').hide();
+				$("#stations").css('opacity','1');
+				$("#stations").css('background-color','white');
  			});
  		});
 	}
@@ -134,6 +140,12 @@ var Welcome = function() {
 		documentReady: function() {
 			var times_forward = 0;
 			
+			$('#type_type_key').hide();
+			$('#service_type').change(function() {
+			  $('#type_type_key').fadeIn();
+			});
+			$('#ajax-loader').hide();			
+
 			$('#tv').prop('checked', true);
 			
 			$('#twitter_tab').click(function() {
