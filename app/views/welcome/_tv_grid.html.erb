@@ -4,7 +4,7 @@
 			<td class="gridHeaderCellLeft">
 				<div title="Previous Day" class="ghcPrevDay"></div>
 				<div title="Next Day" class="ghcNextDay"></div>
-				<span title="Click to Go to Current Date/Time" class="ghcNow">12/11<!--0pan--></span>
+				<span title="Click to Go to Current Date/Time" class="ghcNow"><%= Time.now.strftime("%m/%d") %><!--0pan--></span>
 			</td>
 			<td valign="middle" class="gridHeaderCellRight">
 				<div onclick="scroll(0,0);" title="Go to Top" class="ghcTop"></div>

@@ -4,7 +4,7 @@
 	</div>
 	<div style= "float:right; width:60%">
 		<h1 class="giant_goldfish"><%=movie.name%></h1> 		
-		<h3><span class="italics"><%=movie.release_date%></span>, <%=movie.mpaa_rating%></h3>
+		<h3><span class="italics"><%=movie.release_date.strftime("%B %d, %Y")%></span>, <%=movie.mpaa_rating %></h3>
 		<h3>
 		<% if (@movie.rating >= 60) %>
 			<% if (@movie.certified) %>
@@ -15,7 +15,15 @@
 		<% else %>
 			<img class="rt_img_overlay" src="../rt_rotten.png" />
 		<% end%>
-		 <%=movie.rating%> 
+		 	<%=movie.rating%> 
+		</h3>
+		<h3>
+			<% if (movie.spudsy_rating >= 60) %>
+			<img src='../blue_tv.png' class="rt_img_overlay test" />
+			<% else %>
+			<img src="../static_tv.png" class="rt_img_overlay test" />
+			<% end %>
+			<%= movie.spudsy_rating %>
 		</h3>
 	</div>
 </div>

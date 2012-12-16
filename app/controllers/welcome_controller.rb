@@ -195,6 +195,7 @@ class WelcomeController < ApplicationController
     # Calls bim's service to get tv data; all is in $ds
     def bim(default_provider_id = nil)
       bim_uuid = "SPUDSYTEST0000000000000001"
+      puts "default_provider_id: #{default_provider_id}" 
       $ds = DataService.new(session[:zip_code], bim_uuid, session, default_provider_id)
       $provider_hash = $ds.selector_hash
       @stations = $ds.current_provider.stations

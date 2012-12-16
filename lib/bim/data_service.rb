@@ -139,15 +139,16 @@ class DataService
     providers.each { |p|
       provider = Provider.new(p['ProviderId'], p['ServiceType'], p['Description'], p['City']);
      
-      if (provider.service_type == "digital") 
+      if (provider.service_type == "digital" && default_provider_id.nil?) 
         @default_provider = provider
         @current_provider = provider
       end
       
-      if (provider.provider_id == default_provider_id)
+      if (provider.provider_id == default_provider_id) 
         @current_provider = provider
       end
       
+      # puts "#{provider.provider_id}, #{default_provider_id}"
       @providers.push(provider)
     }
     
