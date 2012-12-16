@@ -1,11 +1,12 @@
 <div id="your_picks">
+	
 	<% media.each_with_index do |media, index| %>
 	<% if index < 6 %>
 	<% if (index % 6 == 0) %>
 		<div class="container_12">
 	<% end %>
 		<% 
-		if media.class.to_s.downcase.pluralize == "movies" 
+		if media.media.class.to_s.downcase.pluralize == "movies" 
 			media_name = "movies" 
 		else 
 			media_name = "tv_shows"
@@ -13,13 +14,14 @@
 		%>
 		
 		<div class="grid_2">
-			<div data-id="<%= "#{media_name}/#{media['id']}" %>" class="poster tv_show">
+			<div data-id="<%= "#{media_name}/#{media.media['id']}" %>" class="poster tv_show">
 				
-				<%= image_tag("#{media['poster']}", :size => "140x200") %>
+				<%= image_tag("#{media.media['poster']}", :size => "140x200") %>
+				<h3 class="rank grey_shade"><span><%= media.network %> - <%= media.start_time.readable(30.minutes) %></span></h3>
 				<% if (media.class == Movie) %>
 				<h3 class="rating grey_shade">
-					<% if (media['spudsy_rating'] >= 60) %>
-						<% if (media['certified']) %>
+					<% if (media.media['spudsy_rating'] >= 60) %>
+						<% if (media.media['certified']) %>
 						<img class="rt_img" src="../blue_tv.png" />
 						<% else %>
 						<img class="rt_img test" src="../blue_tv.png" />
@@ -27,23 +29,23 @@
 					<% else %>
 						<img class="rt_img" src="../static_tv.png" />
 					<% end%>
-					<span><%= media['spudsy_rating'] %></span>
+					<span><%= media.media['spudsy_rating'] %></span>
 				</h3>
 				<% else %>
 				<h3 class="rating grey_shade">
-					<% if (media['spudsy_rating'] >= 60) %>
+					<% if (media.media['spudsy_rating'] >= 60) %>
 						<img class="rt_img" src="../blue_tv.png" />
 					<% else %>
 						<img class="rt_img" src="../static_tv.png" />
 					<% end %>
-					<span><%= media['spudsy_rating'] %></span>
+					<span><%= media.media['spudsy_rating'] %></span>
 				</h3>
 				<% end%>
 			</div> 
 			<br />
 			<div>
 				<% if user_signed_in? %>
-					<span data-id="<%= "#{media_name},#{media['id']}" %>">
+					<span data-id="<%= "#{media_name},#{media.media['id']}" %>">
 						<a href = "#" class = "hide_media_button" id = "hide_like">Like</a>
 						<a href = "#" class = "hide_media_button" id = "hide_dislike" style = "float: right">Hate</a>
 					</span>

@@ -11,7 +11,8 @@
 					</a>
 				</td>
 
-				<% station.programs.each_with_index do |program, index| %>				
+				<%
+				station.programs.each_with_index do |program, index| %>				
 					<% if index == 0 && program.start_time_from_now.to_i < 0 %>
 						<td class="gLSC_run">
 							&nbsp;
@@ -29,7 +30,7 @@
 						<% cols = program.duration %>
 					<% end %>	
 					
-					<% 
+					<%
 						show = TvShow.where { name =~ program.title }[0]
 						show = Movie.where { name =~ program.title }[0] if show.nil?
 						spudsy_rating = 0
@@ -38,16 +39,23 @@
 							styleClass = "popUnknown"					
 						elsif spudsy_rating < 60
 							styleClass = "popBad"
-							$picks_queue.push(show, show.spudsy_rating)
+							#$picks_queue.push(show, show.spudsy_rating)
+							ml = MediaLive.new(show.class, show, station.name, "#{station.major_channel}.#{station.minor_channel}", program.start_time_utc)
+							$picks_queue.push(ml, show.spudsy_rating)
 							
 						elsif spudsy_rating >= 60 && spudsy_rating < 85
 							styleClass = "popGood"
-							$picks_queue.push(show, show.spudsy_rating)
+							#$picks_queue.push(show, show.spudsy_rating)
 							#$your_picks.push(show) unless $your_picks.include?(show)
+							ml = MediaLive.new(show.class, show, station.name, "#{station.major_channel}.#{station.minor_channel}", program.start_time_utc)
+							$picks_queue.push(ml, show.spudsy_rating)
 						else 
 							styleClass = "popTop"
-							$picks_queue.push(show, show.spudsy_rating)
+							#$picks_queue.push(show, show.spudsy_rating)
+							# attr_accessor :class, :media, :network, :channel, :start_time
 							#$your_picks.push(show) unless $your_picks.include?(show)
+							ml = MediaLive.new(show.class, show, station.name, "#{station.major_channel}.#{station.minor_channel}", program.start_time_utc)
+							$picks_queue.push(ml, show.spudsy_rating)
 						end
 					 %>
 						

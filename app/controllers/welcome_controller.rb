@@ -53,6 +53,7 @@ class WelcomeController < ApplicationController
       if ($your_picks.include?($picks_queue.next))
         $picks_queue.pop
       else 
+        # ml = MediaLive($picks_queue.next.class)
         $your_picks.push($picks_queue.pop)
       end
     end
@@ -186,6 +187,7 @@ class WelcomeController < ApplicationController
   
   private 
     def render_your_picks() 
+      #raise TypeError, $your_picks
       respond_to do |format|
         format.html { render :partial => "your_picks", :locals => { :media => $your_picks} }
       end
@@ -227,6 +229,7 @@ class WelcomeController < ApplicationController
       # @your_picks = @@your_picks
       $your_picks = Array.new
       $picks_forward = 0
+      $your_picks_new = Array.new
     end
     
     
@@ -317,7 +320,8 @@ class WelcomeController < ApplicationController
         
         index = 0;
         while index < $your_picks.length
-          pick = $your_picks[index]
+          pick = $your_picks[index].media
+          puts pick
           index_of_pick = hidden_ids.index(pick.id)
           if (!index_of_pick.nil?) 
             if pick.class.to_s == hidden_media[index_of_pick].media_type
@@ -329,5 +333,27 @@ class WelcomeController < ApplicationController
         end
       end
     end
+end
+
+
+class MediaLive
+  
+  attr_accessor :class, :media, :network, :channel, :start_time
+  
+  def initialize(clazz, media, network, channel, start_time)
+    @class = clazz
+    @media = media
+    @network = network
+    @channel = channel
+    @start_time = start_time
+  end
+  
+  def ==(another)
+    return @class == another.class && @media == another.media && @network == another.network && @channel == another.channel && @start_time == another.start_time
+  end
+  
+  def to_s
+    "MediaLive: class: #{@class}, media: #{@media}, network: #{@network}, channel: #{@channel}, time: #{@start_time}"
+  end
 end
 

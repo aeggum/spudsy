@@ -47,7 +47,7 @@ class Provider < DataService
     schedules = xml['ProgramDataReturn']['ProgramData']['Schedules']['Sc']
     schedules.each { |sc| 
       #raise TypeError, sc
-      now_utc = Time.now.utc
+      now_utc = Time.now.utc.floor(30.minutes)
       schedule = ProgramSchedule.new(sc['s'], sc['p'], sc['st'], sc['et'], now_utc.advance(:minutes => sc['st'].to_i), now_utc.advance(:minutes => sc['et'].to_i))
       @program_schedules.push(schedule)
       # raise TypeError, schedule  

@@ -69,6 +69,9 @@ class Movie < ActiveRecord::Base
     return rating.round
   end
   
+  def ==(another)
+    return self.name == another.name && self.spudsy_rating == another.spudsy_rating
+  end
   
   def default_values
     self.spudsy_rating = Movie.getRating(self)

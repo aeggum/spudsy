@@ -4,7 +4,7 @@ class ProgramFull < Station
   
   def initialize(options = {})
     options.each { |key, value| 
-      instance_variable_set("@#{key}", value)   
+      instance_variable_set("@#{key}", value)
     }
   end
   
