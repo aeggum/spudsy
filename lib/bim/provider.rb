@@ -15,6 +15,7 @@ class Provider < DataService
   
   # Takes in xml from request lineup call, gets stations
   def createStations(xml)
+    puts "createStations() in Provider"
     # raise TypeError, xml['LineupDataReturn']['St']
     stations = xml['LineupDataReturn']['St']
     stations.each { |s| 
@@ -28,6 +29,7 @@ class Provider < DataService
   end
   
   def createPrograms(xml) 
+    puts "createPrograms() in Provider"
     programs = xml['ProgramDataReturn']['ProgramData']['Programs']['Pr']
     #raise TypeError, xml['ProgramDataReturn']['ProgramData']
     # raise TypeError, programs
@@ -45,6 +47,7 @@ class Provider < DataService
   end
   
   def createProgramSchedules(xml)
+    puts "createProgramSchedules() in Provider"
     schedules = xml['ProgramDataReturn']['ProgramData']['Schedules']['Sc']
     schedules.each { |sc| 
       #raise TypeError, sc

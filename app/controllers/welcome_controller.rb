@@ -24,11 +24,13 @@ class WelcomeController < ApplicationController
   
   
   def index
+    puts "index() in WelcomeController"
     $hidden_since_rotate = Array.new;
     #raise TypeError, $ds
   end
   
   def details
+    puts "details() in WelcomeController"
     # This is a placeholder - users will be redirected to it when they are signed in, for now
     # alternatively,
     # Amazon::Ecs.configure do |options|
@@ -46,6 +48,7 @@ class WelcomeController < ApplicationController
   
   # returns the your_picks section
   def your_picks
+    puts "your_picks() in WelcomeController"
     #raise TypeError, "PICKS QUEUE: #{$picks_queue.size}, #{$picks_queue.next}"
     
     # Fill up the $your_picks Array with the picks from the PQ
@@ -65,6 +68,7 @@ class WelcomeController < ApplicationController
   
    # gets all providers available for this data source
   def get_providers
+    puts "get_providers() in WelcomeController"
     type = params[:type]
     descs = $provider_hash[type]
     respond_to do |format|
@@ -74,6 +78,7 @@ class WelcomeController < ApplicationController
   
   # changes the current provider (will regenerate tv grid)
   def change_provider
+    puts "change_provider() in WelcomeController"
     type = params[:type]
     desc = params[:desc]
     
@@ -96,6 +101,7 @@ class WelcomeController < ApplicationController
   
   # rotates the 'your picks' section either forwards or backwards by 6
   def rotate_picks 
+    puts "rotate_picks() in WelcomeController"
     
     # May want to return something else so that the JS doesn't do the slideDown()..
     if ($your_picks.size <= 6)
@@ -141,6 +147,7 @@ class WelcomeController < ApplicationController
   
   # hides the media for the user, permanently
   def hide_media
+    puts "hide_media() in WelcomeController"
     # TODO: Make sure if it's not movies, it's tv_shows..otherwise give an error
     if params[:media_type] == "movies"
       mType = "Movie"
@@ -189,6 +196,7 @@ class WelcomeController < ApplicationController
   
   private 
     def render_your_picks() 
+      puts "render_your_picks() in WelcomeController"
       #raise TypeError, $your_picks
       respond_to do |format|
         format.html { render :partial => "your_picks", :locals => { :media => $your_picks} }
@@ -198,6 +206,7 @@ class WelcomeController < ApplicationController
     
     # Calls bim's service to get tv data; all is in $ds
     def bim(default_provider_id = nil)
+      puts "bim() in WelcomeController"
       bim_uuid = "SPUDSYTEST0000000000000001"
       puts "default_provider_id: #{default_provider_id}" 
       $ds = DataService.new(session[:zip_code], bim_uuid, session, default_provider_id)
@@ -215,6 +224,7 @@ class WelcomeController < ApplicationController
     
     # Sets up various things for the controller
     def set_your_picks
+      puts "set_your_picks() in WelcomeController"
       #@movies = Movie.all(:limit => 30)
       $picks_queue = Containers::PriorityQueue.new
       #@@full_movies = Movie.find(:all, :order => 'spudsy_rating DESC', :limit => 100)
@@ -237,6 +247,7 @@ class WelcomeController < ApplicationController
     
     
     def test_for_cookies
+      puts "test_for_cookies() in WelcomeController"
 
      begin
         location_data = Marshal.load(cookies[:location])
@@ -270,6 +281,7 @@ class WelcomeController < ApplicationController
     
     # Does geolocation to find zip code, latitude and longitude; saved in cookie.
     def geolocate
+      puts "geolocate() in WelcomeController"
       ip = request.remote_ip
       location = IpGeocoder.geocode(ip)
       latitude = location.lat
@@ -299,6 +311,7 @@ class WelcomeController < ApplicationController
     # Adds 6 more movies to the movies list
     # Not used for now..
     def add_more_picks 
+      puts "add_more_picks() in WelcomeController"
       # titles = $your_picks.map { |m| m.name }.join ','
       # num_added = 0;
       # @@full_movies.each {  |m| 
@@ -312,6 +325,7 @@ class WelcomeController < ApplicationController
     
     
     def hide_hidden_picks
+      puts "hide_hidden_picks() in WelcomeController"
       if (current_user) 
         hidden_media =  current_user.hidden_user_medias.all
         hidden_ids = Array.new

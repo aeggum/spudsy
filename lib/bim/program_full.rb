@@ -9,6 +9,7 @@ class ProgramFull < Station
   end
   
   def setDuration(end_time, start_time) 
+    puts "setDuration() in programFull"
     @duration = end_time.to_i - start_time.to_i
   end
   

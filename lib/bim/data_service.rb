@@ -18,17 +18,20 @@ class DataService
   end
   
   def register_user
+    puts "register_user() in DataService"
     @register_user_url = "http://iwavit.data.titantv.com/dataservice.asmx/RegisterUser?UUID=#{@uuid}&ZipCode=#{@zip_code}"
     ParseUrlXml.get(@register_user_url)
   end
   
   def request_lineup_data
+    puts "request_lineup_data() in DataService"
     @request_lineup_data_url = "http://iwavit.data.titantv.com/dataservice.asmx/RequestLineupData?ProviderID=#{@current_provider.provider_id}&UUID=#{@uuid}"
     ParseUrlXml.get(@request_lineup_data_url)
   end
   
   # TODO: Set this up to get future times and dates. Currently does only current
   def request_program_slice(minutes = 180) 
+    puts "request_program_slice() in DataService"
     now = Time.now.utc.floor(30.minutes).utc.to_s
     current_date = now[0..9]
     current_time = now[11..15]
@@ -36,7 +39,8 @@ class DataService
     ParseUrlXml.get(@request_program_slice_url);
   end
   
-  def get_basic_programs() 
+  def get_basic_programs()
+    puts "get_basic_programs() in DataService"
     @current_provider.program_schedules.each {  |schedule| 
       # raise TypeError, schedule
       # @current_provider.stations[schedule.station_id].programs.push(@current_provider.programs[schedule.program_id])
@@ -60,6 +64,7 @@ class DataService
   
   # TODO: Make this more efficient or whatever
   def request_program_details()
+    puts "request_program_details() in DataService"
     # raise TypeError, @current_provider.program_schedules
     # raise TypeError, @current_provider.stations
     
@@ -113,6 +118,7 @@ class DataService
   
   # Fills out hash of provider types -> Array(descriptions)
   def setSelectorHash
+    puts "setSelectorHash() in DataService"
     providers = @providers
     types = (providers.map { |p| p.service_type }).uniq
     type_hash = Hash.new
@@ -135,6 +141,7 @@ class DataService
   
   # Takes in xml from register user call, gets providers, sets default
   def setProviders(xml, default_provider_id = nil)
+    puts "setProviders() in DataService"
     providers = xml['ProviderDataReturn']['ProviderRecord']
     providers.each { |p|
       provider = Provider.new(p['ProviderId'], p['ServiceType'], p['Description'], p['City']);
@@ -170,6 +177,7 @@ class DataService
   end
   
   def setProvider(options) 
+    puts "setProvider() in DataService"
     type = options[:type]
     desc = options[:desc]
     id = options[:id]
