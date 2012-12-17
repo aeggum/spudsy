@@ -46,14 +46,19 @@ var Welcome = function() {
 			var type = $("#service_type option:selected").val();
  			var desc = $("#choose_provider option:selected").val(); 
  			$.ajax({
- 				url: "/welcome/change_provider?type=" + type + "&desc=" + desc //....
- 			}).done(function(data) {
+ 				url: "/welcome/change_provider?",//type=" + type + "&desc=" + desc,
+ 				data: { type: type, desc: desc } //"type=" + type + "desc=" + desc //....
+ 			}).success(function(data) {
  				$("#stations").html(data); //console.log(data)
  				_regenYourPicks();
-				$('#ajax-loader').hide();
+ 			}).error(function(data) {	// TODO: Should be something more user friendly
+ 				alert("There was an error with the request. Sorry.");
+ 			}).done(function() {
+ 				$('#ajax-loader').hide();
 				$("#stations").css('opacity','1');
 				$("#stations").css('background-color','white');
  			});
+ 				
  		});
 	}
 	

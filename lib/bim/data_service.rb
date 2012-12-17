@@ -194,7 +194,11 @@ class DataService
     @current_provider.programs.clear
     @current_provider.program_schedules.clear
     
-    lineup_data_xml = request_lineup_data
+    puts "---------DEBUG-------------"
+    puts @current_provider
+    puts "---------DEBUG-------------"
+    
+    lineup_data_xml = request_lineup_data()
     @current_provider.createStations(lineup_data_xml)
     
     program_data_xml = request_program_slice(180)

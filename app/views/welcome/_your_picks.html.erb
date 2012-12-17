@@ -17,7 +17,7 @@
 			<div data-id="<%= "#{media_name}/#{media.media['id']}" %>" class="poster tv_show">
 				
 				<%= image_tag("#{media.media['poster']}", :size => "140x200") %>
-				<h3 class="rank grey_shade"><span><%= media.network %> - <%= media.start_time.readable(30.minutes) %></span></h3>
+				<h3 class="rank grey_shade"><span><%= media.network %> - <%= media.start_time.readable(1.minute) %></span></h3>
 				<% if (media.class == Movie) %>
 				<h3 class="rating grey_shade">
 					<% if (media.media['spudsy_rating'] >= 60) %>
