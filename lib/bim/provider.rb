@@ -1,6 +1,8 @@
 class Provider < DataService
   attr_reader :provider_id, :service_type, :description, :city, :stations, :programs, :program_schedules
   attr_writer :provider_id, :service_type, :description, :city
+  @@blacklist = ['AT&T', 'ATT', 'MC', 'LOCAL', 'NHL', 'PPV', 'SHOPNG', 'DIRECTV', 'ADLT', 'SPOPRO', 'TEAM', 'MUSIC', 'ONDMD', 'INFO', 'INTLPROG', 'RADIO']
+
   
   def initialize(provider_id, service_type, description, city)
     @provider_id = provider_id
@@ -19,10 +21,13 @@ class Provider < DataService
     # raise TypeError, xml['LineupDataReturn']['St']
     stations = xml['LineupDataReturn']['St']
     stations.each { |s| 
-      station = Station.new(s['s'], s['cs'], s['rf'], s['n'], s['maj'], s['min'])
+      unless blacklisted?(s['cs'])
+        station = Station.new(s['s'], s['cs'], s['rf'], s['n'], s['maj'], s['min'])
+        @stations[s['s']] = station
+      end
       # @stations.push(station)
       # raise TypeError, station
-      @stations[s['s']] = station
+      # @stations[s['s']] = station
     }
     
     # raise TypeError, @stations
@@ -52,8 +57,11 @@ class Provider < DataService
     schedules.each { |sc| 
       #raise TypeError, sc
       now_utc = Time.now.utc.floor(30.minutes)
-      schedule = ProgramSchedule.new(sc['s'], sc['p'], sc['st'], sc['et'], now_utc.advance(:minutes => sc['st'].to_i), now_utc.advance(:minutes => sc['et'].to_i))
-      @program_schedules.push(schedule)
+      
+      if (@stations[sc['s']])
+        schedule = ProgramSchedule.new(sc['s'], sc['p'], sc['st'], sc['et'], now_utc.advance(:minutes => sc['st'].to_i), now_utc.advance(:minutes => sc['et'].to_i))
+        @program_schedules.push(schedule)
+      end
       # raise TypeError, schedule  
     }
   end
@@ -61,4 +69,14 @@ class Provider < DataService
   def to_s
     "Provider: id: #{@provider_id}, type: #{@service_type}, description: #{@description}, city: #{@city}, \nstations: [#{@stations}], \nprograms: [#{@programs}], \nschedules: [#{@program_schedules}]"
   end
+  
+  private 
+    def blacklisted?(name)
+      @@blacklist.each { |str| 
+        return true if name.upcase.include?(str) #str.include?(name.upcase)  
+      }
+      
+      puts name.upcase
+      return false
+    end
 end
