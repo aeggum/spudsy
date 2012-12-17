@@ -1,4 +1,4 @@
-TvShow.update_all(:rating => 4.0)
+TvShow.update_all(:spudsy_rating => 10.0)
 TvShow.update(1, {:imdb_id=>"tt0118276", :runtime=>"44 min", :rating=>8.1, :mpaa=>"TV-14"})
 TvShow.update(2, {:imdb_id=>"tt0273855", :runtime=>"30 min", :rating=>6.5, :mpaa=>"Livre"})
 TvShow.update(3, {:imdb_id=>"tt0103569", :runtime=>"62 min", :rating=>4.8, :mpaa=>"TV-14"})
