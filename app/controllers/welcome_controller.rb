@@ -153,6 +153,8 @@ class WelcomeController < ApplicationController
     puts "show_media() in WelcomeController"
     $show_movies = false
     $show_tv = false
+    $show_netflix = false
+    n = false
     
     if (params[:movie] == "true")
       $show_movies = true
@@ -160,11 +162,18 @@ class WelcomeController < ApplicationController
     if (params[:tv_show] == "true")
       $show_tv = true
     end
+    if (params[:netflix] == "true")
+      $show_netflix = true
+    end
+    if (params[:n] == "true")
+      n = true
+    end
     
     
     # remove from your picks, put in global filtered array
     $your_picks.delete_if do |p| 
-      if ( (p.class.to_s == "TvShow" && !($show_tv)) || (p.class.to_s == "Movie" && !($show_movies)) )
+      if ( (p.class.to_s == "TvShow" && !($show_tv)) || (p.class.to_s == "Movie" && !($show_movies)) || 
+        (p.class == MediaNetflix && (p.clazz.to_s == "TvShow" && !($show_tv)) || (p.clazz.to_s == "Movie" && !($show_movies))) )
         $filtered_picks.push(p);
         #$filtered_queue.add(p, p.media.spudsy_rating)
         true
@@ -174,10 +183,25 @@ class WelcomeController < ApplicationController
     # remove from filtered picks if showing new info
     picks = []
     $filtered_picks.delete_if do |p|
-      if ( (p.class.to_s == "TvShow" && ($show_tv)) || (p.class.to_s == "Movie" && ($show_movies)) )
+      if ( (p.class.to_s == "TvShow" && ($show_tv)) || (p.class.to_s == "Movie" && ($show_movies)) || 
+        (p.class == MediaNetflix && (p.clazz.to_s == "TvShow" && !($show_tv)) || (p.clazz.to_s == "Movie" && !($show_movies))) )
         picks.push(p)
         true
       end
+    end
+    
+    if !$show_netflix 
+      # $your_picks.each { |p| 
+        # if p.class == MediaNetflix
+          # puts "FOOOOO"
+        # end 
+      # }
+      
+      $your_picks.delete_if { |p| 
+        if p.class == MediaNetflix
+          true
+        end  
+      }
     end
     
     # add to the filtered PQ
@@ -188,11 +212,18 @@ class WelcomeController < ApplicationController
       $filtered_queue.push(p, p.media.spudsy_rating) 
     }
     
+    set_netflix_picks($show_tv, $show_movies)
+    $top_netflix_picks.each { |p| 
+      n = MediaNetflix.new(p.class, p)
+      $filtered_queue.push(n, n.media.spudsy_rating)
+    }
+    
     # refill the PQ with the your picks filtered
     $your_picks = []
     while (!$filtered_queue.empty?)
       $your_picks.push($filtered_queue.pop)
     end
+    
     
     render_your_picks()
   end
@@ -221,8 +252,10 @@ class WelcomeController < ApplicationController
     
     index = 0;
     while index < $your_picks.length do
-        
-        if ($your_picks[index].class.to_s == h["media_type"] && $your_picks[index].media.id.to_s == h["media_id"])
+        # puts $your_picks[index].class
+        if ( ($your_picks[index].class.to_s == h["media_type"] || $your_picks[index].clazz.to_s == h['media_type']) && $your_picks[index].media.id.to_s == h["media_id"])
+          puts $your_picks[index].class.to_s
+          puts $your_picks[index].media.id.to_s
           $your_picks.delete_at(index)
           break  # found the hidden variable, break out of loop
         end
@@ -251,18 +284,27 @@ class WelcomeController < ApplicationController
   
   
   
+  def render_netflix()
+    puts "render_netflix() in WelcomeController"
+    set_netflix_picks(true, true);
+    respond_to do |format|
+      format.html { render :partial => "netflix", :locals => { :media => $top_netflix_picks } }
+    end
+  end
   
-  
-  
+  def render_your_picks() 
+    puts "render_your_picks() in WelcomeController"
+    hide_hidden_picks()
+    #raise TypeError, $your_picks
+    respond_to do |format|
+      format.html { render :partial => "your_picks", :locals => { :media_array => $your_picks} }
+    end
+  end
   
   private 
-    def render_your_picks() 
-      puts "render_your_picks() in WelcomeController"
-      #raise TypeError, $your_picks
-      respond_to do |format|
-        format.html { render :partial => "your_picks", :locals => { :media => $your_picks} }
-      end
-    end
+    
+    
+    
     
     
     # Calls bim's service to get tv data; all is in $ds
@@ -308,21 +350,49 @@ class WelcomeController < ApplicationController
       $filtered_picks = []
       $filtered_queue = Containers::PriorityQueue.new
       $top_netflix_picks = []
-      set_netflix_picks()
+      set_netflix_picks(true, true)
+      $show_netflix = false
     end
     
     
-    def set_netflix_picks() 
-        netflixes = NetflixMedia.find(:all, :limit => 50, :order => "spudsy_rating DESC")
-        netflixes.each { |program| 
-          if (program.media_type == "Movie")
-            $top_netflix_picks.push(Movie.find(program.media_id))
-          else
-            $top_netflix_picks.push(TvShow.find(program.media_id))
-          end  
-        }
+    def set_netflix_picks(tv, movie) 
+      puts "-----------------------------------------"
+      puts "-----------------------------------------"
+      if !$show_netflix 
+        puts "returning"
+        $top_netflix_picks = []
+        return
+      end
+      tv = $show_tv
+      movie = $show_movies
+      # puts "---------------------------------------"
+      # puts tv
+      # puts movie
+      # puts "---------------------------------------"
+      
+      if (tv && movie) 
+        netflixes = NetflixMedia.find(:all, :limit => 30, :order => "spudsy_rating DESC")
+      elsif (tv && !movie)
+        netflixes = NetflixMedia.where("media_type = 'TvShow'").limit(30).order('spudsy_rating DESC')
+      elsif (!tv && movie)
+        netflixes = NetflixMedia.where("media_type = 'Movie'").limit(30).order('spudsy_rating DESC')
+      elsif (!tv && !movie)
+        netflixes = []
+      end
+      
+      $top_netflix_picks.clear
+      netflixes.each { |program| 
+        if (program.media_type == "Movie")
+          $top_netflix_picks.push(Movie.find(program.media_id))
+        else
+          $top_netflix_picks.push(TvShow.find(program.media_id))
+        end  
+      }
         
         # raise TypeError, $top_netflix_picks
+      puts $top_netflix_picks
+      puts "-----------------------------------------"
+      puts "-----------------------------------------"
     end
     
     def test_for_cookies
@@ -433,7 +503,7 @@ end
 
 class MediaLive
   
-  attr_accessor :class, :media, :network, :channel, :start_time, :end_time
+  attr_accessor :class, :media, :network, :channel, :start_time, :end_time, :clazz
   
   def initialize(clazz, media, network, channel, start_time, end_time)
     @class = clazz
@@ -450,6 +520,23 @@ class MediaLive
   
   def to_s
     "MediaLive: class: #{@class}, media: #{@media}, network: #{@network}, channel: #{@channel}, time: #{@start_time}-#{@end_time}"
+  end
+end
+
+
+class MediaNetflix
+  attr_accessor :clazz, :media
+  def initialize(clazz, media)
+    @clazz = clazz
+    @media = media
+  end
+  
+  def ==(another)
+    return @clazz = another.clazz && @media == another.media
+  end
+  
+  def to_s
+    "MediaNetflix: class: #{@clazz}, media: #{@media}"
   end
 end
 

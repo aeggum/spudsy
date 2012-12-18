@@ -1,6 +1,6 @@
 <div id="your_picks">
 	
-	<% media.each_with_index do |media, index| %>
+	<% media_array.each_with_index do |media, index| %>
 	<% if index < 6 %>
 	<% if (index % 6 == 0) %>
 		<div class="container_12">
@@ -17,7 +17,11 @@
 			<div data-id="<%= "#{media_name}/#{media.media['id']}" %>" class="poster tv_show">
 				
 				<%= image_tag("#{media.media['poster']}", :size => "140x200") %>
+				<% if media.class == MediaNetflix %>
+				<h3 class="rank grey_shade"><span>Netflix</span></h3>
+				<% else %>
 				<h3 class="rank grey_shade"><span><%= media.network %> - <%= media.start_time.readable(1.minute) %></span></h3>
+				<% end %>
 				<% if (media.class == Movie) %>
 				<h3 class="rating grey_shade">
 					<% if (media.media['spudsy_rating'] >= 60) %>

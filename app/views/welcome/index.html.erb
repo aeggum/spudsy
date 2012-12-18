@@ -73,7 +73,7 @@
 
 <div id="your_picks_container">
 	<div id="your_picks_section" class="grey_border">
-		<%= render :partial => 'your_picks', :locals => { :media => $your_picks } %>
+		<%= render :partial => 'your_picks', :locals => { :media_array => $your_picks } %>
 	</div>
 	
 	<div class="container_2">
@@ -88,12 +88,7 @@
 
 
 
-<div id="hulu_section" class="grey_border" style="display: none">
-	<%= render :partial => 'netflix', :locals => { :shows => $top_netflix_picks, :header => "Hulu" } %>
-</div>
-
 <div id="netflix_section" class="grey_border" style="display: none">
-	<%= render :partial => 'netflix', :locals => { :shows => $top_netflix_picks, :header => "Netflix" } %>
 </div>
 
 

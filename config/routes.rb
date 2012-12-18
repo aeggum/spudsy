@@ -14,6 +14,8 @@ DemoApp::Application.routes.draw do
   get "welcome/change_provider"
   get "welcome/your_picks"
   get "welcome/twitter"
+  get "welcome/render_netflix"
+  get "welcome/render_your_picks"
 
   root :to => 'welcome#index'
   match "/landing", :to => "welcome#index"

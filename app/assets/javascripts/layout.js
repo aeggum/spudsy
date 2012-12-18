@@ -110,8 +110,8 @@ var Welcome = function() {
 					url: "/welcome/hide_media",
 					data: {"like": liked, "media_type": data[0] , "media_id": data[1]}
 			}).done (function(data) {
-				$("#your_picks_section").html(data).slideDown(500, 'swing').show();
-				initBinding();
+				$("#your_picks_section").html(data).slideDown(500).show();
+				_initBinding();
 			});
 		});
 	}
@@ -173,6 +173,7 @@ var Welcome = function() {
 			$("#tv_show").prop('checked', true);
 			$("#movie").prop('checked', true);
 			
+			
 			$('#twitter_tab').click(function() {
 				$('#twitter_section').slideDown('slow');
 			});
@@ -193,26 +194,90 @@ var Welcome = function() {
 			
 			$("#tv_show, #movie").click(function() {
 				$("#your_picks_section").hide();
+				$("#netflix_section").hide();
+				
+				var netflix_bool = $("#netflix").is(':checked');
 				var movie_bool = $("#movie").is(':checked');
 				var tv_show_bool = $("#tv_show").is(':checked');
 				
 				$.ajax({
 					url: "/welcome/show_media?",
-					data: { "tv_show": tv_show_bool, "movie": movie_bool } 
+					data: { "tv_show": tv_show_bool, "movie": movie_bool, "netflix": netflix_bool } 
 				}).done(function(data) {
 					$("#your_picks_section").html(data);
 					$("#your_picks_section").show();
+					_initBinding();
+				});
+				
+				$.ajax({
+					url: "/welcome/render_netflix"
+				}).done(function(data) {
+					$("#netflix_section").html(data);
+					if (netflix_bool) {
+						$("#netflix_section").show();
+					}
 					_initBinding();
 				});
 			});
 			
 			$('#netflix').click(function() {
 				if ($(this).is(':checked')) {
-					$("#netflix_section").slideDown('slow');
+					//$("#netflix_section").slideDown('slow');
+					var netflix_bool = $("#netflix").is(':checked');
+					var movie_bool = $("#movie").is(':checked');
+					var tv_show_bool = $("#tv_show").is(':checked');
+					$("#your_picks_section").hide();
+					
+					
+					$.ajax({
+						url: "/welcome/show_media?",
+						data: { "tv_show": tv_show_bool, "movie": movie_bool, "netflix": netflix_bool, "n": "true" } 
+					}).done(function(data) {
+						$.ajax({
+							url: "/welcome/render_netflix"
+						}).done(function(data) {
+							$("#netflix_section").html(data);
+							if (netflix_bool) {
+								$("#netflix_section").slideDown();
+							}
+							_initBinding();
+						});
+						$("#your_picks_section").html(data);
+						$("#your_picks_section").show();
+						_initBinding();
+					});
+					
+					
 					//$("#netflix_section").slideDown('slow');
 				}
 				else {
 					$("#netflix_section").slideUp('slow');
+					var netflix_bool = $("#netflix").is(':checked');
+					var movie_bool = $("#movie").is(':checked');
+					var tv_show_bool = $("#tv_show").is(':checked');
+					$("#your_picks_section").hide();
+					
+					
+					$.ajax({
+						url: "/welcome/show_media?",
+						data: { "tv_show": tv_show_bool, "movie": movie_bool, "netflix": netflix_bool, "n": "true" } 
+					}).done(function(data) {
+						$("#your_picks_section").html(data);
+							$("#your_picks_section").show();
+							_initBinding();
+						
+					});
+					
+					$.ajax({
+							url: "/welcome/render_netflix"
+						}).done(function(data) {
+							$("#netflix_section").html(data);
+							if (netflix_bool) {
+								$("#netflix_section").slideDown();
+							}
+							_initBinding();
+							
+						});
 				}
 			});
 			
