@@ -68,11 +68,11 @@ class TvShow < ActiveRecord::Base
       when -10..14
         yFactor = 1.0
       when 14..25
-        yFactor = yFactorEq(1.0, 0.90, diff, 0.010)
+        yFactor = yFactorEq(1.0, 0.95, diff, 0.005)
       when 25..45
-        yFactor = yFactorEq(0.90, 0.75, diff, 0.15/20.0)
+        yFactor = yFactorEq(0.95, 0.85, diff, 0.10/20.0)
       when 45..65 
-        yFactor = yFactorEq(0.75, 0.50, diff, 0.25/20)
+        yFactor = yFactorEq(0.85, 0.75, diff, 0.10/20.0)
       else 
         yFactor = 0.50
       end

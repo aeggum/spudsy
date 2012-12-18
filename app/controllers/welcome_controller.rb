@@ -170,7 +170,7 @@ class WelcomeController < ApplicationController
     index = 0;
     while index < $your_picks.length do
         
-        if ($your_picks[index].class.to_s == h["media_type"] && $your_picks[index].id.to_s == h["media_id"])
+        if ($your_picks[index].class.to_s == h["media_type"] && $your_picks[index].media.id.to_s == h["media_id"])
           $your_picks.delete_at(index)
           break  # found the hidden variable, break out of loop
         end
@@ -365,7 +365,7 @@ class MediaLive
   end
   
   def ==(another)
-    return @class == another.class && @media == another.media && @network == another.network #&& @channel == another.channel && @start_time == another.start_time
+    return @class == another.class && @media == another.media #&& @network == another.network #&& @channel == another.channel && @start_time == another.start_time
   end
   
   def to_s

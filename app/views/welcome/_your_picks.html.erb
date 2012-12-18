@@ -46,8 +46,8 @@
 			<div>
 				<% if user_signed_in? %>
 					<span data-id="<%= "#{media_name},#{media.media['id']}" %>">
-						<a href = "#" class = "hide_media_button" id = "hide_like">Like</a>
-						<a href = "#" class = "hide_media_button" id = "hide_dislike" style = "float: right">Hate</a>
+						<a class="hide_media_button" id="hide_like">Like</a>
+						<a class="hide_media_button" id="hide_dislike" style = "float: right">Hate</a>
 					</span>
 				<%end%>
 			</div>

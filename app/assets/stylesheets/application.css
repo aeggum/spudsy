@@ -256,14 +256,26 @@ img.rt_img_overlay {
 	height:200px;
 }
 
+a:hover {
+	cursor:pointer;
+}
+
 #previous_picks {
 	float: left;
 	padding: 15px;
 }
 
+#previous_picks:hover {
+	cursor:pointer;
+}
+
 #view_more {
 	float: right;
-	padding: 0 15px;
+	padding: 0 15px; 
+}
+
+#view_more:hover {
+	cursor:pointer;
 }
 
 #poster_slider_2, #poster_slider_3 {
