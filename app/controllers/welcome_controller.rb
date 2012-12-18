@@ -183,8 +183,13 @@ class WelcomeController < ApplicationController
   end
   
   def twitter
+    titles = [] 
+    $your_picks.each { |media|
+	titles.push media.media.name		
+    } 
+    searchCriteria = titles[0..5].join(" OR ")
     respond_to do |format|
-        format.html { render :partial => "twitter", :locals => { :media_array => $your_picks} }
+        format.html { render :partial => "twitter", :locals => { :crit => searchCriteria} }
     end
   end
   

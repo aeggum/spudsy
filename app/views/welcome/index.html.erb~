@@ -56,7 +56,7 @@
 </div>
 
 <div class="container_12 grey_border" id="twitter_section" style="display:none;">
-	<%= render :partial => 'twitter', :locals => { :media => $your_picks } %>
+	<%= render :partial => 'twitter', :locals => { :crit => {} } %>
 </div>
 
 <div class="container_12 grey_border" id="facebook_section" style="display:none;">
@@ -77,11 +77,11 @@
 	</div>
 	
 	<div class="container_2">
-		<a href="#" id="previous_picks" style="display:none;">Previous picks</a>
+		<a id="previous_picks" style="display:none;">Previous picks</a>
 	</div>
 	
 	<div class="container_2">
-		<a href="#" id="view_more">View More</a>	  	
+		<a id="view_more">View More</a>	  	
 	</div>
 
 </div>
