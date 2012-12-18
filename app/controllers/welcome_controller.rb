@@ -146,6 +146,8 @@ class WelcomeController < ApplicationController
    
   end
   
+  
+  # filters the media in the your picks section depending on the check-boxes
   def show_media
     puts "show_media() in WelcomeController"
     $show_movies = false
@@ -159,6 +161,7 @@ class WelcomeController < ApplicationController
     end
     
     
+    # remove from your picks, put in global filtered array
     $your_picks.delete_if do |p| 
       if ( (p.class.to_s == "TvShow" && !($show_tv)) || (p.class.to_s == "Movie" && !($show_movies)) )
         $filtered_picks.push(p);
@@ -167,40 +170,28 @@ class WelcomeController < ApplicationController
       end  
     end
     
+    # remove from filtered picks if showing new info
     picks = []
     $filtered_picks.delete_if do |p|
       if ( (p.class.to_s == "TvShow" && ($show_tv)) || (p.class.to_s == "Movie" && ($show_movies)) )
-        #$your_picks.push($filtered_queue.)
         picks.push(p)
         true
       end
     end
     
+    # add to the filtered PQ
     $your_picks.each { |p| 
       $filtered_queue.push(p, p.media.spudsy_rating)
     }
-    
     picks.each { |p| 
       $filtered_queue.push(p, p.media.spudsy_rating) 
     }
     
+    # refill the PQ with the your picks filtered
     $your_picks = []
     while (!$filtered_queue.empty?)
       $your_picks.push($filtered_queue.pop)
     end
-    # $your_picks.each_with_index { |p, i| 
-      # if (p.class == "Movie" && !$show_movies)
-        # $hidden_picks.push($your_picks.delete_at(i))
-        # i -= 1
-        # next
-      # end
-      # if (p.class = "TvShow" && !$show_tv)
-        # $hidden_picks.push($your_picks.delete_at(i))
-        # i -= 1
-        # next
-      # end
-    # }
-    puts $filtered_picks
     
     render_your_picks()
   end

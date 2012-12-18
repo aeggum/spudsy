@@ -176,6 +176,10 @@ a {
 	padding: 5px;
 }
 
+.hide_media_button {
+	float:right;
+}
+
 .tv_rating {
 	left: 95px;
 	top: 150px;
