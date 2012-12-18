@@ -89,11 +89,11 @@
 
 
 <div id="hulu_section" class="grey_border" style="display: none">
-	<%= render :partial => 'netflix', :locals => { :shows => @show_array, :header => "Hulu" } %>
+	<%= render :partial => 'netflix', :locals => { :shows => $top_netflix_picks, :header => "Hulu" } %>
 </div>
 
 <div id="netflix_section" class="grey_border" style="display: none">
-	<%= render :partial => 'netflix', :locals => { :shows => @show_array.reverse, :header => "Netflix" } %>
+	<%= render :partial => 'netflix', :locals => { :shows => $top_netflix_picks, :header => "Netflix" } %>
 </div>
 
 

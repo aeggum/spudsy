@@ -289,7 +289,7 @@ class WelcomeController < ApplicationController
       #@movies = Movie.all(:limit => 30)
       $picks_queue = Containers::PriorityQueue.new
       #@@full_movies = Movie.find(:all, :order => 'spudsy_rating DESC', :limit => 100)
-      @show_array = TvShow.all(:limit => 30)
+      #@show_array = TvShow.all(:limit => 30)
       #@movies = @@full_movies[0...30] #Movie.find(:all, :order => 'spudsy_rating DESC', :limit => 30)
       #@@your_picks = Array.new
       #@movie = @movies[0]
@@ -307,9 +307,23 @@ class WelcomeController < ApplicationController
       $show_tv = true
       $filtered_picks = []
       $filtered_queue = Containers::PriorityQueue.new
+      $top_netflix_picks = []
+      set_netflix_picks()
     end
     
     
+    def set_netflix_picks() 
+        netflixes = NetflixMedia.find(:all, :limit => 50, :order => "spudsy_rating DESC")
+        netflixes.each { |program| 
+          if (program.media_type == "Movie")
+            $top_netflix_picks.push(Movie.find(program.media_id))
+          else
+            $top_netflix_picks.push(TvShow.find(program.media_id))
+          end  
+        }
+        
+        # raise TypeError, $top_netflix_picks
+    end
     
     def test_for_cookies
       puts "test_for_cookies() in WelcomeController"

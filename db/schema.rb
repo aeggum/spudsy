@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121216092536) do
+ActiveRecord::Schema.define(:version => 20121218070235) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "resource_id",   :null => false
@@ -93,6 +93,19 @@ ActiveRecord::Schema.define(:version => 20121216092536) do
 
   add_index "movies", ["name"], :name => "index_movies_on_name"
 
+  create_table "netflix_media", :force => true do |t|
+    t.string   "name"
+    t.string   "media_type"
+    t.integer  "media_id"
+    t.integer  "spudsy_rating"
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
+  end
+
+  add_index "netflix_media", ["name", "media_id", "media_type"], :name => "index_netflix_media_on_name_and_media_id_and_media_type", :unique => true
+  add_index "netflix_media", ["name"], :name => "index_netflix_media_on_name"
+  add_index "netflix_media", ["spudsy_rating"], :name => "index_netflix_media_on_spudsy_rating"
+
   create_table "pg_search_documents", :force => true do |t|
     t.text     "content"
     t.integer  "searchable_id"
@@ -147,6 +160,8 @@ ActiveRecord::Schema.define(:version => 20121216092536) do
     t.string   "provider"
     t.string   "uid"
     t.string   "username"
+    t.string   "netflix_token"
+    t.string   "netflix_secret"
   end
 
   add_index "users", ["email"], :name => "index_users_on_email", :unique => true
