@@ -148,11 +148,45 @@ class WelcomeController < ApplicationController
   
   def show_media
     puts "show_media() in WelcomeController"
+    $show_movies = false
+    $show_tv = false
+    
     if (params[:movie] == "true")
-      
-    else if (params[:tv_show] == "true")
-      
+      $show_movies = true
     end
+    if (params[:tv_show] == "true")
+      $show_tv = true
+    end
+    
+    
+    $your_picks.delete_if do |p| 
+      if ( (p.class.to_s == "TvShow" && !($show_tv)) || (p.class.to_s == "Movie" && !($show_movies)) )
+        $filtered_picks.push(p);
+        true
+      end  
+    end
+    
+    $filtered_picks.delete_if do |p|
+      if ( (p.class.to_s == "TvShow" && ($show_tv)) || (p.class.to_s == "Movie" && ($show_movies)) )
+        $your_picks.push(p)
+        true
+      end
+    end
+    # $your_picks.each_with_index { |p, i| 
+      # if (p.class == "Movie" && !$show_movies)
+        # $hidden_picks.push($your_picks.delete_at(i))
+        # i -= 1
+        # next
+      # end
+      # if (p.class = "TvShow" && !$show_tv)
+        # $hidden_picks.push($your_picks.delete_at(i))
+        # i -= 1
+        # next
+      # end
+    # }
+    puts $filtered_picks
+    
+    render_your_picks()
   end
   
   # hides the media for the user, permanently
@@ -194,11 +228,11 @@ class WelcomeController < ApplicationController
   def twitter
     titles = [] 
     $your_picks.each { |media|
-	titles.push media.media.name		
+	    titles.push media.media.name		
     } 
     searchCriteria = titles[0..5].join(" OR ")
     respond_to do |format|
-        format.html { render :partial => "twitter", :locals => { :crit => searchCriteria} }
+      format.html { render :partial => "twitter", :locals => { :crit => searchCriteria} }
     end
   end
   
@@ -261,6 +295,9 @@ class WelcomeController < ApplicationController
       $your_picks = Array.new
       $picks_forward = 0
       $your_picks_new = Array.new
+      $show_movies = true
+      $show_tv = true
+      $filtered_picks = []
     end
     
     
