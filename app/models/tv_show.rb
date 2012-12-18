@@ -33,6 +33,10 @@ class TvShow < ActiveRecord::Base
     end
   end
   
+  def to_s
+    puts "name: #{self.name}"
+  end
+  
   # TODO: Get a rating for each tvshow
   def self.getRating tv_show
     if (tv_show.rating == 0 || tv_show.rating.nil?)

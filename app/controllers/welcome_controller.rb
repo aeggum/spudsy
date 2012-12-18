@@ -45,6 +45,7 @@ class WelcomeController < ApplicationController
     # @res = res
     # @total_pages = @res.total_pages
     # @first = @res.items.first
+    redirect_to :controller => 'welcome', :action => 'index'
   end
   
   # returns the your_picks section
