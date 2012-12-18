@@ -82,34 +82,18 @@ var Welcome = function() {
 		});
 				
 		$(".poster").on('click', function() {
-			//console.log($(this).attr('data-id'));
-			$.ajax({
-				url: $(this).attr('data-id')  // get movie#show for this movie
-				
-			}).done(function(data) { 
-				//console.log(data);
-				$("#info_overlay").html(data);
-			});
-			
-			$(this).colorbox({	
-		    	width:"800px",
-		   		height:"650px",
-		   		inline: true,
-		   		href: "#info_overlay",
-		   		speed: 500,
-		   		onLoad:function() { 
-					document.documentElement.style.overflow = "hidden";
-					var id = $(this).attr('data-id');
-		   		},
-		   		onClosed:function() {
-		   			$(".overlay_info").css("overflow", "hidden");
-					$(".overlay_info").css("height", "200px");
-					$("#overlay_more_info").show();
-					document.documentElement.style.overflow = "auto";
-		   		}
-		  	})
+			_showOverlay();
 		});
-		
+		$(".popBad").on('click', function() {
+			_showOverlay();
+		});
+		$(".popGood").on('click', function() {
+			_showOverlay();
+		});
+		$(".popTop").on('click', function() {
+			_showOverlay();
+		});
+
 		
 		$(".hide_media_button").on('click', function(event) {
 			var liked = "";
@@ -141,6 +125,34 @@ var Welcome = function() {
 	
 	function _restore() {
 	   document.body.removeChild(document.getElementById("overlay"));
+	}
+
+	function _showOverlay() {
+		$.ajax({
+			url: $(this).attr('data-id')  // get movie#show for this movie
+		
+		}).done(function(data) { 
+			//console.log(data);
+			$("#info_overlay").html(data);
+		});
+	
+		$(this).colorbox({	
+	    	width:"800px",
+	   		height:"650px",
+	   		inline: true,
+	   		href: "#info_overlay",
+	   		speed: 500,
+	   		onLoad:function() { 
+				document.documentElement.style.overflow = "hidden";
+				var id = $(this).attr('data-id');
+	   		},
+	   		onClosed:function() {
+	   			$(".overlay_info").css("overflow", "hidden");
+				$(".overlay_info").css("height", "200px");
+				$("#overlay_more_info").show();
+				document.documentElement.style.overflow = "auto";
+	   		}
+	  	})
 	}
 
 	return {

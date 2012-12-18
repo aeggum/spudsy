@@ -1,79 +1,88 @@
 <% stations.each_pair do |id, station| %>	
-			<tr valign="top" class="gridRow">
-				<td valign="middle" nowrap="" align="center" class="gridCallSignCell" >
-					<span class="gridCallSignText"><%= station.callsign %></span>
-					<br>
-					<span class="gridNetworkText"><%= station.name %></span>
-				</td>
-				<td valign="middle" align="center" class="gridChannelCell">
-					<a href="#">
-						<span class="gridChannelText"><%= station.major_channel %>.<%= station.minor_channel %></span>
-					</a>
-				</td>
+	<tr valign="top" class="gridRow">
+		<td valign="middle" nowrap="" align="center" class="gridCallSignCell" >
+			<span class="gridCallSignText"><%= station.callsign %></span>
+			<br>
+			<span class="gridNetworkText"><%= station.name %></span>
+		</td>
+		<td valign="middle" align="center" class="gridChannelCell">
+			<a href="#">
+				<span class="gridChannelText"><%= station.channel %></span>
+			</a>
+		</td>
 
-				<% station.programs.each_with_index do |program, index| %>				
-					<% if index == 0 && program.start_time_from_now.to_i < 0 %>
-						<td class="gLSC_run">
-							↩
-						</td>
-					<% elsif index == 0 %>
-						<td class="gLSC">
-							&nbsp;
-						</td>
-					<% end %>					
-					<% if program.start_time_from_now.to_i < 0 %>
-						<% cols = program.duration + program.start_time_from_now.to_i %>
-					<% elsif program.end_time_from_now.to_i > 180 %>
-						<% cols = program.duration - (program.end_time_from_now.to_i - 180) %>
-					<% else %>
-						<% cols = program.duration %>
-					<% end %>	
+		<%
+		station.programs.each_with_index do |program, index| %>				
+			<% if index == 0 && program.start_time_from_now.to_i < 0 %>
+				<td class="gLSC_run">
+					⇠
+				</td>
+			<% elsif index == 0 %>
+				<td class="gLSC">
+					&nbsp;
+				</td>
+			<% end %>					
+			<% if program.start_time_from_now.to_i < 0 %>
+				<% cols = program.duration + program.start_time_from_now.to_i %>
+			<% elsif program.end_time_from_now.to_i > 180 %>
+				<% cols = program.duration - (program.end_time_from_now.to_i - 180) %>
+			<% else %>
+				<% cols = program.duration %>
+			<% end %>	
+			
+			<%
+				show = TvShow.where { name =~ program.title }[0]
+				show = Movie.where { name =~ program.title }[0] if show.nil?
+				spudsy_rating = 0
+				spudsy_rating = (show.spudsy_rating).to_i unless show.nil?
+				if spudsy_rating == 0	
+					styleClass = "popUnknown"					
+				elsif spudsy_rating < 60
+					styleClass = "popBad"
+					# $picks_queue_new.push(show, show.spudsy_rating)
+					#raise TypeError, station
+					ml = MediaLive.new(show.class, show, station.name, "#{station.major_channel}.#{station.minor_channel}", program.start_time_utc)
+					$picks_queue.push(ml, show.spudsy_rating)
 					
-					<% 
-						show = TvShow.where { name =~ program.title }[0]
-						show = Movie.where { name =~ program.title }[0] if show.nil?
-						spudsy_rating = 0
-						spudsy_rating = (show.spudsy_rating).to_i unless show.nil?
-						if spudsy_rating == 0	
-							styleClass = "popUnknown"					
-						elsif spudsy_rating < 60
-							styleClass = "popBad"
-							$picks_queue.push(show, show.spudsy_rating)
-							
-						elsif spudsy_rating >= 60 && spudsy_rating < 85
-							styleClass = "popGood"
-							$picks_queue.push(show, show.spudsy_rating)
-							#$your_picks.push(show) unless $your_picks.include?(show)
-						else 
-							styleClass = "popTop"
-							$picks_queue.push(show, show.spudsy_rating)
-							#$your_picks.push(show) unless $your_picks.include?(show)
-						end
-					 %>
-						
+				elsif spudsy_rating >= 60 && spudsy_rating < 85
+					styleClass = "popGood"
+					# $picks_queue_new.push(show, show.spudsy_rating)
+					# $your_picks_new.push(show) unless $your_picks.include?(show)
+					ml = MediaLive.new(show.class, show, station.name, "#{station.major_channel}.#{station.minor_channel}", program.start_time_utc)
+					$picks_queue.push(ml, show.spudsy_rating)
+				else 
+					styleClass = "popTop"
+					# $picks_queue_new.push(show, show.spudsy_rating)
+					# attr_accessor :class, :media, :network, :channel, :start_time
+					#$your_picks.push(show) unless $your_picks.include?(show)
+					ml = MediaLive.new(show.class, show, station.name, "#{station.major_channel}.#{station.minor_channel}", program.start_time_utc)
+					$picks_queue.push(ml, show.spudsy_rating)
+				end
+			 %>
+				
 
-					<td class="gC c4b <%= styleClass %>" colspan="<%= cols %>" title="Click to Show/Hide Details">
-						<div class="gP gH" id="cc">
-							<span class="grid_left">
-								<span class="ctt c4tt" id="tn"><%= program.title %></span>
-								<span class="cdt c4dt episode_title"><br><%= program.episode_title %></span>
-							</span>
-							<span class="grid_right">
-								<% if (spudsy_rating > 0) %>
-									<span class="cdt c4dt" style="float:right;"><%= spudsy_rating %>%</span>
-									<div style="clear:both;"></div>
-									<% if (spudsy_rating >= 60) %>
-										<img src='../blue_tv.png' class="grid_tv" />
-									<% else %>
-										<img src='../static_tv.png' class="grid_tv" />
-									<% end %>
-								<% end %>
-							</span>
-						</div>
-					</td>
-	
-				<% end %>
-			</tr>
-		<% end 
-		#raise TypeError, $your_picks
-		%>
+			<td data-id="<%= "#{show.class}/#{show.id}" unless show.nil? %>" class="gC c4b <%= styleClass %>" colspan="<%= cols %>" title="Click to Show/Hide Details">
+				<div class="gP gH" id="cc">
+					<span class="grid_left">
+						<span class="ctt c4tt" id="tn"><%= program.title %></span>
+						<span class="cdt c4dt episode_title"><br><%= program.episode_title %></span>
+					</span>
+					<span class="grid_right">
+						<% if (spudsy_rating > 0) %>
+							<span class="cdt c4dt" style="float:right;"><%= spudsy_rating %>%</span>
+							<div style="clear:both;"></div>
+							<% if (spudsy_rating >= 60) %>
+								<img src='../blue_tv.png' class="grid_tv" />
+							<% else %>
+								<img src='../static_tv.png' class="grid_tv" />
+							<% end %>
+						<% end %>
+					</span>
+				</div>
+			</td>
+
+		<% end %>
+	</tr>
+<% end 
+#raise TypeError, $your_picks
+%>

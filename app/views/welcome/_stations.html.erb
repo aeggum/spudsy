@@ -61,7 +61,7 @@
 			 %>
 				
 
-			<td class="gC c4b <%= styleClass %>" colspan="<%= cols %>" title="Click to Show/Hide Details">
+			<td data-id="<%= "#{String.class_to_data_id(show.class)}/#{show.id}" unless show.nil? %>" class="gC c4b <%= styleClass %>" colspan="<%= cols %>" title="Click to Show/Hide Details">
 				<div class="gP gH" id="cc">
 					<span class="grid_left">
 						<span class="ctt c4tt" id="tn"><%= program.title %></span>

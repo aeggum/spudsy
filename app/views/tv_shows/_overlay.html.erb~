@@ -33,18 +33,18 @@
 	 width: 275,
 	 height: 245,
 	 shell: {
-	 background: '#67E6EC',
-	 color: '#ffffff'
+		 background: '#F38630',
+		 color: '#ffffff'
 	 },
 	 features: {
-	 scrollbar: false,
-	 loop: true,
-	 live: true,
-	 hashtags: true,
-	 timestamp: true,
-	 avatars: true,
-	 toptweets: true,
-	 behavior: 'default'
+		 scrollbar: false,
+		 loop: true,
+		 live: true,
+		 hashtags: true,
+		 timestamp: true,
+		 avatars: true,
+		 toptweets: true,
+		 behavior: 'default'
 	 }
 	}).render().start();
 	</script>
