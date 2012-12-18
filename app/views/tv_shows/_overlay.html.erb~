@@ -4,13 +4,48 @@
 	</div>
 	<div style= "float:right; width:60%">
 		<h1 class="giant_goldfish"><%=tv_show.name%></h1> 
-		<h3>Rating (for you) <%=tv_show.rating%> </h3>
-		<h3>Released: tv_show.release_date (soon)</h3>
+		<h3>
+			<% if (tv_show.spudsy_rating >= 60) %>
+			<img src='../blue_tv.png' class="rt_img_overlay test" />
+			<% else %>
+			<img src="../static_tv.png" class="rt_img_overlay test" />
+			<% end %>
+			<%= tv_show.spudsy_rating %>
+		</h3>
+		<h3>Originally aired: <%= tv_show.release_date.strftime("%B %d, %Y") %></h3>
 	</div>
 </div>
 <div style="width:95% ">
-	<div class="overlay_info" style="overflow:hidden; height:200px">
+	<div class="overlay_info" style="overflow:hidden; height:200px; width: 50%; float: left;">
 		<h3>Description</h3>
 		<p><%=tv_show.description%></p>
 	</div>
+	<div id="twitter_div<%= tv_show.name.gsub(/[^0-9a-z]/i, '') %>" style= "float:right; width:40%; margin-top: -55px;"></div>
+	<script>
+	new TWTR.Widget({
+	 version: 2,
+	 id: 'twitter_div<%= tv_show.name.gsub(/[^0-9a-z]/i, '') %>',
+	 type: 'search',
+	 search: '<%=tv_show.name%>',
+	 interval: 6000,
+	 title: 'Tweets about',
+	 subject: '<%=tv_show.name%>',
+	 width: 275,
+	 height: 245,
+	 shell: {
+	 background: '#67E6EC',
+	 color: '#ffffff'
+	 },
+	 features: {
+	 scrollbar: false,
+	 loop: true,
+	 live: true,
+	 hashtags: true,
+	 timestamp: true,
+	 avatars: true,
+	 toptweets: true,
+	 behavior: 'default'
+	 }
+	}).render().start();
+	</script>
 </div>

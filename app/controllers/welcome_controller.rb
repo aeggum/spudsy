@@ -181,7 +181,11 @@ class WelcomeController < ApplicationController
     render_your_picks()
   end
   
-  
+  def twitter
+    respond_to do |format|
+        format.html { render :partial => "twitter", :locals => { :media_array => $your_picks} }
+    end
+  end
   
   
   

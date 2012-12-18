@@ -4,7 +4,7 @@
 	</div>
 	<div style= "float:right; width:60%">
 		<h1 class="giant_goldfish"><%=movie.name%></h1> 		
-		<h3><span class="italics"><%=movie.release_date%></span>, <%=movie.mpaa_rating%></h3>
+		<h3><span class="italics"><%=movie.release_date.strftime("%B %d, %Y")%></span>, <%=movie.mpaa_rating %></h3>
 		<h3>
 		<% if (@movie.rating >= 60) %>
 			<% if (@movie.certified) %>
@@ -15,14 +15,57 @@
 		<% else %>
 			<img class="rt_img_overlay" src="../rt_rotten.png" />
 		<% end%>
-		 <%=movie.rating%> 
+		 	<%=movie.rating%> 
+		</h3>
+		<h3>
+			<% if (movie.spudsy_rating >= 60) %>
+			<img src='../blue_tv.png' class="rt_img_overlay test" />
+			<% else %>
+			<img src="../static_tv.png" class="rt_img_overlay test" />
+			<% end %>
+			<%= movie.spudsy_rating %>
 		</h3>
 	</div>
 </div>
 <div style="width:95% ">
-	<div class="overlay_info" style="overflow:hidden; height:200px">
+	<div class="overlay_info">
 		<h3>Description</h3>
 		<p><%=movie.description%></p>
 	</div>
 	<a href="#" id = "overlay_more_info" style="float: right">More Info</a>
+</div>
+<div style="width:95% ">
+	<div class="overlay_info" style="overflow:hidden; height:200px; width: 50%; float: left;">
+		<h3>Description</h3>
+		<p><%=movie.description%></p>
+		<a href="#" id = "overlay_more_info" style="float: right">More Info</a>
+	</div>
+	<div id="twitter_div<%= tv_show.name.gsub(/[^0-9a-z]/i, '') %>" style= "float:right; width:40%; margin-top: -55px;"></div>
+	<script>
+	new TWTR.Widget({
+	 version: 2,
+	 id: 'twitter_div<%= tv_show.name.gsub(/[^0-9a-z]/i, '') %>',
+	 type: 'search',
+	 search: '<%=tv_show.name%>',
+	 interval: 6000,
+	 title: 'Tweets about',
+	 subject: '<%=tv_show.name%>',
+	 width: 275,
+	 height: 245,
+	 shell: {
+		 background: '#F38630',
+		 color: '#ffffff'
+	 },
+	 features: {
+		 scrollbar: false,
+		 loop: true,
+		 live: true,
+		 hashtags: true,
+		 timestamp: true,
+		 avatars: true,
+		 toptweets: true,
+		 behavior: 'default'
+	 }
+	}).render().start();
+	</script>
 </div>

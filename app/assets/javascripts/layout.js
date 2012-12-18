@@ -32,6 +32,11 @@ var Welcome = function() {
 			$("#your_picks_section").html(data);
 			_initBinding();
 		});
+		$.ajax({
+			url: "/welcome/twitter"
+		}).done(function(data) {
+			$("#twitter_section").html(data);
+		});
 	}
 	
 	/**
@@ -88,7 +93,7 @@ var Welcome = function() {
 			
 			$(this).colorbox({	
 		    	width:"800px",
-		   		height:"600px",
+		   		height:"650px",
 		   		inline: true,
 		   		href: "#info_overlay",
 		   		speed: 500,
