@@ -1,0 +1,29 @@
+<% media_array.each_with_index do |mediaLive, index| %>
+	<% break if index > 5 %>	
+	<div class="grid_2">
+		<div id="twitter_div<%= index %>"></div>
+		<script>
+		new TWTR.Widget({
+		 version: 2,
+		 id: 'twitter_div<%= index %>',
+		 type: 'search',
+		 search: '<%= mediaLive.media.name %>',
+		 interval: 6000,
+		 title: 'Tweets about',
+		 subject: '<%= mediaLive.media.name %>',
+		 width: 140,
+		 height: 300,
+		 features: {
+		 scrollbar: false,
+		 loop: true,
+		 live: true,
+		 hashtags: true,
+		 timestamp: true,
+		 avatars: true,
+		 toptweets: true,
+		 behavior: 'default'
+		 }
+		}).render().start();
+		</script>
+	</div>	
+<% end %>

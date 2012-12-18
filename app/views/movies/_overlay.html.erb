@@ -34,3 +34,38 @@
 	</div>
 	<a href="#" id = "overlay_more_info" style="float: right">More Info</a>
 </div>
+<div style="width:95% ">
+	<div class="overlay_info" style="overflow:hidden; height:200px; width: 50%; float: left;">
+		<h3>Description</h3>
+		<p><%=movie.description%></p>
+		<a href="#" id = "overlay_more_info" style="float: right">More Info</a>
+	</div>
+	<div id="twitter_div<%= movie.name.gsub(/[^0-9a-z]/i, '') %>" style= "float:right; width:40%; margin-top: -55px;"></div>
+	<script>
+	new TWTR.Widget({
+	 version: 2,
+	 id: 'twitter_div<%= movie.name.gsub(/[^0-9a-z]/i, '') %>',
+	 type: 'search',
+	 search: '<%=movie.name%>',
+	 interval: 6000,
+	 title: 'Tweets about',
+	 subject: '<%=movie.name%>',
+	 width: 275,
+	 height: 245,
+	 shell: {
+		 background: '#F38630',
+		 color: '#ffffff'
+	 },
+	 features: {
+		 scrollbar: false,
+		 loop: true,
+		 live: true,
+		 hashtags: true,
+		 timestamp: true,
+		 avatars: true,
+		 toptweets: true,
+		 behavior: 'default'
+	 }
+	}).render().start();
+	</script>
+</div>

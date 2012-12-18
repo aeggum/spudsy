@@ -147,8 +147,6 @@ ActiveRecord::Schema.define(:version => 20121216092536) do
     t.string   "provider"
     t.string   "uid"
     t.string   "username"
-    t.string   "netflix_token"
-    t.string   "netflix_secret"
   end
 
   add_index "users", ["email"], :name => "index_users_on_email", :unique => true

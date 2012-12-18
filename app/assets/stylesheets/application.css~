@@ -210,10 +210,15 @@ img.rt_img_overlay {
 .brand {
 	font-family: LeagueGothic !important;
 	font-size: 40px !important;
+	margin-left: 20px !important;
 }
 
 .brand:hover {
 	color: white !important;
+}
+
+.dropdown-toggle {
+	margin-right: 20px !important;
 }
 
 .navbar-inner {
@@ -263,7 +268,7 @@ img.rt_img_overlay {
 
 #view_more {
 	float: right;
-	padding: 15px;
+	padding: 0 15px;
 }
 
 #poster_slider_2, #poster_slider_3 {

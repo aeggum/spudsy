@@ -16,81 +16,148 @@ class WelcomeController < ApplicationController
   Rotten.api_key = 'pykjuv5y44fywgpu2m7rt4dk'
   Tmdb::Tmdb.api_key = "8da8a86a8b272a70d20c08a35b576d50"
   Tmdb::Tmdb.default_language = "en"
-  caches_action :geolocate, :expires_in => 1.hour
   before_filter :set_your_picks, :only => :index
-  before_filter :geolocate, :only => :index
+  before_filter :test_for_cookies, :only => :index
+  # before_filter :geolocate, :only => :index
   # caches_action :index, :expires_in => 2.minutes
+  # before_filter :bim, :only => :index
   
-  before_filter :tvdata, :only => :index
   
-  
-  def index 
-    # reset_session
-
-    
-    @@hidden_since_rotate = Array.new;
-    
-    bim_uuid = "SPUDSYTEST0000000000000001"
-    ds = DataService.new(session[:zip_code], bim_uuid, session)
-    #@stations = ds.current_provider.stations
-    #raise TypeError, @@stations
-    # session[:testing] = ds.current_provider.stations
-    #sleep 10;
-    
+  def index
+    puts "index() in WelcomeController"
+    $hidden_since_rotate = Array.new;
+    #raise TypeError, $ds
   end
   
-  def tvdata
-    
-    
+  def details
+    puts "details() in WelcomeController"
+    # This is a placeholder - users will be redirected to it when they are signed in, for now
+    # alternatively,
+    # Amazon::Ecs.configure do |options|
+      # options[:associate_tag] = 'Spudsy Devs'
+      # options[:AWS_access_key_id] = 'AKIAIKFAMUN6RODAOVKA'
+      # options[:AWS_secret_key] = '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'
+    # end
+# 
+    # # options provided on method call will merge with the default options
+    # res = Amazon::Ecs.item_search('Seinfeld', {:response_group => 'Medium', :sort => 'salesrank'})
+    # @res = res
+    # @total_pages = @res.total_pages
+    # @first = @res.items.first
   end
   
-  respond_to :html, :json
-  def rotate_picks 
-    @@your_picks.rotate!(6)
-    @@your_picks.each do |pick|
-     print pick.name + ","
-    end
-    respond_to do |format|
-      # format.json { render :json => @your_picks }
-      format.html { render :partial => "your_picks", :locals => { :media => @@your_picks} }
-    end
-    puts
-    puts 
-    @@your_picks.each do |pick|
-      print pick.name + ","
-    end
-    @your_picks = @@your_picks
+  # returns the your_picks section
+  def your_picks
+    puts "your_picks() in WelcomeController"
+    #raise TypeError, "PICKS QUEUE: #{$picks_queue.size}, #{$picks_queue.next}"
     
-    $index = [0,@your_picks.length-6].max
-    
-    while $index < @your_picks.length do
-      for pick in @@hidden_since_rotate do
-        
-          if (@your_picks[$index].class.to_s == pick["media_type"] && @your_picks[$index].id.to_s == pick["media_id"]) 
-            @your_picks.delete_at($index)
-            $index -=1
-          end
+    # Fill up the $your_picks Array with the picks from the PQ
+    while (!$picks_queue.empty?)
+      if ($your_picks_new.include?($picks_queue.next))
+        $picks_queue.pop
+      else 
+        # ml = MediaLive($picks_queue.next.class)
+        $your_picks_new.push($picks_queue.next)
+        $your_picks.push($picks_queue.pop)
       end
-      $index +=1
     end
     
-    @@hidden_since_rotate = Array.new
-    
+    hide_hidden_picks()
+    render_your_picks()
   end
   
+   # gets all providers available for this data source
+  def get_providers
+    puts "get_providers() in WelcomeController"
+    type = params[:type]
+    descs = $provider_hash[type]
+    respond_to do |format|
+      format.html { render :partial => "provider_option", :locals => { :descs => descs } }
+    end
+  end
+  
+  # changes the current provider (will regenerate tv grid)
+  def change_provider
+    puts "change_provider() in WelcomeController"
+    type = params[:type]
+    desc = params[:desc]
+    
+    $your_picks.clear
+    $your_picks_new.clear
+    $ds.setProvider( { :type => type, :desc => desc } )
+    @stations = $ds.current_provider.stations
+    
+    cookies.delete(:provider_data)
+    provider_cookie = { :provider_id => $ds.current_provider.provider_id, :provider_hash => $ds.selector_hash }
+    cookies[:provider_data] = {
+      :value => Marshal.dump(provider_cookie),
+      :expires => 15.minutes.from_now
+    }
+    
+    respond_to do |format|
+      format.html { render :partial => "stations", :locals => { :stations => @stations } }
+    end
+  end
+  
+  # rotates the 'your picks' section either forwards or backwards by 6
+  def rotate_picks 
+    puts "rotate_picks() in WelcomeController"
+    
+    # May want to return something else so that the JS doesn't do the slideDown()..
+    if ($your_picks.size <= 6)
+      render_your_picks()
+      return
+    end
+    
+    # can rotate forwards or backwards
+    if (params[:forward] == "true")
+      $picks_forward += 6
+      $your_picks.rotate!(6)
+      if $picks_forward >= $your_picks.size
+        add_more_picks()
+        $your_picks.rotate!(-6)
+      end
+    else
+      $picks_forward -= 6
+      $your_picks.rotate!(-6)
+    end
+    
+    render_your_picks()
+    $hidden_since_rotate = Array.new
+    
+    
+    # TODO: Do I need to recheck for hidden media types here, if more are brought in?
+    
+    # $index = [0,@your_picks.length-6].max
+#     
+    # while $index < @your_picks.length do
+      # for pick in $hidden_since_rotate do
+#         
+          # if (@your_picks[$index].class.to_s == pick["media_type"] && @your_picks[$index].id.to_s == pick["media_id"]) 
+            # @your_picks.delete_at($index)
+            # $index -=1
+          # end
+      # end
+      # $index +=1
+    # end
+    
+    
+   
+  end
+  
+  # hides the media for the user, permanently
   def hide_media
+    puts "hide_media() in WelcomeController"
+    # TODO: Make sure if it's not movies, it's tv_shows..otherwise give an error
     if params[:media_type] == "movies"
       mType = "Movie"
     else 
       mType = "TvShow"
     end
     
-    if params[:like] == "true"
-      liked = true
-    else
-      liked = false
-    end
+    liked = (params[:like] == "true")? true : false
     
+    # add the content to the HiddenUserMedia table
     current_user.hidden_user_medias.push(HiddenUserMedia.new( :user_id => current_user.id, 
                                                               :media_id => params[:media_id], 
                                                               :media_type => mType,
@@ -98,61 +165,215 @@ class WelcomeController < ApplicationController
     h = Hash.new
     h["media_id"] = params[:media_id]
     h["media_type"] = mType;                                            
-    @@hidden_since_rotate.push(h)
+    $hidden_since_rotate.push(h)
+    
+    index = 0;
+    while index < $your_picks.length do
+        
+        if ($your_picks[index].class.to_s == h["media_type"] && $your_picks[index].id.to_s == h["media_id"])
+          $your_picks.delete_at(index)
+          break  # found the hidden variable, break out of loop
+        end
+   
+      index += 1
+    end
+        
+    render_your_picks()
   end
   
-  def details
-    # This is a placeholder - users will be redirected to it when they are signed in, for now
-    # alternatively,
-    Amazon::Ecs.configure do |options|
-      options[:associate_tag] = 'Spudsy Devs'
-      options[:AWS_access_key_id] = 'AKIAIKFAMUN6RODAOVKA'
-      options[:AWS_secret_key] = 'u9r55D5jVDJ226vEvHuBKW19mHexgKEVoQ5CWZRh'
+  def twitter
+    respond_to do |format|
+        format.html { render :partial => "twitter", :locals => { :media => $your_picks} }
     end
+  end
+  
+  
+  
 
-    # options provided on method call will merge with the default options
-    res = Amazon::Ecs.item_search('Seinfeld', {:response_group => 'Medium', :sort => 'salesrank'})
-    @res = res
-    @total_pages = @res.total_pages
-    @first = @res.items.first
-  end
   
-  # called before the others in the class get going
-  def set_your_picks
-    #@movies = Movie.all(:limit => 30)
-    @show_array = TvShow.all(:limit => 30)
-    @movies = Movie.find(:all, :order => 'spudsy_rating DESC', :limit => 30)
-    @@your_picks = Array.new
-    @movie = @movies[0]
-    @@your_picks.push(*@movies)
-    @your_picks = @@your_picks
-  end
   
-  def geolocate
-    ip = request.remote_ip
-    location = IpGeocoder.geocode(ip)
-    latitude = location.lat
-    longitude = location.lng
-    
-    # if localhost, assume madison for now
-    if (ip == "127.0.0.1")
-      latitude = 43.0731
-      longitude = -89.4011
-    end
-    
-    ll = "#{latitude}, #{longitude}"
-    res = Geokit::Geocoders::GoogleGeocoder.reverse_geocode ll
-    full_address = res.full_address
-    zip_code = res.zip
-    session[:zip_code] = zip_code
-    session[:latitude] = latitude
-    session[:longitude] = longitude
-  end
   
-  # TODO: Could get the next set of shows if user has cycled through all on main load..
+  
+  
+  
+  
   
   private 
+    def render_your_picks() 
+      puts "render_your_picks() in WelcomeController"
+      #raise TypeError, $your_picks
+      respond_to do |format|
+        format.html { render :partial => "your_picks", :locals => { :media => $your_picks} }
+      end
+    end
     
-    # put private methods here
+    
+    # Calls bim's service to get tv data; all is in $ds
+    def bim(default_provider_id = nil)
+      puts "bim() in WelcomeController"
+      bim_uuid = "SPUDSYTEST0000000000000001"
+      puts "default_provider_id: #{default_provider_id}" 
+      $ds = DataService.new(session[:zip_code], bim_uuid, session, default_provider_id)
+      $provider_hash = $ds.selector_hash
+      @stations = $ds.current_provider.stations
+      
+      provider_cookie = { :provider_id => $ds.current_provider.provider_id, :provider_hash => $ds.selector_hash }
+      cookies[:provider_data] = {
+        :value => Marshal.dump(provider_cookie),
+        :expires => 5.minutes.from_now
+      }
+    end
+    
+    
+    
+    # Sets up various things for the controller
+    def set_your_picks
+      puts "set_your_picks() in WelcomeController"
+      #@movies = Movie.all(:limit => 30)
+      $picks_queue = Containers::PriorityQueue.new
+      #@@full_movies = Movie.find(:all, :order => 'spudsy_rating DESC', :limit => 100)
+      @show_array = TvShow.all(:limit => 30)
+      #@movies = @@full_movies[0...30] #Movie.find(:all, :order => 'spudsy_rating DESC', :limit => 30)
+      #@@your_picks = Array.new
+      #@movie = @movies[0]
+      #@@your_picks.push(*@movies)
+      
+      
+      
+      
+      
+      # @your_picks = @@your_picks
+      $your_picks = Array.new
+      $picks_forward = 0
+      $your_picks_new = Array.new
+    end
+    
+    
+    
+    def test_for_cookies
+      puts "test_for_cookies() in WelcomeController"
+
+     begin
+        location_data = Marshal.load(cookies[:location])
+        session[:zip_code] = location_data[:zip_code]
+        session[:latitude] = location_data[:latitude]
+        session[:longitude] = location_data[:longitude]
+     rescue
+        puts "Cookies with location data did not exist; calling geolocate."
+        geolocate()
+     end
+      
+     begin
+       provider_data = Marshal.load(cookies[:provider_data])
+       puts "Default provide found: #{provider_data[:provider_id]}."
+       bim(provider_data[:provider_id])
+     rescue
+       puts "No default provider data found. Calling bim()."
+       bim()
+     end
+      # raise TypeError, my_object
+      
+      
+      # provider_cookie = { :provider_id => $ds.current_provider.provider_id, :provider_hash => $ds.selector_hash, :provider_ids => ($ds.providers.map { |p| p.provider_id }.join ",") }
+      # cookies[:provider_data] = {
+        # :value => Marshal.dump(provider_cookie),
+        # :expires => 5.minutes.from_now
+      # }
+    end
+    
+    
+    
+    # Does geolocation to find zip code, latitude and longitude; saved in cookie.
+    def geolocate
+      puts "geolocate() in WelcomeController"
+      ip = request.remote_ip
+      location = IpGeocoder.geocode(ip)
+      latitude = location.lat
+      longitude = location.lng
+      
+      # if localhost, assume madison for now
+      if (ip == "127.0.0.1")
+        latitude = 43.0731
+        longitude = -89.4011
+      end
+      
+      ll = "#{latitude}, #{longitude}"
+      res = Geokit::Geocoders::GoogleGeocoder.reverse_geocode ll
+      full_address = res.full_address
+      zip_code = res.zip
+      session[:zip_code] = zip_code
+      session[:latitude] = latitude
+      session[:longitude] = longitude
+      
+      # Store data in cookie, to last 1 day from now (for now)
+      location_cookie = { :zip_code => zip_code, :latitude => latitude, :longitude => longitude }
+      cookies[:location] = { :value => Marshal.dump(location_cookie), :expires => 1.day.from_now }
+    end
+    
+
+    
+    # Adds 6 more movies to the movies list
+    # Not used for now..
+    def add_more_picks 
+      puts "add_more_picks() in WelcomeController"
+      # titles = $your_picks.map { |m| m.name }.join ','
+      # num_added = 0;
+      # @@full_movies.each {  |m| 
+        # unless titles.include?(m.name) 
+          # @@your_picks.push(m)
+          # num_added += 1
+            # break if num_added == 6
+        # end
+      # }
+    end
+    
+    
+    def hide_hidden_picks
+      puts "hide_hidden_picks() in WelcomeController"
+      if (current_user) 
+        hidden_media =  current_user.hidden_user_medias.all
+        hidden_ids = Array.new
+        
+        hidden_media.each do |media|
+          hidden_ids.push(media.media_id)
+        end
+        
+        index = 0;
+        while index < $your_picks.length
+          pick = $your_picks[index].media
+          puts pick
+          index_of_pick = hidden_ids.index(pick.id)
+          if (!index_of_pick.nil?) 
+            if pick.class.to_s == hidden_media[index_of_pick].media_type
+              $your_picks.delete_at(index)
+              index -=1
+            end
+          end
+          index +=1;
+        end
+      end
+    end
+end
+
+
+class MediaLive
+  
+  attr_accessor :class, :media, :network, :channel, :start_time
+  
+  def initialize(clazz, media, network, channel, start_time)
+    @class = clazz
+    @media = media
+    @network = network
+    @channel = channel
+    @start_time = start_time
+  end
+  
+  def ==(another)
+    return @class == another.class && @media == another.media && @network == another.network #&& @channel == another.channel && @start_time == another.start_time
+  end
+  
+  def to_s
+    "MediaLive: class: #{@class}, media: #{@media}, network: #{@network}, channel: #{@channel}, time: #{@start_time}"
+  end
 end
 

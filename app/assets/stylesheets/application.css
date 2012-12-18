@@ -210,6 +210,7 @@ img.rt_img_overlay {
 .brand {
 	font-family: LeagueGothic !important;
 	font-size: 40px !important;
+	margin-left: 20px !important;
 }
 
 .brand:hover {

@@ -56,9 +56,7 @@
 </div>
 
 <div class="container_12 grey_border" id="twitter_section" style="display:none;">
-	<div class="grid_12">		
-		<h1 class="clean_pondwater">Twitter</h1>
-	</div>
+	<%= render :partial => 'twitter', :locals => { :media => $your_picks } %>
 </div>
 
 <div class="container_12 grey_border" id="facebook_section" style="display:none;">
@@ -115,7 +113,6 @@
 		</div>
 		<div class="grid_3" id="choose_provider">
 			<%= select("type", "type_key", $provider_hash.keys.each {|p| p.capitalize }, {:prompt => 'Select Your Provider'}) %>
-			<img src='../ajax-loader.gif' id='ajax-loader' />
 		</div>
 		<div class="grid_3 suffix_1">
 			<img src='../ajax-loader.gif' id='ajax-loader' />
