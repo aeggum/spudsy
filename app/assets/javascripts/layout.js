@@ -192,6 +192,7 @@ var Welcome = function() {
 			});
 			
 			$("#tv_show, #movie").click(function() {
+				$("#your_picks_section").hide();
 				var movie_bool = $("#movie").is(':checked');
 				var tv_show_bool = $("#tv_show").is(':checked');
 				
@@ -200,6 +201,7 @@ var Welcome = function() {
 					data: { "tv_show": tv_show_bool, "movie": movie_bool } 
 				}).done(function(data) {
 					$("#your_picks_section").html(data);
+					$("#your_picks_section").show();
 					_initBinding();
 				});
 			});

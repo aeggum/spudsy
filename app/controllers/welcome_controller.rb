@@ -162,15 +162,31 @@ class WelcomeController < ApplicationController
     $your_picks.delete_if do |p| 
       if ( (p.class.to_s == "TvShow" && !($show_tv)) || (p.class.to_s == "Movie" && !($show_movies)) )
         $filtered_picks.push(p);
+        #$filtered_queue.add(p, p.media.spudsy_rating)
         true
       end  
     end
     
+    picks = []
     $filtered_picks.delete_if do |p|
       if ( (p.class.to_s == "TvShow" && ($show_tv)) || (p.class.to_s == "Movie" && ($show_movies)) )
-        $your_picks.push(p)
+        #$your_picks.push($filtered_queue.)
+        picks.push(p)
         true
       end
+    end
+    
+    $your_picks.each { |p| 
+      $filtered_queue.push(p, p.media.spudsy_rating)
+    }
+    
+    picks.each { |p| 
+      $filtered_queue.push(p, p.media.spudsy_rating) 
+    }
+    
+    $your_picks = []
+    while (!$filtered_queue.empty?)
+      $your_picks.push($filtered_queue.pop)
     end
     # $your_picks.each_with_index { |p, i| 
       # if (p.class == "Movie" && !$show_movies)
@@ -298,6 +314,7 @@ class WelcomeController < ApplicationController
       $show_movies = true
       $show_tv = true
       $filtered_picks = []
+      $filtered_queue = Containers::PriorityQueue.new
     end
     
     

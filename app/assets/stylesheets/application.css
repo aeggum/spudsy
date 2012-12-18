@@ -263,7 +263,7 @@ a:hover {
 
 #previous_picks {
 	float: left;
-	padding: 15px;
+	padding: 0 15px;
 }
 
 #previous_picks:hover {
