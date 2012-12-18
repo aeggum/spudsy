@@ -166,9 +166,12 @@ var Welcome = function() {
 			$('#service_type').change(function() {
 			  $('#type_type_key').fadeIn();
 			});
-			$('#ajax-loader').hide();			
+			$('#ajax-loader').hide();	
+					
 
 			$('#tv').prop('checked', true);
+			$("#tv_show").prop('checked', true);
+			$("#movie").prop('checked', true);
 			
 			$('#twitter_tab').click(function() {
 				$('#twitter_section').slideDown('slow');
@@ -186,6 +189,10 @@ var Welcome = function() {
 					// checkbox is now being unchecked
 					$('#tv_section').slideUp('slow');
 				}
+			});
+			
+			$("#tv_show, #movie").click(function() {
+				$.ajax
 			});
 			
 			$('#netflix').click(function() {

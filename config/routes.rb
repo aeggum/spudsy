@@ -9,6 +9,7 @@ DemoApp::Application.routes.draw do
   get "welcome/rotate_picks"
   get "search/results"
   get "welcome/hide_media"
+  get "welcome/show_media"
   get "welcome/get_providers"
   get "welcome/change_provider"
   get "welcome/your_picks"
