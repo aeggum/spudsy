@@ -1,4 +1,28 @@
-<% media_array.each_with_index do |mediaLive, index| %>
-	<% break if index > 5 %>	
-	
-<% end %>
+<div id="twitter_div_your_picks" class="grid_12"></div>
+<script>
+	new TWTR.Widget({
+	 version: 2,
+	 id: 'twitter_div_your_picks',
+	 type: 'search',
+	 search: '<%= crit %>',
+	 interval: 6000,
+	 title: 'Tweets about',
+	 subject: 'Your Picks',
+	 width: 900,
+	 height: 500,
+	 shell: {
+		 background: '#F38630',
+		 color: '#ffffff'
+	 },
+	 features: {
+		 scrollbar: true,
+		 loop: true,
+		 live: true,
+		 hashtags: true,
+		 timestamp: true,
+		 avatars: true,
+		 toptweets: true,
+		 behavior: 'default'
+	 }
+	}).render().start();
+</script>
