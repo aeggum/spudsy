@@ -58,7 +58,7 @@
     -moz-border-right-colors: none;
     -moz-border-top-colors: none;*/
     background-color: #FFFFFF;
-    background-image: url("../images/grid/time_gradient.gif");
+    /*background-image: url("../images/grid/time_gradient.gif");*/
     background-position: center bottom;
     background-repeat: repeat-x;
     border-color: #4B4C4C #4B4C4C #4B4C4C -moz-use-text-color;
@@ -81,7 +81,7 @@
     vertical-align: middle;
 }
 .gridHeaderCellLeft div.ghcPrevDay {
-    background-image: url("../images/grid/navl.gif");
+    /*background-image: url("../images/grid/navl.gif");*/
     background-position: center center;
     background-repeat: no-repeat;
     cursor: pointer;
@@ -90,7 +90,7 @@
     width: 16px;
 }
 .gridHeaderCellLeft div.ghcNextDay {
-    background-image: url("../images/grid/navr.gif");
+    /*background-image: url("../images/grid/navr.gif");*/
     background-position: center center;
     background-repeat: no-repeat;
     cursor: pointer;
@@ -106,7 +106,7 @@
     cursor: pointer;
 }
 .gridHeaderCellRight div.ghcTop {
-    background-image: url("../images/grid/navtop.gif");
+    /*background-image: url("../images/grid/navtop.gif");*/
     background-position: center center;
     background-repeat: no-repeat;
     cursor: pointer;
@@ -122,7 +122,7 @@
 }
 .gridHeaderCellRight {
     background-color: #FFFFFF;
-    background-image: url("../images/grid/time_gradient.gif");
+    /*background-image: url("../images/grid/time_gradient.gif");*/
     background-position: center bottom;
     background-repeat: repeat-x;
     border: 1px solid #4B4C4C;
@@ -135,7 +135,7 @@
 }
 .gridHeaderNavLeftCell {
     background-color: #FFFFFF;
-    background-image: url("../images/grid/time_gradient.gif");
+    /*background-image: url("../images/grid/time_gradient.gif");*/
     background-position: center bottom;
     background-repeat: repeat-x;
     border: 1px solid #4B4C4C;
@@ -148,7 +148,7 @@
 }
 .gridHeaderTimeCell {
     background-color: #FFFFFF;
-    background-image: url("../images/grid/time_gradient.gif");
+    /*background-image: url("../images/grid/time_gradient.gif");*/
     background-position: center bottom;
     background-repeat: repeat-x;
     border: 1px solid #4B4C4C;
@@ -162,7 +162,7 @@
 }
 .gridHeaderNavRightCell {
     background-color: #FFFFFF;
-    background-image: url("../images/grid/time_gradient.gif");
+    /*background-image: url("../images/grid/time_gradient.gif");*/
     background-position: center bottom;
     background-repeat: repeat-x;
     border: 1px solid #4B4C4C;
@@ -198,7 +198,7 @@ div.dailyGridRight {
 }
 .gridDailyTimeHeaderColumn {
     background-color: white;
-    background-image: url("../images/grid/shadow_gradient.gif");
+    /*background-image: url("../images/grid/shadow_gradient.gif");*/
     background-position: right center;
     background-repeat: repeat-y;
     border-left: 1px solid #4B4C4C;
@@ -234,7 +234,7 @@ div.dailyGridRight {
 }
 .gridDailyDateHeaderCell {
     background-color: #FFFFFF;
-    background-image: url("../images/grid/time_gradient.gif");
+    /*background-image: url("../images/grid/time_gradient.gif");*/
     background-position: center bottom;
     background-repeat: repeat-x;
     border: 1px solid #4B4C4C;
@@ -250,7 +250,7 @@ div.dailyGridRight {
     padding-top: 4px;
 }
 .gridCallSignCell {
-    background: url("../images/grid/channel_bg.gif") no-repeat scroll right bottom #FFFFFF;
+    /*background: url("../images/grid/channel_bg.gif") no-repeat scroll right bottom #FFFFFF;*/
     border: 1px solid #4B4C4C;
     cursor: pointer;
     overflow: hidden;
@@ -271,7 +271,7 @@ div.dailyGridRight {
 }
 .gridChannelCell {
     background-color: white;
-    background-image: url("../images/grid/shadow_gradient.gif");
+    /*background-image: url("../images/grid/shadow_gradient.gif");*/
     background-position: right center;
     background-repeat: repeat-y;
     border: 1px solid #4B4C4C;
@@ -1042,7 +1042,7 @@ div.favResultsBox {
 }
 div.favSummaryHeader {
     background-color: #FFFFFF;
-    background-image: url("../images/grid/time_gradient.gif");
+    /*background-image: url("../images/grid/time_gradient.gif");*/
     background-position: center bottom;
     background-repeat: repeat-x;
     border: 1px solid #4B4C4C;
