@@ -82,16 +82,16 @@ var Welcome = function() {
 		});
 				
 		$(".poster").on('click', function() {
-			_showOverlay();
+			_showOverlay(this);
 		});
 		$(".popBad").on('click', function() {
-			_showOverlay();
+			_showOverlay(this);
 		});
 		$(".popGood").on('click', function() {
-			_showOverlay();
+			_showOverlay(this);
 		});
 		$(".popTop").on('click', function() {
-			_showOverlay();
+			_showOverlay(this);
 		});
 
 		
@@ -127,16 +127,16 @@ var Welcome = function() {
 	   document.body.removeChild(document.getElementById("overlay"));
 	}
 
-	function _showOverlay() {
+	function _showOverlay(thiz) {
 		$.ajax({
-			url: $(this).attr('data-id')  // get movie#show for this movie
+			url: $(thiz).attr('data-id')  // get movie#show for this movie
 		
 		}).done(function(data) { 
 			//console.log(data);
 			$("#info_overlay").html(data);
 		});
 	
-		$(this).colorbox({	
+		$(thiz).colorbox({	
 	    	width:"800px",
 	   		height:"650px",
 	   		inline: true,
@@ -144,7 +144,7 @@ var Welcome = function() {
 	   		speed: 500,
 	   		onLoad:function() { 
 				document.documentElement.style.overflow = "hidden";
-				var id = $(this).attr('data-id');
+				var id = $(thiz).attr('data-id');
 	   		},
 	   		onClosed:function() {
 	   			$(".overlay_info").css("overflow", "hidden");
