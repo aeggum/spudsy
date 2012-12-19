@@ -195,6 +195,8 @@ var Welcome = function() {
 			$("#tv_show, #movie").click(function() {
 				$("#your_picks_section").hide();
 				$("#netflix_section").hide();
+				times_forward = 0;
+				_determinePrevious(times_forward);
 				
 				var netflix_bool = $("#netflix").is(':checked');
 				var movie_bool = $("#movie").is(':checked');
@@ -221,64 +223,42 @@ var Welcome = function() {
 			});
 			
 			$('#netflix').click(function() {
-				if ($(this).is(':checked')) {
-					//$("#netflix_section").slideDown('slow');
-					var netflix_bool = $("#netflix").is(':checked');
-					var movie_bool = $("#movie").is(':checked');
-					var tv_show_bool = $("#tv_show").is(':checked');
+				times_forward = 0;
+				_determinePrevious(times_forward);
+				
+				var netflix_checked = $("#netflix").is(':checked');
+				var movie_checked = $("#movie").is(':checked');
+				var tv_show_checked = $("#tv_show").is(':checked');
+				
+				if (netflix_checked) {
 					$("#your_picks_section").hide();
-					
-					
-					$.ajax({
-						url: "/welcome/show_media?",
-						data: { "tv_show": tv_show_bool, "movie": movie_bool, "netflix": netflix_bool, "n": "true" } 
-					}).done(function(data) {
-						$.ajax({
-							url: "/welcome/render_netflix"
-						}).done(function(data) {
-							$("#netflix_section").html(data);
-							if (netflix_bool) {
-								$("#netflix_section").slideDown();
-							}
-							_initBinding();
-						});
-						$("#your_picks_section").html(data);
-						$("#your_picks_section").show();
-						_initBinding();
-					});
-					
-					
-					//$("#netflix_section").slideDown('slow');
 				}
 				else {
 					$("#netflix_section").slideUp('slow');
-					var netflix_bool = $("#netflix").is(':checked');
-					var movie_bool = $("#movie").is(':checked');
-					var tv_show_bool = $("#tv_show").is(':checked');
 					$("#your_picks_section").hide();
-					
-					
-					$.ajax({
-						url: "/welcome/show_media?",
-						data: { "tv_show": tv_show_bool, "movie": movie_bool, "netflix": netflix_bool, "n": "true" } 
-					}).done(function(data) {
-						$("#your_picks_section").html(data);
-							$("#your_picks_section").show();
-							_initBinding();
-						
-					});
-					
-					$.ajax({
-							url: "/welcome/render_netflix"
-						}).done(function(data) {
-							$("#netflix_section").html(data);
-							if (netflix_bool) {
-								$("#netflix_section").slideDown();
-							}
-							_initBinding();
-							
-						});
 				}
+					
+				
+				// change the media to reflect the netflix update
+				$.ajax({
+					url: "/welcome/show_media?",
+					data: { "tv_show": tv_show_checked, "movie": movie_checked, "netflix": netflix_checked } 
+				}).done(function(data) {
+					$("#your_picks_section").html(data);
+					$("#your_picks_section").show();
+					_initBinding();
+				});
+				
+				// render the netflix section
+				$.ajax({
+					url: "/welcome/render_netflix"
+				}).done(function(data) {
+					$("#netflix_section").html(data);
+					if (netflix_bool) {
+						$("#netflix_section").slideDown();
+					}
+					_initBinding();
+				});
 			});
 			
 			
