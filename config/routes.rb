@@ -1,4 +1,4 @@
-DemoApp::Application.routes.draw do
+Spudsy::Application.routes.draw do
   
   ActiveAdmin.routes(self)
 
