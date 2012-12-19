@@ -1,15 +1,15 @@
 <div id="netflix_partial">
 	<div class="container_12">
 		<div class="grid_12">	
-			<h1 class="giant_goldfish"><%= header %></h1>
+			<h1 class="giant_goldfish">Netflix</h1>
 		</div>
 	</div>
-	<% shows.each_with_index do |show, index| %>
+	<% media.each_with_index do |show, index| %>
 	<% if index < 6%>
 	<% if (index % 6 == 0) %>
 		<div class="container_12">
 	<% end %>
-		<div data-id="<%= index %>" class="grid_2 poster tv_show">
+		<div data-id="<%= String.class_to_data_id(show.class.to_s) %>/<%= show.id %>" class="grid_2 poster tv_show">
 			<%= image_tag("#{show['poster']}", :size => "140x200") %>
 			<h3 class="rank grey_shade"><span>Netflix</span></h3>
 			<h3 class="rating grey_shade">
