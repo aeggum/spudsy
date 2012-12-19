@@ -257,6 +257,7 @@ var Welcome = function() {
 					if (netflix_bool) {
 						$("#netflix_section").slideDown();
 					}
+					//TODO: The binding here may not need to be the initBinding() function, but instead a new netflixBinding, or something
 					_initBinding();
 				});
 			});

@@ -5,8 +5,6 @@ require 'httparty'
 include Geokit::Geocoders
 
 class WelcomeController < ApplicationController
-  Dir[File.dirname(__FILE__) + '/lib/bim/*.rb'].each {|file| require file }
-  Dir[File.dirname(__FILE__) + '/lib/util/*.rb'].each {|file| require file }
   Rotten.api_key = 'pykjuv5y44fywgpu2m7rt4dk'
   Tmdb::Tmdb.api_key = "8da8a86a8b272a70d20c08a35b576d50"
   Tmdb::Tmdb.default_language = "en"
@@ -244,8 +242,8 @@ class WelcomeController < ApplicationController
   
   def twitter
     titles = [] 
-    $your_picks.each { |media|
-	    titles.push media.media.name		
+    $your_picks.each { |media_source|
+	    titles.push media_source.media.name		
     } 
     searchCriteria = titles[0..5].join(" OR ")
     respond_to do |format|
@@ -378,7 +376,7 @@ class WelcomeController < ApplicationController
     
     # Does geolocation to find zip code, latitude and longitude; saved in cookie.
     def geolocate
-      puts "geolocate() in WelcomeController"
+      logger.debug "WelcomeController#geolocate"
       ip = request.remote_ip
       location = IpGeocoder.geocode(ip)
       latitude = location.lat
@@ -407,7 +405,7 @@ class WelcomeController < ApplicationController
     
     
     def hide_hidden_picks
-      puts "hide_hidden_picks() in WelcomeController"
+      logger.debug "WelcomeController#hide_hidden_picks"
       if (current_user) 
         hidden_media =  current_user.hidden_user_medias.all
         hidden_ids = Array.new
@@ -429,47 +427,16 @@ class WelcomeController < ApplicationController
           end
           index +=1;
         end
+        
+        
       end
     end
+    
 end
 
 
-class MediaLive
-  
-  attr_accessor :clazz, :media, :network, :channel, :start_time, :end_time
-  
-  def initialize(clazz, media, network, channel, start_time, end_time)
-    @clazz = clazz
-    @media = media
-    @network = network
-    @channel = channel
-    @start_time = start_time
-    @end_time = end_time
-  end
-  
-  def ==(another)
-    return @clazz == another.clazz && @media == another.media #&& @network == another.network #&& @channel == another.channel && @start_time == another.start_time
-  end
-  
-  def to_s
-    "MediaLive: clazz: #{@clazz}, media: #{@media}, network: #{@network}, channel: #{@channel}, time: #{@start_time}-#{@end_time}"
-  end
-end
 
 
-class MediaNetflix
-  attr_accessor :clazz, :media
-  def initialize(clazz, media)
-    @clazz = clazz
-    @media = media
-  end
-  
-  def ==(another)
-    return @clazz = another.clazz && @media == another.media
-  end
-  
-  def to_s
-    "MediaNetflix: clazz: #{@clazz}, media: #{@media}"
-  end
-end
+
+
 
