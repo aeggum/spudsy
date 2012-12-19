@@ -5,15 +5,8 @@ require 'httparty'
 include Geokit::Geocoders
 
 class WelcomeController < ApplicationController
-  require 'bim/data_service'
-  require 'bim/provider'
-  require 'bim/station'
-  require 'bim/program_schedule'
-  require 'bim/program_full'
-  require 'bim/program'
-  require 'bim/parse_url_xml'
-  require 'bim/time'
-  require 'bim/string'
+  Dir[File.dirname(__FILE__) + '/lib/bim/*.rb'].each {|file| require file }
+  Dir[File.dirname(__FILE__) + '/lib/util/*.rb'].each {|file| require file }
   Rotten.api_key = 'pykjuv5y44fywgpu2m7rt4dk'
   Tmdb::Tmdb.api_key = "8da8a86a8b272a70d20c08a35b576d50"
   Tmdb::Tmdb.default_language = "en"
@@ -150,11 +143,13 @@ class WelcomeController < ApplicationController
   
   # filters the media in the your picks section depending on the check-boxes
   def show_media
-    puts "show_media() in WelcomeController"
+    logger.debug 'WelcomeController#show_media'
     $show_movies = false
     $show_tv = false
     $show_netflix = false
-    n = false
+    
+    $your_picks.delete_if { |p| p.class == MediaNetflix }
+    $filtered_picks.delete_if { |p| p.class == MediaNetflix }
     
     if (params[:movie] == "true")
       $show_movies = true
@@ -165,17 +160,13 @@ class WelcomeController < ApplicationController
     if (params[:netflix] == "true")
       $show_netflix = true
     end
-    if (params[:n] == "true")
-      n = true
-    end
+    
     
     
     # remove from your picks, put in global filtered array
     $your_picks.delete_if do |p| 
-      if ( (p.class.to_s == "TvShow" && !($show_tv)) || (p.class.to_s == "Movie" && !($show_movies)) || 
-        (p.class == MediaNetflix && (p.clazz.to_s == "TvShow" && !($show_tv)) || (p.clazz.to_s == "Movie" && !($show_movies))) )
-        $filtered_picks.push(p);
-        #$filtered_queue.add(p, p.media.spudsy_rating)
+      if ( (p.clazz.to_s == "TvShow" && !($show_tv)) || (p.clazz.to_s == "Movie" && !($show_movies)) ) 
+        $filtered_picks.push(p)
         true
       end  
     end
@@ -183,25 +174,10 @@ class WelcomeController < ApplicationController
     # remove from filtered picks if showing new info
     picks = []
     $filtered_picks.delete_if do |p|
-      if ( (p.class.to_s == "TvShow" && ($show_tv)) || (p.class.to_s == "Movie" && ($show_movies)) || 
-        (p.class == MediaNetflix && (p.clazz.to_s == "TvShow" && !($show_tv)) || (p.clazz.to_s == "Movie" && !($show_movies))) )
+      if ( (p.clazz == TvShow && ($show_tv)) || (p.clazz == Movie && ($show_movies)) )
         picks.push(p)
         true
       end
-    end
-    
-    if !$show_netflix 
-      # $your_picks.each { |p| 
-        # if p.class == MediaNetflix
-          # puts "FOOOOO"
-        # end 
-      # }
-      
-      $your_picks.delete_if { |p| 
-        if p.class == MediaNetflix
-          true
-        end  
-      }
     end
     
     # add to the filtered PQ
@@ -212,19 +188,19 @@ class WelcomeController < ApplicationController
       $filtered_queue.push(p, p.media.spudsy_rating) 
     }
     
-    set_netflix_picks($show_tv, $show_movies)
+    set_netflix_picks()
     $top_netflix_picks.each { |p| 
       n = MediaNetflix.new(p.class, p)
       $filtered_queue.push(n, n.media.spudsy_rating)
     }
     
-    # refill the PQ with the your picks filtered
+    # refill the PQ with the your picks filtered, sorted by spudsy rating
     $your_picks = []
     while (!$filtered_queue.empty?)
       $your_picks.push($filtered_queue.pop)
     end
     
-    
+    $picks_forward = 0
     render_your_picks()
   end
   
@@ -286,7 +262,7 @@ class WelcomeController < ApplicationController
   
   def render_netflix()
     puts "render_netflix() in WelcomeController"
-    set_netflix_picks(true, true);
+    set_netflix_picks();
     respond_to do |format|
       format.html { render :partial => "netflix", :locals => { :media => $top_netflix_picks } }
     end
@@ -325,23 +301,10 @@ class WelcomeController < ApplicationController
     
     
     
-    # Sets up various things for the controller
+    # Sets up various global variables for the controller
     def set_your_picks
-      puts "set_your_picks() in WelcomeController"
-      #@movies = Movie.all(:limit => 30)
+      logger.debug "WelcomeController#set_your_picks"
       $picks_queue = Containers::PriorityQueue.new
-      #@@full_movies = Movie.find(:all, :order => 'spudsy_rating DESC', :limit => 100)
-      #@show_array = TvShow.all(:limit => 30)
-      #@movies = @@full_movies[0...30] #Movie.find(:all, :order => 'spudsy_rating DESC', :limit => 30)
-      #@@your_picks = Array.new
-      #@movie = @movies[0]
-      #@@your_picks.push(*@movies)
-      
-      
-      
-      
-      
-      # @your_picks = @@your_picks
       $your_picks = Array.new
       $picks_forward = 0
       $your_picks_new = Array.new
@@ -350,37 +313,33 @@ class WelcomeController < ApplicationController
       $filtered_picks = []
       $filtered_queue = Containers::PriorityQueue.new
       $top_netflix_picks = []
-      set_netflix_picks(true, true)
+      set_netflix_picks()
       $show_netflix = false
     end
     
     
-    def set_netflix_picks(tv, movie) 
-      puts "-----------------------------------------"
-      puts "-----------------------------------------"
+    # sets the netflix picks depending on if we should show tv, movies, or netflix in general
+    def set_netflix_picks() 
+      logger.debug "WelcomeController#set_netflix_picks"
+      $top_netflix_picks = []
+      
       if !$show_netflix 
-        puts "returning"
-        $top_netflix_picks = []
+        logger.debug "$show_netflix is false; returning"
         return
       end
-      tv = $show_tv
-      movie = $show_movies
-      # puts "---------------------------------------"
-      # puts tv
-      # puts movie
-      # puts "---------------------------------------"
       
-      if (tv && movie) 
+      # Get netflix media based on what to show/hide
+      if ($show_tv && $show_movies) 
         netflixes = NetflixMedia.find(:all, :limit => 30, :order => "spudsy_rating DESC")
-      elsif (tv && !movie)
+      elsif ($show_tv && !$show_movies)
         netflixes = NetflixMedia.where("media_type = 'TvShow'").limit(30).order('spudsy_rating DESC')
-      elsif (!tv && movie)
+      elsif (!$show_tv && $show_movies)
         netflixes = NetflixMedia.where("media_type = 'Movie'").limit(30).order('spudsy_rating DESC')
-      elsif (!tv && !movie)
+      elsif (!$show_tv && !$show_movies)
         netflixes = []
       end
       
-      $top_netflix_picks.clear
+      # Fill out the top netflix picks array
       netflixes.each { |program| 
         if (program.media_type == "Movie")
           $top_netflix_picks.push(Movie.find(program.media_id))
@@ -389,14 +348,10 @@ class WelcomeController < ApplicationController
         end  
       }
         
-        # raise TypeError, $top_netflix_picks
-      puts $top_netflix_picks
-      puts "-----------------------------------------"
-      puts "-----------------------------------------"
     end
     
     def test_for_cookies
-      puts "test_for_cookies() in WelcomeController"
+      logger.debug "WelcomeController#test_for_cookies"
 
      begin
         location_data = Marshal.load(cookies[:location])
@@ -416,14 +371,7 @@ class WelcomeController < ApplicationController
        puts "No default provider data found. Calling bim()."
        bim()
      end
-      # raise TypeError, my_object
-      
-      
-      # provider_cookie = { :provider_id => $ds.current_provider.provider_id, :provider_hash => $ds.selector_hash, :provider_ids => ($ds.providers.map { |p| p.provider_id }.join ",") }
-      # cookies[:provider_data] = {
-        # :value => Marshal.dump(provider_cookie),
-        # :expires => 5.minutes.from_now
-      # }
+     
     end
     
     
@@ -457,21 +405,6 @@ class WelcomeController < ApplicationController
     
 
     
-    # Adds 6 more movies to the movies list
-    # Not used for now..
-    def add_more_picks 
-      puts "add_more_picks() in WelcomeController"
-      # titles = $your_picks.map { |m| m.name }.join ','
-      # num_added = 0;
-      # @@full_movies.each {  |m| 
-        # unless titles.include?(m.name) 
-          # @@your_picks.push(m)
-          # num_added += 1
-            # break if num_added == 6
-        # end
-      # }
-    end
-    
     
     def hide_hidden_picks
       puts "hide_hidden_picks() in WelcomeController"
@@ -486,7 +419,7 @@ class WelcomeController < ApplicationController
         index = 0;
         while index < $your_picks.length
           pick = $your_picks[index].media
-          puts pick
+          # puts pick
           index_of_pick = hidden_ids.index(pick.id)
           if (!index_of_pick.nil?) 
             if pick.class.to_s == hidden_media[index_of_pick].media_type
@@ -503,10 +436,10 @@ end
 
 class MediaLive
   
-  attr_accessor :class, :media, :network, :channel, :start_time, :end_time, :clazz
+  attr_accessor :clazz, :media, :network, :channel, :start_time, :end_time
   
   def initialize(clazz, media, network, channel, start_time, end_time)
-    @class = clazz
+    @clazz = clazz
     @media = media
     @network = network
     @channel = channel
@@ -515,11 +448,11 @@ class MediaLive
   end
   
   def ==(another)
-    return @class == another.class && @media == another.media #&& @network == another.network #&& @channel == another.channel && @start_time == another.start_time
+    return @clazz == another.clazz && @media == another.media #&& @network == another.network #&& @channel == another.channel && @start_time == another.start_time
   end
   
   def to_s
-    "MediaLive: class: #{@class}, media: #{@media}, network: #{@network}, channel: #{@channel}, time: #{@start_time}-#{@end_time}"
+    "MediaLive: clazz: #{@clazz}, media: #{@media}, network: #{@network}, channel: #{@channel}, time: #{@start_time}-#{@end_time}"
   end
 end
 
@@ -536,7 +469,7 @@ class MediaNetflix
   end
   
   def to_s
-    "MediaNetflix: class: #{@clazz}, media: #{@media}"
+    "MediaNetflix: clazz: #{@clazz}, media: #{@media}"
   end
 end
 

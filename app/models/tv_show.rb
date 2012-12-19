@@ -33,9 +33,13 @@ class TvShow < ActiveRecord::Base
     end
   end
   
-  def to_s
-    puts "name: #{self.name}"
+  def ==(another)
+    return self.name == another.name && self.rating == another.rating && self.description == another.description
   end
+  
+  # def to_s
+    # puts "name: #{self.name}"
+  # end
   
   # TODO: Get a rating for each tvshow
   def self.getRating tv_show

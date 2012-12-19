@@ -81,18 +81,18 @@ var Welcome = function() {
 		   	$(this).data("bouncing", false);
 		});
 				
-		$(".poster").on('click', function() {
+		$(".poster, .popBad, .popGood, .popTop").on('click', function() {
 			_showOverlay(this);
 		});
-		$(".popBad").on('click', function() {
-			_showOverlay(this);
-		});
-		$(".popGood").on('click', function() {
-			_showOverlay(this);
-		});
-		$(".popTop").on('click', function() {
-			_showOverlay(this);
-		});
+		// $(".popBad").on('click', function() {
+			// _showOverlay(this);
+		// });
+		// $(".popGood").on('click', function() {
+			// _showOverlay(this);
+		// });
+		// $(".popTop").on('click', function() {
+			// _showOverlay(this);
+		// });
 
 		
 		$(".hide_media_button").on('click', function(event) {
