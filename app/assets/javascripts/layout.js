@@ -53,12 +53,12 @@ var Welcome = function() {
  			$.ajax({
  				url: "/welcome/change_provider?",//type=" + type + "&desc=" + desc,
  				data: { type: type, desc: desc } //"type=" + type + "desc=" + desc //....
- 			}).success(function(data) {
+ 			}).done(function(data) {
  				$("#stations").html(data); //console.log(data)
  				_regenYourPicks();
- 			}).error(function(data) {	// TODO: Should be something more user friendly
+ 			}).fail(function(data) {	// TODO: Should be something more user friendly
  				alert("There was an error with the request. Sorry.");
- 			}).done(function() {
+ 			}).always(function() {
  				$('#ajax-loader').hide();
 				$("#stations").css('opacity','1');
 				$("#stations").css('background-color','white');
@@ -84,15 +84,6 @@ var Welcome = function() {
 		$(".poster, .popBad, .popGood, .popTop").on('click', function() {
 			_showOverlay(this);
 		});
-		// $(".popBad").on('click', function() {
-			// _showOverlay(this);
-		// });
-		// $(".popGood").on('click', function() {
-			// _showOverlay(this);
-		// });
-		// $(".popTop").on('click', function() {
-			// _showOverlay(this);
-		// });
 
 		
 		$(".hide_media_button").on('click', function(event) {
@@ -109,7 +100,7 @@ var Welcome = function() {
 					type: "GET",
 					url: "/welcome/hide_media",
 					data: {"like": liked, "media_type": data[0] , "media_id": data[1]}
-			}).done (function(data) {
+			}).done(function(data) {
 				$("#your_picks_section").html(data).slideDown(500).show();
 				_initBinding();
 			});
@@ -184,10 +175,8 @@ var Welcome = function() {
 
 			$('#tv').click(function() {
 				if ($(this).is(':checked')) {
-					// checkbox is now being checked
 					$('#tv_section').slideDown('slow');
 				} else {
-					// checkbox is now being unchecked
 					$('#tv_section').slideUp('slow');
 				}
 			});
@@ -207,6 +196,8 @@ var Welcome = function() {
 					data: { "tv_show": tv_show_bool, "movie": movie_bool, "netflix": netflix_bool } 
 				}).done(function(data) {
 					$("#your_picks_section").html(data);
+					_initBinding();
+				}).always(function() {
 					$("#your_picks_section").show();
 					_initBinding();
 				});
@@ -215,10 +206,11 @@ var Welcome = function() {
 					url: "/welcome/render_netflix"
 				}).done(function(data) {
 					$("#netflix_section").html(data);
+				}).always(function() {
 					if (netflix_bool) {
 						$("#netflix_section").show();
+						_initBinding();
 					}
-					_initBinding();
 				});
 			});
 			
@@ -234,8 +226,8 @@ var Welcome = function() {
 					$("#your_picks_section").hide();
 				}
 				else {
-					$("#netflix_section").slideUp('slow');
-					$("#your_picks_section").hide();
+					$("#netflix_section").hide();//('fast');
+					$("#your_picks_section").hide(); //('fast'); //hide();
 				}
 					
 				
@@ -245,21 +237,23 @@ var Welcome = function() {
 					data: { "tv_show": tv_show_checked, "movie": movie_checked, "netflix": netflix_checked } 
 				}).done(function(data) {
 					$("#your_picks_section").html(data);
-					$("#your_picks_section").show();
+				}).always(function() {
+					$("#your_picks_section").slideDown();
 					_initBinding();
+					// render the netflix section
+					$.ajax({
+						url: "/welcome/render_netflix"
+					}).done(function(data) {
+						$("#netflix_section").html(data);
+						if (netflix_checked) {
+							$("#netflix_section").slideDown();
+						}
+						//TODO: The binding here may not need to be the initBinding() function, but instead a new netflixBinding, or something
+						//_initBinding();
+					});
 				});
 				
-				// render the netflix section
-				$.ajax({
-					url: "/welcome/render_netflix"
-				}).done(function(data) {
-					$("#netflix_section").html(data);
-					if (netflix_bool) {
-						$("#netflix_section").slideDown();
-					}
-					//TODO: The binding here may not need to be the initBinding() function, but instead a new netflixBinding, or something
-					_initBinding();
-				});
+				
 			});
 			
 			
@@ -277,9 +271,7 @@ var Welcome = function() {
 
 			$(".chzn-select").chosen(); 
 			$(".chzn-select-deselect").chosen({allow_single_deselect:true});
-			
-			//Hides the selected media for the logged in user
-			
+						
 			
 			// shows a different selection of picks when the view more link is pressed
 			$("#view_more").on('click', function(event) {
