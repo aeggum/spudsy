@@ -55,7 +55,7 @@ class WelcomeController < ApplicationController
       end
     end
     
-    hide_hidden_picks()
+    #hide_hidden_picks()
     render_your_picks()
   end
   
@@ -94,29 +94,63 @@ class WelcomeController < ApplicationController
   
   # rotates the 'your picks' section either forwards or backwards by 6
   def rotate_picks 
-    puts "rotate_picks() in WelcomeController"
+    logger.debug "WelcomeController#rotate_picks"
+    options = Hash.new
+    options[:forward] = params[:forward] == "true"
+
+    if (params[:your_picks] == "true")
+      options[:your_picks] = true
+      rotate(options)
+    elsif (params[:netflix] == "true")
+      options[:netflix] = true
+      rotate(options)
+    end   
+  end
     
-    # May want to return something else so that the JS doesn't do the slideDown()..
-    if ($your_picks.size <= 6)
-      render_your_picks()
-      return
-    end
+  def rotate(option)
+    logger.debug "WelcomeController#rotate"
+    logger.debug "Option: #{option}"
     
-    # can rotate forwards or backwards
-    if (params[:forward] == "true")
-      $picks_forward += 6
-      $your_picks.rotate!(6)
-      if $picks_forward >= $your_picks.size
-        add_more_picks()
+    if (option[:your_picks]) 
+      # May want to return something else so that the JS doesn't do the slideDown()..
+      if ($your_picks.size <= 6)
+        render_your_picks()
+        return
+      end
+      
+      # can rotate forwards or backwards
+      if (option[:forward])
+        $picks_forward += 6
+        $your_picks.rotate!(6)
+        if $picks_forward >= $your_picks.size
+          $your_picks.rotate!(-6)
+        end
+      else
+        $picks_forward -= 6
         $your_picks.rotate!(-6)
       end
-    else
-      $picks_forward -= 6
-      $your_picks.rotate!(-6)
+      
+      render_your_picks()
+      $hidden_since_rotate = []
+      
+    elsif (option[:netflix])
+      if (option[:forward])
+        $netflix_forward += 6
+        $top_netflix_picks.rotate!(6)
+        if ($netflix_forward >= $top_netflix_picks.size)
+          puts "netflix forward: #{$netflix_forward}"
+          puts "top netflix picks size: #{$top_netflix_picks.size}"
+          add_more( {:netflix => true} )
+          $top_netflix_picks.rotate!(-6)
+        end
+      else 
+        $netflix_forward -= 6
+        $top_netflix_picks.rotate!(-6)
+      end
+      
+      render_netflix()
+      
     end
-    
-    render_your_picks()
-    $hidden_since_rotate = Array.new
     
     
     # TODO: Do I need to recheck for hidden media types here, if more are brought in?
@@ -198,6 +232,7 @@ class WelcomeController < ApplicationController
       $your_picks.push($filtered_queue.pop)
     end
     
+    $netflix_forward = 0
     $picks_forward = 0
     render_your_picks()
   end
@@ -205,7 +240,6 @@ class WelcomeController < ApplicationController
   # hides the media for the user, permanently
   def hide_media
     puts "hide_media() in WelcomeController"
-    # TODO: Make sure if it's not movies, it's tv_shows..otherwise give an error
     if params[:media_type] == "movies"
       mType = "Movie"
     else 
@@ -228,8 +262,8 @@ class WelcomeController < ApplicationController
     while index < $your_picks.length do
         # puts $your_picks[index].class
         if ( ($your_picks[index].class.to_s == h["media_type"] || $your_picks[index].clazz.to_s == h['media_type']) && $your_picks[index].media.id.to_s == h["media_id"])
-          puts $your_picks[index].class.to_s
-          puts $your_picks[index].media.id.to_s
+          # puts $your_picks[index].class.to_s
+          # puts $your_picks[index].media.id.to_s
           $your_picks.delete_at(index)
           break  # found the hidden variable, break out of loop
         end
@@ -259,8 +293,8 @@ class WelcomeController < ApplicationController
   
   
   def render_netflix()
-    puts "render_netflix() in WelcomeController"
-    set_netflix_picks();
+    logger.debug "WelcomeController#render_netflix"
+    #set_netflix_picks();
     respond_to do |format|
       format.html { render :partial => "netflix", :locals => { :media => $top_netflix_picks } }
     end
@@ -305,14 +339,15 @@ class WelcomeController < ApplicationController
       $picks_queue = Containers::PriorityQueue.new
       $your_picks = Array.new
       $picks_forward = 0
+      $netflix_forward = 0
       $your_picks_new = Array.new
-      $show_movies = true
-      $show_tv = true
       $filtered_picks = []
       $filtered_queue = Containers::PriorityQueue.new
       $top_netflix_picks = []
       set_netflix_picks()
       $show_netflix = false
+      $show_movies = true
+      $show_tv = true
     end
     
     
@@ -328,11 +363,11 @@ class WelcomeController < ApplicationController
       
       # Get netflix media based on what to show/hide
       if ($show_tv && $show_movies) 
-        netflixes = NetflixMedia.find(:all, :limit => 30, :order => "spudsy_rating DESC")
+        netflixes = NetflixMedia.find(:all, :limit => 50, :order => "spudsy_rating DESC")
       elsif ($show_tv && !$show_movies)
-        netflixes = NetflixMedia.where("media_type = 'TvShow'").limit(30).order('spudsy_rating DESC')
+        netflixes = NetflixMedia.where("media_type = 'TvShow'").limit(50).order('spudsy_rating DESC')
       elsif (!$show_tv && $show_movies)
-        netflixes = NetflixMedia.where("media_type = 'Movie'").limit(30).order('spudsy_rating DESC')
+        netflixes = NetflixMedia.where("media_type = 'Movie'").limit(50).order('spudsy_rating DESC')
       elsif (!$show_tv && !$show_movies)
         netflixes = []
       end
@@ -346,6 +381,19 @@ class WelcomeController < ApplicationController
         end  
       }
         
+    end
+    
+    # options is a hash with the type of media (netflix, hulu, amazon, etc) 
+    # to get more media for
+    def add_more(options) 
+      if (options[:netflix] == true)
+        if ($show_tv && $show_movies)
+          #more = NetflixMedia.find(:all)
+        end
+        puts "----------------------------------------------"
+        puts "Netflix add_more was hit."
+        puts "----------------------------------------------"
+      end
     end
     
     def test_for_cookies
@@ -401,37 +449,40 @@ class WelcomeController < ApplicationController
       cookies[:location] = { :value => Marshal.dump(location_cookie), :expires => 1.day.from_now }
     end
     
-
     
     
+    
+    
+    # hides the hidden picks for a signed-in user
     def hide_hidden_picks
       logger.debug "WelcomeController#hide_hidden_picks"
       if (current_user) 
         hidden_media =  current_user.hidden_user_medias.all
-        hidden_ids = Array.new
         
-        hidden_media.each do |media|
-          hidden_ids.push(media.media_id)
-        end
-        
-        index = 0;
-        while index < $your_picks.length
-          pick = $your_picks[index].media
-          # puts pick
-          index_of_pick = hidden_ids.index(pick.id)
-          if (!index_of_pick.nil?) 
-            if pick.class.to_s == hidden_media[index_of_pick].media_type
-              $your_picks.delete_at(index)
-              index -=1
-            end
+        # delete if you find a match in the user's hidden media array
+        $your_picks.delete_if { |media| 
+          pick = media.media
+          found = hidden_media.select { |v| v.media_id == pick.id && v.media_type == pick.class.to_s }
+          if (!found.empty?)
+            true
           end
-          index +=1;
-        end
+        }
         
+        # delete if you find a match in the user's hidden media array
+        $top_netflix_picks.delete_if { |media| 
+          if ( !(hidden_media.select { |v| v.media_id == media.id && v.media_type == media.class.to_s }.empty?) )
+            true
+          end
+        }
         
       end
     end
     
+end
+
+module Section
+  YOUR_PICKS = 1
+  NETFLIX = 2
 end
 
 

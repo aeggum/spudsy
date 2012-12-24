@@ -12,12 +12,25 @@ var Welcome = function() {
 	 * Determines whether there should be an option to go back 
 	 * in the 'your picks' section
 	 */
-	function _determinePrevious(times_forward) {
-		if (times_forward > 0) {
+	function _determineYourPrevious(your_picks_times_forward) {
+		if (your_picks_times_forward > 0) {
 			$("#previous_picks").show();
 		}
 		else {
 			$("#previous_picks").hide();
+		}
+	}
+	
+	/**
+	 * Shows the 'previous' netflix link if the parameter is > 0, hides otherwise.
+	 * For the 'netflix' section.
+	 */
+	function _determineNetflixPrevious(netflix_times_forward) {
+		if (netflix_times_forward > 0) {
+			$("#previous_netflix").show();
+		}
+		else {
+			$("#previous_netflix").hide();
 		}
 	}
 	
@@ -97,9 +110,9 @@ var Welcome = function() {
 			var data = $(this).parent().attr('data-id').split(',');
 			
 			$.ajax({
-					type: "GET",
-					url: "/welcome/hide_media",
-					data: {"like": liked, "media_type": data[0] , "media_id": data[1]}
+				type: "GET",
+				url: "/welcome/hide_media",
+				data: {"like": liked, "media_type": data[0] , "media_id": data[1]}
 			}).done(function(data) {
 				$("#your_picks_section").html(data).slideDown(500).show();
 				_initBinding();
@@ -151,7 +164,8 @@ var Welcome = function() {
 		*	Public Methods (separated by commas)
 		*/
 		documentReady: function() {
-			var times_forward = 0;
+			var your_picks_times_forward = 0;
+			var netflix_times_forward = 0;
 			
 			$('#type_type_key').hide();
 			$('#service_type').change(function() {
@@ -184,8 +198,9 @@ var Welcome = function() {
 			$("#tv_show, #movie").click(function() {
 				$("#your_picks_section").hide();
 				$("#netflix_section").hide();
-				times_forward = 0;
-				_determinePrevious(times_forward);
+				your_picks_times_forward = netflix_times_forward = 0;
+				_determineYourPrevious(your_picks_times_forward);
+				_determineNetflixPrevious(netflix_times_forward);
 				
 				var netflix_bool = $("#netflix").is(':checked');
 				var movie_bool = $("#movie").is(':checked');
@@ -215,19 +230,22 @@ var Welcome = function() {
 			});
 			
 			$('#netflix').click(function() {
-				times_forward = 0;
-				_determinePrevious(times_forward);
+				your_picks_times_forward = netflix_times_forward = 0;
+				_determineYourPrevious(your_picks_times_forward);
+				_determineNetflixPrevious(netflix_times_forward);
 				
 				var netflix_checked = $("#netflix").is(':checked');
 				var movie_checked = $("#movie").is(':checked');
 				var tv_show_checked = $("#tv_show").is(':checked');
 				
 				if (netflix_checked) {
+					$("#netflix_container").show();
 					$("#your_picks_section").hide();
 				}
 				else {
 					$("#netflix_section").hide();//('fast');
 					$("#your_picks_section").hide(); //('fast'); //hide();
+					$("#netflix_container").hide();
 				}
 					
 				
@@ -278,14 +296,26 @@ var Welcome = function() {
 				var yourPicksHeight = $("#your_picks_container").height();
 				$("#your_picks_container").css('height', yourPicksHeight);
 				$.ajax({
-					url: "/welcome/rotate_picks?forward=true"
+					url: "/welcome/rotate_picks?forward=true&your_picks=true"
 					
 				}).done(function(data) {
 					event.preventDefault();
 					$("#your_picks_section").hide();
 					$("#your_picks_section").html(data).slideDown(500).show();
 					_initBinding();
-					_determinePrevious(++times_forward);
+					_determineYourPrevious(++your_picks_times_forward);
+				});
+			});
+			
+			$("#view_more_netflix").on('click', function(event) {
+				var netflixPicksHeight = $("#netflix_container").height();
+				$("#netflix_container").css("height", netflixPicksHeight);
+				$("#netflix_section").hide();
+				$.ajax({
+					url: "/welcome/rotate_picks?forward=true&netflix=true"
+				}).done(function(data) {
+					$("#netflix_section").html(data).show();
+					_determineNetflixPrevious(++netflix_times_forward);
 				});
 			});
 			
@@ -297,14 +327,26 @@ var Welcome = function() {
 			
 			$("#previous_picks").on('click', function(event) {
 				$.ajax({
-					url: "/welcome/rotate_picks?forward=false"
+					url: "/welcome/rotate_picks?forward=false&your_picks=true"
 				}).done(function(data) {
 					$("#your_picks_section").hide();
 					$("#your_picks_section").html(data).slideDown(500).show();
 					_initBinding();
-					_determinePrevious(--times_forward);
+					_determineYourPrevious(--your_picks_times_forward);
 				});
 			});
+			
+			$("#previous_netflix").on('click', function() {
+				$("#netflix_section").hide();
+				$.ajax({
+					url: "/welcome/rotate_picks?forward=false&netflix=true"
+				}).done(function(data) {
+					$("#netflix_section").html(data).show();
+					_determineNetflixPrevious(--netflix_times_forward);
+				});
+			});
+			
+			
 			
 			
 			/**

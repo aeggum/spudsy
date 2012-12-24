@@ -274,13 +274,9 @@ a:hover {
 	cursor:pointer;
 }
 
-#view_more {
+#view_more, #view_more_netflix {
 	float: right;
 	padding: 0 15px; 
-}
-
-#view_more:hover {
-	cursor:pointer;
 }
 
 #poster_slider_2, #poster_slider_3 {
