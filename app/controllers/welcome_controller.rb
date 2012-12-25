@@ -107,9 +107,9 @@ class WelcomeController < ApplicationController
     end   
   end
     
+  # Rotates {currently} either the your_picks or netflix sections forwards or backwards
   def rotate(option)
     logger.debug "WelcomeController#rotate"
-    logger.debug "Option: #{option}"
     
     if (option[:your_picks]) 
       # May want to return something else so that the JS doesn't do the slideDown()..
@@ -118,7 +118,7 @@ class WelcomeController < ApplicationController
         return
       end
       
-      # can rotate forwards or backwards
+      # Rotates your picks forwards or backwards
       if (option[:forward])
         $picks_forward += 6
         $your_picks.rotate!(6)
@@ -132,44 +132,35 @@ class WelcomeController < ApplicationController
       
       render_your_picks()
       $hidden_since_rotate = []
-      
+    
+    # Netflix rotations.. a bit more complex, attempt to keep order
     elsif (option[:netflix])
       if (option[:forward])
         $netflix_forward += 6
         $top_netflix_picks.rotate!(6)
-        if ($netflix_forward >= $top_netflix_picks.size)
-          puts "netflix forward: #{$netflix_forward}"
-          puts "top netflix picks size: #{$top_netflix_picks.size}"
-          add_more( {:netflix => true} )
-          $top_netflix_picks.rotate!(-6)
+        
+        # keep things in order; request more picks if nearing end of array
+        if ($netflix_forward + 6 >= $top_netflix_picks.size)
+          diff = ($netflix_forward + 6) - $top_netflix_picks.size
+          $top_netflix_picks.rotate!(diff)
+          $netflix_forward += diff
+         
+          # puts "netflix_forward_factor: #{$netflix_forward_factor}"
+          num_added = add_more( {:netflix => true, :netflix_factor => $netflix_forward_factor} )
+          $netflix_forward_factor += 1
+          $top_netflix_picks.rotate!(-num_added)
         end
       else 
-        $netflix_forward -= 6
-        $top_netflix_picks.rotate!(-6)
+        diff = ($netflix_forward >= 6? 6 : $netflix_forward)
+        $netflix_forward -= diff
+        $top_netflix_picks.rotate!(-diff)
       end
       
+      # puts "netflix forward: #{$netflix_forward}"
+      # puts "top netflix picks size: #{$top_netflix_picks.size}"
       render_netflix()
-      
     end
-    
-    
-    # TODO: Do I need to recheck for hidden media types here, if more are brought in?
-    
-    # $index = [0,@your_picks.length-6].max
-#     
-    # while $index < @your_picks.length do
-      # for pick in $hidden_since_rotate do
-#         
-          # if (@your_picks[$index].class.to_s == pick["media_type"] && @your_picks[$index].id.to_s == pick["media_id"]) 
-            # @your_picks.delete_at($index)
-            # $index -=1
-          # end
-      # end
-      # $index +=1
-    # end
-    
-    
-   
+
   end
   
   
@@ -297,6 +288,7 @@ class WelcomeController < ApplicationController
     #set_netflix_picks();
     respond_to do |format|
       format.html { render :partial => "netflix", :locals => { :media => $top_netflix_picks } }
+      format.text { render :text => 3}
     end
   end
   
@@ -340,6 +332,7 @@ class WelcomeController < ApplicationController
       $your_picks = Array.new
       $picks_forward = 0
       $netflix_forward = 0
+      $netflix_forward_factor = 1
       $your_picks_new = Array.new
       $filtered_picks = []
       $filtered_queue = Containers::PriorityQueue.new
@@ -354,6 +347,7 @@ class WelcomeController < ApplicationController
     # sets the netflix picks depending on if we should show tv, movies, or netflix in general
     def set_netflix_picks() 
       logger.debug "WelcomeController#set_netflix_picks"
+      offset_size = 25
       $top_netflix_picks = []
       
       if !$show_netflix 
@@ -363,11 +357,11 @@ class WelcomeController < ApplicationController
       
       # Get netflix media based on what to show/hide
       if ($show_tv && $show_movies) 
-        netflixes = NetflixMedia.find(:all, :limit => 50, :order => "spudsy_rating DESC")
+        netflixes = NetflixMedia.find(:all, :limit => offset_size, :order => "spudsy_rating DESC")
       elsif ($show_tv && !$show_movies)
-        netflixes = NetflixMedia.where("media_type = 'TvShow'").limit(50).order('spudsy_rating DESC')
+        netflixes = NetflixMedia.where("media_type = 'TvShow'").limit(offset_size).order('spudsy_rating DESC')
       elsif (!$show_tv && $show_movies)
-        netflixes = NetflixMedia.where("media_type = 'Movie'").limit(50).order('spudsy_rating DESC')
+        netflixes = NetflixMedia.where("media_type = 'Movie'").limit(offset_size).order('spudsy_rating DESC')
       elsif (!$show_tv && !$show_movies)
         netflixes = []
       end
@@ -385,15 +379,33 @@ class WelcomeController < ApplicationController
     
     # options is a hash with the type of media (netflix, hulu, amazon, etc) 
     # to get more media for
-    def add_more(options) 
+    def add_more(options)
+      
+      
       if (options[:netflix] == true)
+        limit = 25
+        offset_size = limit * options[:netflix_factor]
+        puts offset_size
+        more = []
         if ($show_tv && $show_movies)
-          #more = NetflixMedia.find(:all)
+          more = NetflixMedia.find(:all, :offset => offset_size, :limit => limit, :order => "spudsy_rating DESC")
+        elsif ($show_tv && !$show_movies)
+          more = NetflixMedia.where("media_type = 'TvShow'").offset(offset_size).limit(limit).order("spudsy_rating DESC") 
+        elsif (!$show_tv && $show_movies)
+          more = NetflixMedia.where("media_type = 'Movie'").offset(offset_size).limit(limit).order('spudsy_rating DESC')
         end
-        puts "----------------------------------------------"
-        puts "Netflix add_more was hit."
-        puts "----------------------------------------------"
+        
+        more.each { |program| 
+          if (program.media_type == "Movie")
+            $top_netflix_picks.push(Movie.find(program.media_id))
+          else 
+            $top_netflix_picks.push(TvShow.find(program.media_id))
+          end
+        }
+        
+        return more.size
       end
+      
     end
     
     def test_for_cookies

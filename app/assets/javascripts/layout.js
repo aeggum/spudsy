@@ -200,7 +200,7 @@ var Welcome = function() {
 				$("#netflix_section").hide();
 				your_picks_times_forward = netflix_times_forward = 0;
 				_determineYourPrevious(your_picks_times_forward);
-				_determineNetflixPrevious(netflix_times_forward);
+				//_determineNetflixPrevious(netflix_times_forward);
 				
 				var netflix_bool = $("#netflix").is(':checked');
 				var movie_bool = $("#movie").is(':checked');
@@ -232,7 +232,7 @@ var Welcome = function() {
 			$('#netflix').click(function() {
 				your_picks_times_forward = netflix_times_forward = 0;
 				_determineYourPrevious(your_picks_times_forward);
-				_determineNetflixPrevious(netflix_times_forward);
+				// _determineNetflixPrevious(netflix_times_forward);
 				
 				var netflix_checked = $("#netflix").is(':checked');
 				var movie_checked = $("#movie").is(':checked');
@@ -315,7 +315,10 @@ var Welcome = function() {
 					url: "/welcome/rotate_picks?forward=true&netflix=true"
 				}).done(function(data) {
 					$("#netflix_section").html(data).show();
-					_determineNetflixPrevious(++netflix_times_forward);
+					//_determineNetflixPrevious(++netflix_times_forward);
+				}).fail(function() {
+					$("#previous_netflix").hide();
+					$("#view_more_netflix").hide();
 				});
 			});
 			
@@ -341,8 +344,12 @@ var Welcome = function() {
 				$.ajax({
 					url: "/welcome/rotate_picks?forward=false&netflix=true"
 				}).done(function(data) {
+					console.log(data)
 					$("#netflix_section").html(data).show();
-					_determineNetflixPrevious(--netflix_times_forward);
+					//_determineNetflixPrevious(--netflix_times_forward);
+				}).fail(function() {
+					$("#previous_netflix").hide();
+					$("#view_more_netflix").hide();
 				});
 			});
 			
