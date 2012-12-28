@@ -39,6 +39,41 @@ class WelcomeController < ApplicationController
     redirect_to :controller => 'welcome', :action => 'index'
   end
   
+  # Change the zip code, update the table, add zip code to user's zip code location
+  def update_zip #zip_code
+    logger.debug "---START--- WelcomeController#update_table -------------------------"
+    zip_code = params[:zip_code]
+    
+    # Store data in cookie, to last 1 day from now (for now)
+    location_cookie = { :zip_code => zip_code, :latitude => nil, :longitude => nil }
+    cookies[:location] = { :value => Marshal.dump(location_cookie), :expires => 1.day.from_now }
+    
+    puts "No default provider data found. Calling bim()."
+    bim( { :zip_code => zip_code } )
+    
+    $your_picks.clear
+    $your_picks_new.clear
+    #$ds.setProvider( { :type => type, :desc => desc } )
+    @stations = $ds.current_provider.stations
+    
+    cookies.delete(:provider_data)
+    # provider_cookie = { :provider_id => $ds.current_provider.provider_id, :provider_hash => $ds.selector_hash }
+    # cookies[:provider_data] = {
+      # :value => Marshal.dump(provider_cookie),
+      # :expires => 15.minutes.from_now
+    # }
+    
+    respond_to do |format|
+      format.html { render :partial => "stations", :locals => { :stations => @stations } }
+    end
+    logger.debug "---END--- WelcomeController#update_table ---------------------------"
+  end
+  
+  
+  
+  
+  
+  
   # returns the your_picks section
   def your_picks
     puts "your_picks() in WelcomeController"
@@ -92,6 +127,9 @@ class WelcomeController < ApplicationController
     end
   end
   
+  
+  
+  
   # rotates the 'your picks' section either forwards or backwards by 6
   def rotate_picks 
     logger.debug "WelcomeController#rotate_picks"
@@ -107,61 +145,10 @@ class WelcomeController < ApplicationController
     end   
   end
     
-  # Rotates {currently} either the your_picks or netflix sections forwards or backwards
-  def rotate(option)
-    logger.debug "WelcomeController#rotate"
     
-    if (option[:your_picks]) 
-      # May want to return something else so that the JS doesn't do the slideDown()..
-      if ($your_picks.size <= 6)
-        render_your_picks()
-        return
-      end
-      
-      # Rotates your picks forwards or backwards
-      if (option[:forward])
-        $picks_forward += 6
-        $your_picks.rotate!(6)
-        if $picks_forward >= $your_picks.size
-          $your_picks.rotate!(-6)
-        end
-      else
-        $picks_forward -= 6
-        $your_picks.rotate!(-6)
-      end
-      
-      render_your_picks()
-      $hidden_since_rotate = []
     
-    # Netflix rotations.. a bit more complex, attempt to keep order
-    elsif (option[:netflix])
-      if (option[:forward])
-        $netflix_forward += 6
-        $top_netflix_picks.rotate!(6)
-        
-        # keep things in order; request more picks if nearing end of array
-        if ($netflix_forward + 6 >= $top_netflix_picks.size)
-          diff = ($netflix_forward + 6) - $top_netflix_picks.size
-          $top_netflix_picks.rotate!(diff)
-          $netflix_forward += diff
-         
-          # puts "netflix_forward_factor: #{$netflix_forward_factor}"
-          num_added = add_more( {:netflix => true, :netflix_factor => $netflix_forward_factor} )
-          $netflix_forward_factor += 1
-          $top_netflix_picks.rotate!(-num_added)
-        end
-      else 
-        diff = ($netflix_forward >= 6? 6 : $netflix_forward)
-        $netflix_forward -= diff
-        $top_netflix_picks.rotate!(-diff)
-      end
-      
-      # puts "netflix forward: #{$netflix_forward}"
-      # puts "top netflix picks size: #{$top_netflix_picks.size}"
-      render_netflix()
-    end
+    
 
-  end
   
   
   # filters the media in the your picks section depending on the check-boxes
@@ -308,11 +295,16 @@ class WelcomeController < ApplicationController
     
     
     # Calls bim's service to get tv data; all is in $ds
-    def bim(default_provider_id = nil)
+    def bim(options) #default_provider_id = nil)
+      logger.debug "---START--- WelcomeController#bim() -------------------------------"
+      
+      logger.debug "Options: #{options}"
+      default_provider_id = options[:default_provider_id]
+      zip_code = options[:zip_code]
       puts "bim() in WelcomeController"
       bim_uuid = "SPUDSYTEST0000000000000001"
       puts "default_provider_id: #{default_provider_id}" 
-      $ds = DataService.new(session[:zip_code], bim_uuid, session, default_provider_id)
+      $ds = DataService.new(zip_code, bim_uuid, session, default_provider_id)
       $provider_hash = $ds.selector_hash
       @stations = $ds.current_provider.stations
       
@@ -321,6 +313,8 @@ class WelcomeController < ApplicationController
         :value => Marshal.dump(provider_cookie),
         :expires => 5.minutes.from_now
       }
+      
+      logger.debug "---END----- WelcomeController#bim() -------------------------------"
     end
     
     
@@ -424,10 +418,10 @@ class WelcomeController < ApplicationController
      begin
        provider_data = Marshal.load(cookies[:provider_data])
        puts "Default provide found: #{provider_data[:provider_id]}."
-       bim(provider_data[:provider_id])
+       bim( { :zip_code => session[:zip_code], :default_provider_id => provider_data[:provider_id] } )
      rescue
        puts "No default provider data found. Calling bim()."
-       bim()
+       bim( { :zip_code => session[:zip_code] } )
      end
      
     end
@@ -488,6 +482,62 @@ class WelcomeController < ApplicationController
         }
         
       end
+    end
+    
+      # Rotates {currently} either the your_picks or netflix sections forwards or backwards
+    def rotate(option)
+      logger.debug "WelcomeController#rotate"
+      
+      if (option[:your_picks]) 
+        # May want to return something else so that the JS doesn't do the slideDown()..
+        if ($your_picks.size <= 6)
+          render_your_picks()
+          return
+        end
+        
+        # Rotates your picks forwards or backwards
+        if (option[:forward])
+          $picks_forward += 6
+          $your_picks.rotate!(6)
+          if $picks_forward >= $your_picks.size
+            $your_picks.rotate!(-6)
+          end
+        else
+          $picks_forward -= 6
+          $your_picks.rotate!(-6)
+        end
+        
+        render_your_picks()
+        $hidden_since_rotate = []
+      
+      # Netflix rotations.. a bit more complex, attempt to keep order
+      elsif (option[:netflix])
+        if (option[:forward])
+          $netflix_forward += 6
+          $top_netflix_picks.rotate!(6)
+          
+          # keep things in order; request more picks if nearing end of array
+          if ($netflix_forward + 6 >= $top_netflix_picks.size)
+            diff = ($netflix_forward + 6) - $top_netflix_picks.size
+            $top_netflix_picks.rotate!(diff)
+            $netflix_forward += diff
+           
+            # puts "netflix_forward_factor: #{$netflix_forward_factor}"
+            num_added = add_more( {:netflix => true, :netflix_factor => $netflix_forward_factor} )
+            $netflix_forward_factor += 1
+            $top_netflix_picks.rotate!(-num_added)
+          end
+        else 
+          diff = ($netflix_forward >= 6? 6 : $netflix_forward)
+          $netflix_forward -= diff
+          $top_netflix_picks.rotate!(-diff)
+        end
+        
+        # puts "netflix forward: #{$netflix_forward}"
+        # puts "top netflix picks size: #{$top_netflix_picks.size}"
+        render_netflix()
+      end
+  
     end
     
 end

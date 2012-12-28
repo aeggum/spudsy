@@ -12,15 +12,20 @@ class DataService
     @providers = Array.new
     @session = session
     
+    puts @zip_code
+    puts @uuid
     register_user_xml = register_user
+    puts register_user_xml
     setProviders(register_user_xml, default_provider_id)
     setSelectorHash()
   end
   
   def register_user
-    puts "register_user() in DataService"
+    puts "---START--- DataService::register_user() ------------------------------------"
     @register_user_url = "http://iwavit.data.titantv.com/dataservice.asmx/RegisterUser?UUID=#{@uuid}&ZipCode=#{@zip_code}"
-    ParseUrlXml.get(@register_user_url)
+    ret = ParseUrlXml.get(@register_user_url)
+    puts "---END----- DataService::register_user() ------------------------------------"
+    return ret
   end
   
   def request_lineup_data

@@ -16,6 +16,8 @@ Spudsy::Application.routes.draw do
   get "welcome/twitter"
   get "welcome/render_netflix"
   get "welcome/render_your_picks"
+  get "welcome/update_zip"
+  # TODO: Add new get for new action form on main page (changing zip code)
 
   root :to => 'welcome#index'
   match "/landing", :to => "welcome#index"

@@ -284,8 +284,12 @@ a:hover {
 	display: none;
 }
 
-#testing {
-	color:red;
+#new_zip_container {
+	padding: 10px 0px;
+}
+
+#new_zip {
+	width: 100%;
 }
 
 .right {

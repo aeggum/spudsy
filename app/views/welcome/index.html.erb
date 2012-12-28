@@ -106,7 +106,7 @@
 			<h1 class="giant_goldfish">TV</h1>
 		</div>
 	</div>
-	<div class="container_12" id="testing">
+	<div class="container_12">
 		<div class="grid_2">
 			<p class="grey_label right">Change provider:</p>
 		</div>		
@@ -119,11 +119,22 @@
 		<div class="grid_3 suffix_1">
 			<img src='../ajax-loader.gif' id='ajax-loader' />
 		</div>
-		<div class="grid_2">
-			Not your location?  Enter a new zip code.
-		</div>
 	</div>
 	<div class="container_12">
+		<%= form_tag('/welcome/update_zip', :method => "get", :id => "update_zip") do %>
+			<div class="grid_12" id="new_zip_container">
+				<div class="grid_3">
+					<%= label_tag(:new_zip, 'Wrong location? Enter a new one.', :class => 'grey_label right' )%>
+				</div>
+				<div class="grid_1">
+					<%= text_field_tag(:new_zip) %>
+				</div>
+				<div class="grid_1">
+					<%= submit_tag('Update') %>
+				</div>
+			</div>
+		<% end %>
+		</form>
 		<div class="grid_12">
 			<%= render :partial => 'tv_grid', :locals => { :stations => @stations } %>
 		</div>
