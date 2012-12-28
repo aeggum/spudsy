@@ -43,6 +43,7 @@ class WelcomeController < ApplicationController
   
   # Change the zip code, update the table, add zip code to user's zip code location
   def update_zip #zip_code
+    # TODO: if the zip is the same as the current zip, return, or something
     logger.debug "---START--- WelcomeController#update_table -------------------------"
     logger.debug "Params: #{params}"
     
@@ -56,15 +57,14 @@ class WelcomeController < ApplicationController
     
     $your_picks.clear
     $your_picks_new.clear
-    #$ds.setProvider( { :type => type, :desc => desc } )
     @stations = $ds.current_provider.stations
     
     cookies.delete(:provider_data)
-    # provider_cookie = { :provider_id => $ds.current_provider.provider_id, :provider_hash => $ds.selector_hash }
-    # cookies[:provider_data] = {
-      # :value => Marshal.dump(provider_cookie),
-      # :expires => 15.minutes.from_now
-    # }
+    provider_cookie = { :provider_id => $ds.current_provider.provider_id }
+    cookies[:provider_data] = {
+      :value => Marshal.dump(provider_cookie),
+      :expires => 4.hours.from_now
+    }
     
     respond_to do |format|
       format.html { render :partial => "stations", :locals => { :stations => @stations } }
@@ -73,8 +73,12 @@ class WelcomeController < ApplicationController
     #TODO: Here would be a good spot to get the best picks before sending it to the view
     # because if we have netflix picks showing up, they get lost after this call
     
-    #TODO: Should clean this up and add the new zip code to the user's database
-            # -- Also should save the user's default provider
+    
+    
+    # Update the current_user's info
+    if (current_user) 
+      current_user.update_attributes( :zip_code => zip_code, :default_provider => $ds.current_provider.provider_id )
+    end
     
     logger.debug "---END--- WelcomeController#update_table ---------------------------"
   end
@@ -128,15 +132,22 @@ class WelcomeController < ApplicationController
     @stations = $ds.current_provider.stations
     
     cookies.delete(:provider_data)
-    provider_cookie = { :provider_id => $ds.current_provider.provider_id, :provider_hash => $ds.selector_hash }
+    provider_cookie = { :provider_id => $ds.current_provider.provider_id }
     cookies[:provider_data] = {
       :value => Marshal.dump(provider_cookie),
-      :expires => 15.minutes.from_now
+      :expires => 4.hours.from_now
     }
     
     respond_to do |format|
       format.html { render :partial => "stations", :locals => { :stations => @stations } }
     end
+    
+    # Update the default provider for the user
+    if (current_user)
+      current_user.default_provider = $ds.current_provider.provider_id
+      current_user.save
+    end
+    
     logger.debug "---END----- WelcomeController#change_provider -----------------------"
   end
   
@@ -326,16 +337,22 @@ class WelcomeController < ApplicationController
       default_provider_id = options[:default_provider_id]
       zip_code = options[:zip_code]
       bim_uuid = "SPUDSYTEST0000000000000001"
-      puts "default_provider_id: #{default_provider_id}" 
       $ds = DataService.new(zip_code, bim_uuid, session, default_provider_id)
       $provider_hash = $ds.selector_hash
       @stations = $ds.current_provider.stations
       
-      provider_cookie = { :provider_id => $ds.current_provider.provider_id, :provider_hash => $ds.selector_hash }
+      provider_cookie = { :provider_id => $ds.current_provider.provider_id }
       cookies[:provider_data] = {
         :value => Marshal.dump(provider_cookie),
-        :expires => 5.minutes.from_now
+        :expires => 4.hours.from_now
       }
+      
+      # Update the user with the zip and providerId 
+      if (current_user)
+        current_user.zip_code = zip_code if current_user.zip_code.nil?
+        current_user.default_provider = $ds.current_provider.provider_id if current_user.default_provider.nil?
+        current_user.save
+      end
       
       logger.debug "---END----- WelcomeController#bim() -------------------------------"
     end
@@ -432,6 +449,23 @@ class WelcomeController < ApplicationController
     def test_for_cookies
       logger.debug "---START--- WelcomeController#test_for_cookies --------------------"
 
+      # If user is signed in, we have what we need
+      if (current_user)
+        logger.debug "User (signed-in): #{current_user}"
+        
+        # may not need to deal with session at all
+        session[:zip_code] = current_user.zip_code
+        session[:latitude] = current_user.latitude
+        session[:longitude] = current_user.longitude
+        session[:provider_id] = current_user.default_provider
+        
+        unless (current_user.zip_code.nil? && current_user.default_provider.nil?)
+          bim( { :zip_code => session[:zip_code], :default_provider_id => session[:provider_id] } )
+          session[:remembered] = true  # may be used to alert user we remembered their zip code
+          return
+        end
+      end
+      
       begin
         location_data = Marshal.load(cookies[:location])
         session[:zip_code] = location_data[:zip_code]
@@ -459,8 +493,18 @@ class WelcomeController < ApplicationController
     # Does geolocation to find zip code, latitude and longitude; saved in cookie.
     def geolocate
       logger.debug "---START--- WelcomeController#geolocate ---------------------------"
+      
+      if (current_user)
+        session[:zip_code] = current_user.zip_code
+        session[:provider_id] = current_user.default_provider
+        session[:remembered] = true
+        return
+      end
+      
       ip = request.remote_ip
+      # May need to configure more on live server: https://github.com/jlecour/geokit-rails3#ip-geocoding
       location = IpGeocoder.geocode(ip)
+      logger.debug "location returned from IpGeocoder.geocode(ip): #{location}"
       latitude = location.lat
       longitude = location.lng
       
@@ -481,6 +525,9 @@ class WelcomeController < ApplicationController
       # Store data in cookie, to last 1 day from now (for now)
       location_cookie = { :zip_code => zip_code, :latitude => latitude, :longitude => longitude }
       cookies[:location] = { :value => Marshal.dump(location_cookie), :expires => 1.day.from_now }
+      if (current_user) 
+        current_user.update_attributes( :zip_code => zip_code, :latitude => latitude, :longitude => longitude )
+      end
       logger.debug "---END----- WelcomeController#geolocate ---------------------------"
     end
     
