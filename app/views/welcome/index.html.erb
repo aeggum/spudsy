@@ -110,11 +110,11 @@
 		<div class="grid_2">
 			<p class="grey_label right">Change provider:</p>
 		</div>		
-		<div class="grid_3">
+		<div class="grid_3" id="serviceType">
 			<%= select("service", "type", $provider_hash.keys.each {|p| p.capitalize }, {:prompt => "Choose your service"}) %>
 		</div>
 		<div class="grid_3" id="choose_provider">
-			<%= select("type", "type_key", $provider_hash.keys.each {|p| p.capitalize }, {:prompt => 'Select Your Provider'}) %>
+		
 		</div>
 		<div class="grid_3 suffix_1">
 			<img src='../ajax-loader.gif' id='ajax-loader' />

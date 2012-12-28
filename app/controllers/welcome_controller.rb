@@ -42,8 +42,9 @@ class WelcomeController < ApplicationController
   # Change the zip code, update the table, add zip code to user's zip code location
   def update_zip #zip_code
     logger.debug "---START--- WelcomeController#update_table -------------------------"
-    zip_code = params[:zip_code]
+    logger.debug "Params: #{params}"
     
+    zip_code = params[:zip_code]
     # Store data in cookie, to last 1 day from now (for now)
     location_cookie = { :zip_code => zip_code, :latitude => nil, :longitude => nil }
     cookies[:location] = { :value => Marshal.dump(location_cookie), :expires => 1.day.from_now }
@@ -66,6 +67,11 @@ class WelcomeController < ApplicationController
     respond_to do |format|
       format.html { render :partial => "stations", :locals => { :stations => @stations } }
     end
+    
+    
+    #TODO: Should clean this up and add the new zip code to the user's database
+            # -- Also should save the user's default provider
+    
     logger.debug "---END--- WelcomeController#update_table ---------------------------"
   end
   
@@ -297,11 +303,10 @@ class WelcomeController < ApplicationController
     # Calls bim's service to get tv data; all is in $ds
     def bim(options) #default_provider_id = nil)
       logger.debug "---START--- WelcomeController#bim() -------------------------------"
-      
       logger.debug "Options: #{options}"
+      
       default_provider_id = options[:default_provider_id]
       zip_code = options[:zip_code]
-      puts "bim() in WelcomeController"
       bim_uuid = "SPUDSYTEST0000000000000001"
       puts "default_provider_id: #{default_provider_id}" 
       $ds = DataService.new(zip_code, bim_uuid, session, default_provider_id)

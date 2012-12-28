@@ -376,16 +376,17 @@ var Welcome = function() {
 			 * and turn it into an ajax action.
 			 */
 			$("#update_zip").on('submit', function() {
-				alert($("#new_zip").val());
 				var newZip = $("#new_zip").val();
 				if ( newZip.length != 5 || !(/^(\d)+$/.test(newZip)) ) {
 					alert("There was a problem with the new zip code.");
 					return false;
 				}
 				
+				$("#choose_provider").hide().empty();
 				$("#stations").css('opacity','0.9');
 				$("#stations").css('background-color','#CCC');
 				$('#ajax-loader').show(); 
+				
 				$.ajax({
 					url: "/welcome/update_zip",
 					data: { zip_code: newZip }
@@ -399,8 +400,6 @@ var Welcome = function() {
 					$("#stations").css('opacity','1');
 					$("#stations").css('background-color','white');
 				});
-				//TODO: We'll have to do more than just this..but this is a start
-					
 				
 				// prevent the default form action from occurring		
 				return false;
