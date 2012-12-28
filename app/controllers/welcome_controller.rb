@@ -16,13 +16,14 @@ class WelcomeController < ApplicationController
   
   
   def index
-    puts "index() in WelcomeController"
+    logger.debug "---START--- WelcomeController#index ---------------------------------"
     $hidden_since_rotate = Array.new;
     #raise TypeError, $ds
+    logger.debug "---END----- WelcomeController#index ---------------------------------"
   end
   
   def details
-    puts "details() in WelcomeController"
+    logger.debug "---START--- WelcomeController#details--------------------------------"
     # This is a placeholder - users will be redirected to it when they are signed in, for now
     # alternatively,
     # Amazon::Ecs.configure do |options|
@@ -37,6 +38,7 @@ class WelcomeController < ApplicationController
     # @total_pages = @res.total_pages
     # @first = @res.items.first
     redirect_to :controller => 'welcome', :action => 'index'
+    logger.debug "---END----- WelcomeController#details -------------------------------"
   end
   
   # Change the zip code, update the table, add zip code to user's zip code location
@@ -84,7 +86,7 @@ class WelcomeController < ApplicationController
   
   # returns the your_picks section
   def your_picks
-    puts "your_picks() in WelcomeController"
+    logger.debug "---START--- WelcomeController#your_picks ----------------------------"
     #raise TypeError, "PICKS QUEUE: #{$picks_queue.size}, #{$picks_queue.next}"
     
     # Fill up the $your_picks Array with the picks from the PQ
@@ -100,21 +102,23 @@ class WelcomeController < ApplicationController
     
     #hide_hidden_picks()
     render_your_picks()
+    logger.debug "---END----- WelcomeController#your_picks ----------------------------"
   end
   
    # gets all providers available for this data source
   def get_providers
-    puts "get_providers() in WelcomeController"
+    logger.debug "---START--- WelcomeController#get_providers -------------------------"
     type = params[:type]
     descs = $provider_hash[type]
     respond_to do |format|
       format.html { render :partial => "provider_option", :locals => { :descs => descs } }
     end
+    logger.debug "---END----- WelcomeController#get_providers -------------------------"
   end
   
   # changes the current provider (will regenerate tv grid)
   def change_provider
-    puts "change_provider() in WelcomeController"
+    logger.debug "---START--- WelcomeController#change_provider -----------------------"
     type = params[:type]
     desc = params[:desc]
     
@@ -133,6 +137,7 @@ class WelcomeController < ApplicationController
     respond_to do |format|
       format.html { render :partial => "stations", :locals => { :stations => @stations } }
     end
+    logger.debug "---END----- WelcomeController#change_provider -----------------------"
   end
   
   
@@ -140,7 +145,7 @@ class WelcomeController < ApplicationController
   
   # rotates the 'your picks' section either forwards or backwards by 6
   def rotate_picks 
-    logger.debug "WelcomeController#rotate_picks"
+    logger.debug "---START--- WelcomeController#rotate_picks --------------------------"
     options = Hash.new
     options[:forward] = params[:forward] == "true"
 
@@ -151,6 +156,7 @@ class WelcomeController < ApplicationController
       options[:netflix] = true
       rotate(options)
     end   
+    logger.debug "---END----- WelcomeController#rotate_picks --------------------------"
   end
     
     
@@ -161,7 +167,7 @@ class WelcomeController < ApplicationController
   
   # filters the media in the your picks section depending on the check-boxes
   def show_media
-    logger.debug 'WelcomeController#show_media'
+    logger.debug "---START--- WelcomeController#show_media ----------------------------"
     $show_movies = false
     $show_tv = false
     $show_netflix = false
@@ -221,11 +227,13 @@ class WelcomeController < ApplicationController
     $netflix_forward = 0
     $picks_forward = 0
     render_your_picks()
+    
+    logger.debug "---END----- WelcomeController#show_media ----------------------------"
   end
   
   # hides the media for the user, permanently
   def hide_media
-    puts "hide_media() in WelcomeController"
+    logger.debug "---START--- WelcomeController#hide_media ----------------------------"
     if params[:media_type] == "movies"
       mType = "Movie"
     else 
@@ -258,9 +266,11 @@ class WelcomeController < ApplicationController
     end
         
     render_your_picks()
+    logger.debug "---END----- WelcomeController#hide_media ----------------------------"
   end
   
   def twitter
+    logger.debug "---START--- WelcomeController#twitter -------------------------------"
     titles = [] 
     $your_picks.each { |media_source|
 	    titles.push media_source.media.name		
@@ -269,6 +279,7 @@ class WelcomeController < ApplicationController
     respond_to do |format|
       format.html { render :partial => "twitter", :locals => { :crit => searchCriteria} }
     end
+    logger.debug "---END----- WelcomeController#twitter -------------------------------"
   end
   
   
@@ -279,21 +290,26 @@ class WelcomeController < ApplicationController
   
   
   def render_netflix()
-    logger.debug "WelcomeController#render_netflix"
+    logger.debug "---START--- WelcomeController#render_netflix ------------------------"
+    
     #set_netflix_picks();
     respond_to do |format|
       format.html { render :partial => "netflix", :locals => { :media => $top_netflix_picks } }
-      format.text { render :text => 3}
     end
+    
+    logger.debug "---END----- WelcomeController#render_netflix ------------------------"
   end
   
   def render_your_picks() 
-    puts "render_your_picks() in WelcomeController"
+    logger.debug "---START--- WelcomeController#render_your_picks ---------------------"
+
     hide_hidden_picks()
     #raise TypeError, $your_picks
     respond_to do |format|
       format.html { render :partial => "your_picks", :locals => { :media_array => $your_picks} }
     end
+    
+    logger.debug "---END----- WelcomeController#render_your_picks ---------------------"
   end
   
   private 
@@ -328,7 +344,7 @@ class WelcomeController < ApplicationController
     
     # Sets up various global variables for the controller
     def set_your_picks
-      logger.debug "WelcomeController#set_your_picks"
+      logger.debug "---START--- WelcomeController#set_your_picks ----------------------"
       $picks_queue = Containers::PriorityQueue.new
       $your_picks = Array.new
       $picks_forward = 0
@@ -342,12 +358,13 @@ class WelcomeController < ApplicationController
       $show_netflix = false
       $show_movies = true
       $show_tv = true
+      logger.debug "---END----- WelcomeController#set_your_picks ----------------------"
     end
     
     
     # sets the netflix picks depending on if we should show tv, movies, or netflix in general
     def set_netflix_picks() 
-      logger.debug "WelcomeController#set_netflix_picks"
+      logger.debug "---START--- WelcomeController#set_netflix_picks -------------------"
       offset_size = 25
       $top_netflix_picks = []
       
@@ -375,12 +392,14 @@ class WelcomeController < ApplicationController
           $top_netflix_picks.push(TvShow.find(program.media_id))
         end  
       }
-        
+       
+      logger.debug "---END----- WelcomeController#set_netflix_picks -------------------" 
     end
     
     # options is a hash with the type of media (netflix, hulu, amazon, etc) 
     # to get more media for
     def add_more(options)
+      logger.debug "---START--- WelcomeController#add_more ----------------------------"
       
       
       if (options[:netflix] == true)
@@ -407,37 +426,39 @@ class WelcomeController < ApplicationController
         return more.size
       end
       
+      logger.debug "---END----- WelcomeController#add_more ----------------------------"
     end
     
     def test_for_cookies
-      logger.debug "WelcomeController#test_for_cookies"
+      logger.debug "---START--- WelcomeController#test_for_cookies --------------------"
 
-     begin
+      begin
         location_data = Marshal.load(cookies[:location])
         session[:zip_code] = location_data[:zip_code]
         session[:latitude] = location_data[:latitude]
         session[:longitude] = location_data[:longitude]
-     rescue
+      rescue
         puts "Cookies with location data did not exist; calling geolocate."
         geolocate()
-     end
+      end
       
-     begin
-       provider_data = Marshal.load(cookies[:provider_data])
-       puts "Default provide found: #{provider_data[:provider_id]}."
-       bim( { :zip_code => session[:zip_code], :default_provider_id => provider_data[:provider_id] } )
-     rescue
-       puts "No default provider data found. Calling bim()."
-       bim( { :zip_code => session[:zip_code] } )
-     end
+      begin
+        provider_data = Marshal.load(cookies[:provider_data])
+        puts "Default provide found: #{provider_data[:provider_id]}."
+        bim( { :zip_code => session[:zip_code], :default_provider_id => provider_data[:provider_id] } )
+      rescue
+        puts "No default provider data found. Calling bim()."
+        bim( { :zip_code => session[:zip_code] } )
+      end
      
+      logger.debug "---END----- WelcomeController#test_for_cookies --------------------"
     end
     
     
     
     # Does geolocation to find zip code, latitude and longitude; saved in cookie.
     def geolocate
-      logger.debug "WelcomeController#geolocate"
+      logger.debug "---START--- WelcomeController#geolocate ---------------------------"
       ip = request.remote_ip
       location = IpGeocoder.geocode(ip)
       latitude = location.lat
@@ -460,6 +481,7 @@ class WelcomeController < ApplicationController
       # Store data in cookie, to last 1 day from now (for now)
       location_cookie = { :zip_code => zip_code, :latitude => latitude, :longitude => longitude }
       cookies[:location] = { :value => Marshal.dump(location_cookie), :expires => 1.day.from_now }
+      logger.debug "---END----- WelcomeController#geolocate ---------------------------"
     end
     
     
@@ -468,7 +490,8 @@ class WelcomeController < ApplicationController
     
     # hides the hidden picks for a signed-in user
     def hide_hidden_picks
-      logger.debug "WelcomeController#hide_hidden_picks"
+      logger.debug "---START--- WelcomeController#hide_hidden_picks -------------------"
+      
       if (current_user) 
         hidden_media =  current_user.hidden_user_medias.all
         
@@ -489,11 +512,13 @@ class WelcomeController < ApplicationController
         }
         
       end
+      
+      logger.debug "---END----- WelcomeController#hide_hidden_picks -------------------"
     end
     
       # Rotates {currently} either the your_picks or netflix sections forwards or backwards
     def rotate(option)
-      logger.debug "WelcomeController#rotate"
+      logger.debug "---START--- WelcomeController#rotate ------------------------------"
       
       if (option[:your_picks]) 
         # May want to return something else so that the JS doesn't do the slideDown()..
@@ -544,14 +569,11 @@ class WelcomeController < ApplicationController
         # puts "top netflix picks size: #{$top_netflix_picks.size}"
         render_netflix()
       end
-  
+      
+      
+      logger.debug "---END--- WelcomeController#rotate --------------------------------"
     end
     
-end
-
-module Section
-  YOUR_PICKS = 1
-  NETFLIX = 2
 end
 
 
