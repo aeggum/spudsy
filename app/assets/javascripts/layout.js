@@ -120,6 +120,25 @@ var Welcome = function() {
 		});
 	}
 	
+	/**
+	 * Binds the posters only, allowing them to bounce and be clicked.
+	 * Should work in any section with .posters 
+	 */
+	function _posterBinding() {
+		$(".poster").hover(function(){
+			if ($(this).data("bouncing") == false || $(this).data("bouncing") == undefined){
+			    $(this).effect("bounce", { distance: 5, times: 1 }, 500);
+			    $(this).data("bouncing", true);
+			}
+		},function () {
+		   	$(this).data("bouncing", false);
+		});
+		
+		$(".poster").on('click', function() {
+			_showOverlay(this);
+		});
+	}
+	
 	function _expandPhoto() {
 	   var overlay = document.createElement("div");
 	   overlay.setAttribute("id","overlay");
@@ -224,7 +243,7 @@ var Welcome = function() {
 				}).always(function() {
 					if (netflix_bool) {
 						$("#netflix_section").show();
-						_initBinding();
+						_posterBinding();
 					}
 				});
 			});
@@ -268,6 +287,7 @@ var Welcome = function() {
 						}
 						//TODO: The binding here may not need to be the initBinding() function, but instead a new netflixBinding, or something
 						//_initBinding();
+						_posterBinding();
 					});
 				});
 				
@@ -315,6 +335,7 @@ var Welcome = function() {
 					url: "/welcome/rotate_picks?forward=true&netflix=true"
 				}).done(function(data) {
 					$("#netflix_section").html(data).show();
+					_posterBinding();
 					//_determineNetflixPrevious(++netflix_times_forward);
 				}).fail(function() {
 					$("#previous_netflix").hide();
@@ -346,6 +367,7 @@ var Welcome = function() {
 				}).done(function(data) {
 					console.log(data)
 					$("#netflix_section").html(data).show();
+					_posterBinding();
 					//_determineNetflixPrevious(--netflix_times_forward);
 				}).fail(function() {
 					$("#previous_netflix").hide();

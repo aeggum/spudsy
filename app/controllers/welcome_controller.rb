@@ -68,6 +68,8 @@ class WelcomeController < ApplicationController
       format.html { render :partial => "stations", :locals => { :stations => @stations } }
     end
     
+    #TODO: Here would be a good spot to get the best picks before sending it to the view
+    # because if we have netflix picks showing up, they get lost after this call
     
     #TODO: Should clean this up and add the new zip code to the user's database
             # -- Also should save the user's default provider
